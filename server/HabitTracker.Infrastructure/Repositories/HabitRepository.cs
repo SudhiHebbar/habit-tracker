@@ -235,7 +235,7 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 return await _dbSet
                     .Where(h => h.TrackerId == trackerId && h.IsActive)
-                    .Include(h => h.Completions.Where(c => c.CompletionDate >= DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-30))))
+                    .Include(h => h.Completions.Where(c => c.CompletionDate >= DateTime.UtcNow.AddDays(-30)))
                     .Include(h => h.Streak)
                     .AsNoTracking()
                     .OrderBy(h => h.DisplayOrder)
@@ -657,7 +657,7 @@ namespace HabitTracker.Infrastructure.Repositories
                     .GroupBy(hc => hc.HabitId)
                     .ToDictionaryAsync(
                         g => g.Key,
-                        g => g.Max(hc => (DateTime?)hc.CompletionDate.ToDateTime(TimeOnly.MinValue)),
+                        g => g.Max(hc => (DateTime?)hc.CompletionDate),
                         cancellationToken)
                     .ConfigureAwait(false);
             }
@@ -678,10 +678,10 @@ namespace HabitTracker.Infrastructure.Repositories
                     .Where(hc => hc.Habit.TrackerId == trackerId && hc.IsCompleted);
 
                 if (startDate.HasValue)
-                    query = query.Where(hc => hc.CompletionDate >= DateOnly.FromDateTime(startDate.Value));
+                    query = query.Where(hc => hc.CompletionDate >= startDate.Value);
 
                 if (endDate.HasValue)
-                    query = query.Where(hc => hc.CompletionDate <= DateOnly.FromDateTime(endDate.Value));
+                    query = query.Where(hc => hc.CompletionDate <= endDate.Value);
 
                 return await query
                     .GroupBy(hc => hc.HabitId)

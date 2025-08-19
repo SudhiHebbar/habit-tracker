@@ -136,6 +136,40 @@ Entities:
 - Integration tests with in-memory database
 - Run `dotnet test` to execute all tests
 
+## Environment Configuration
+
+### Frontend Environment Variables
+
+Copy `app/.env.example` to `app/.env.local` and configure:
+
+**Required Variables:**
+- `VITE_API_BASE_URL`: Backend API URL (default: `http://localhost:5281/api`)
+- `VITE_API_TIMEOUT`: API request timeout in milliseconds (default: `10000`)
+
+**Feature Flags:**
+- `VITE_FEATURE_ANALYTICS`: Enable analytics tracking (default: `false`)
+- `VITE_FEATURE_DEBUG`: Enable debug mode (default: `false`)
+- `VITE_FEATURE_MOCK_API`: Use mock API instead of real backend (default: `false`)
+
+**Application Settings:**
+- `VITE_APP_NAME`: Application display name (default: `Habit Tracker`)
+- `VITE_APP_VERSION`: Application version (default: `1.0.0`)
+- `VITE_APP_ENVIRONMENT`: Current environment (default: `development`)
+
+**UI Configuration:**
+- `VITE_DEFAULT_THEME`: Default UI theme (`light` or `dark`)
+- `VITE_ENABLE_ANIMATIONS`: Enable UI animations (default: `true`)
+- `VITE_MAX_HABITS_PER_TRACKER`: Maximum habits per tracker (default: `500`)
+- `VITE_MAX_TRACKERS_PER_USER`: Maximum trackers per user (default: `50`)
+
+**Development Tools:**
+- `VITE_REACT_DEVTOOLS`: Enable React DevTools (default: `true`)
+- `VITE_LOG_LEVEL`: Logging level (`debug`, `info`, `warn`, `error`)
+
+**Optional Third-party Services:**
+- `VITE_SENTRY_DSN`: Sentry error tracking DSN
+- `VITE_ANALYTICS_ID`: Analytics service ID
+
 ## Important Notes
 
 - Frontend uses Vite for fast development and hot module replacement

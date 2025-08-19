@@ -1,6 +1,0 @@
-{
-  "HabitTracker.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Project\\18_HabitTracker\\server\\HabitTracker.Api",
-  "HabitTracker.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Project\\18_HabitTracker\\server\\HabitTracker.Application",
-  "HabitTracker.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Project\\18_HabitTracker\\server\\HabitTracker.Domain",
-  "HabitTracker.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "D:\\Project\\18_HabitTracker\\server\\HabitTracker.Infrastructure"
-}
