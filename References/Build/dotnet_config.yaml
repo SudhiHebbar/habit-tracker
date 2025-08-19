@@ -1,0 +1,215 @@
+# .NET Core Configuration Template
+
+## Tech Stack Configuration
+```yaml
+Primary Language: C#
+Framework/Library: .NET 8+ / ASP.NET Core
+Package Manager: NuGet
+Build Tool: dotnet CLI
+Testing Framework: xUnit + Moq + TestContainers
+Linter: dotnet format + SonarAnalyzer
+Type Checker: C# Compiler
+```
+### 1. Solution Structure
+- Create .NET 8 solution with multiple projects
+- Implement Clean/Layered Architecture with proper separation
+- Configure project dependencies following Dependency Inversion
+- Set up shared kernel and cross-cutting concerns
+
+### 2. Architecture Layers
+- **Presentation Layer** (Web API): Controllers, DTOs, Filters, Middleware
+- **Application Layer** (Business Logic): Services, Interfaces, Use Cases, Validators
+- **Domain Layer** (Core): Entities, Value Objects, Domain Services, Specifications
+- **Infrastructure Layer** (Data Access): EF Core, Repositories, External Services
+- **Shared Kernel**: Common utilities, extensions, constants
+
+### 3. Technology Stack
+- **.NET 8** with C# 12 latest features
+- **ASP.NET Core Web API** with minimal APIs support
+- **Entity Framework Core 8** with Code First approach
+- **SQL Server** with connection string configuration
+- **AutoMapper** for object-to-object mapping
+- **FluentValidation** for input validation
+- **Serilog** for structured logging
+- **Swagger/OpenAPI** for API documentation
+- **MediatR** for CQRS pattern implementation
+- **xUnit** for unit testing framework
+- **Moq** for mocking dependencies
+- **FluentAssertions** for readable test assertions
+- **Microsoft.AspNetCore.Mvc.Testing** for integration testing
+- **Testcontainers** for database integration tests
+- **Bogus** for generating fake test data
+- **Coverlet** for code coverage analysis
+
+### 4. SOLID Principles Implementation
+- **Single Responsibility**: Each class has one reason to change
+- **Open/Closed**: Classes open for extension, closed for modification
+- **Liskov Substitution**: Derived classes must be substitutable for base classes
+- **Interface Segregation**: Clients shouldn't depend on unused interfaces
+- **Dependency Inversion**: Depend on abstractions, not concretions
+
+### 5. Design Patterns & Practices
+- **Repository Pattern** with Unit of Work
+- **CQRS** (Command Query Responsibility Segregation)
+- **Specification Pattern** for query logic
+- **Factory Pattern** for object creation
+- **Decorator Pattern** for cross-cutting concerns
+- **KISS** (Keep It Simple, Stupid) - Simple, readable code
+- **DRY** (Don't Repeat Yourself) - Reusable components
+
+### 6. Project Structure
+
+```
+dotnet-project/                         # Project root folder
+└── Server/                             # .NET Server root
+    ├── src/
+    │   ├── YourProject.WebApi/          # Presentation Layer
+    │   │   ├── Controllers/             # API Controllers
+    │   │   ├── DTOs/                   # Data Transfer Objects
+    │   │   ├── Filters/                # Action Filters
+    │   │   ├── Middleware/             # Custom Middleware
+    │   │   ├── Extensions/             # Service Extensions
+    │   │   └── Program.cs              # Application Entry Point
+    │   ├── YourProject.Application/     # Application Layer
+    │   │   ├── Services/               # Business Services
+    │   │   ├── Interfaces/             # Service Interfaces
+    │   │   ├── UseCases/               # Use Case Handlers
+    │   │   ├── Validators/             # FluentValidation Validators
+    │   │   ├── Mappings/               # AutoMapper Profiles
+    │   │   └── Common/                 # Shared Application Logic
+    │   ├── YourProject.Domain/          # Domain Layer
+    │   │   ├── Entities/               # Domain Entities
+    │   │   ├── ValueObjects/           # Value Objects
+    │   │   ├── Interfaces/             # Domain Interfaces
+    │   │   ├── Services/               # Domain Services
+    │   │   ├── Specifications/         # Business Rules
+    │   │   └── Common/                 # Domain Base Classes
+    │   ├── YourProject.Infrastructure/  # Infrastructure Layer
+    │   │   ├── Data/                   # EF Core Context
+    │   │   │   ├── Configurations/     # Entity Configurations
+    │   │   │   ├── Migrations/         # EF Migrations
+    │   │   │   └── Repositories/       # Repository Implementations
+    │   │   ├── Services/               # External Service Implementations
+    │   │   ├── Logging/                # Logging Implementations
+    │   │   └── Extensions/             # Infrastructure Extensions
+    │   └── YourProject.Shared/          # Shared Kernel
+    │       ├── Constants/              # Application Constants
+    │       ├── Extensions/             # Common Extensions
+    │       ├── Utilities/              # Utility Classes
+    │       └── Exceptions/             # Custom Exceptions
+    ├── tests/                          # Test Projects
+    │   ├── YourProject.UnitTests/       # Unit Tests
+    │   │   ├── Domain/                 # Domain Layer Tests
+    │   │   ├── Application/            # Application Layer Tests
+    │   │   ├── Infrastructure/         # Infrastructure Tests
+    │   │   ├── Fixtures/               # Test Data Fixtures
+    │   │   └── Helpers/                # Test Helper Classes
+    │   ├── YourProject.IntegrationTests/ # Integration Tests
+    │   │   ├── Controllers/            # API Controller Tests
+    │   │   ├── Repositories/           # Repository Integration Tests
+    │   │   ├── Services/               # Service Integration Tests
+    │   │   ├── Database/               # Database Integration Tests
+    │   │   └── TestBase/               # Integration Test Base Classes
+    │   └── YourProject.E2ETests/        # End-to-End Tests
+    │       ├── Scenarios/              # Complete User Scenarios
+    │       ├── ApiClients/             # Test API Clients
+    │       └── TestData/               # E2E Test Data
+    ├── docs/                           # API Documentation
+    │   ├── api/                       # API specifications
+    │   ├── architecture/               # Architecture documentation
+    │   └── deployment/                 # Deployment guides
+    ├── scripts/                        # Build & deployment scripts
+    │   ├── build.sh                   # Build script
+    │   ├── deploy.sh                  # Deployment script
+    │   └── database/                  # Database scripts
+    ├── .gitignore                      # Git ignore file
+    ├── README.md                       # Project documentation
+    ├── YourProject.sln                 # Solution file
+    └── global.json                     # .NET SDK version
+```
+
+### 7. Key Features
+- **Clean Architecture**: Clear separation of concerns with dependency flow
+- **Entity Framework Core 8**: Latest ORM features with optimal performance
+- **API Versioning**: Proper API versioning strategy
+- **Global Exception Handling**: Centralized error management
+- **Request/Response Logging**: Comprehensive audit trail
+- **Health Checks**: Endpoint monitoring and diagnostics
+- **CORS Configuration**: Cross-origin request handling
+- **JWT Authentication Ready**: Prepared for identity integration
+- **Pagination Support**: Efficient data retrieval patterns
+- **Caching Strategy**: Response caching and distributed caching ready
+- **Comprehensive Testing**: Unit, Integration, and E2E test coverage
+- **Test Data Management**: Automated test data generation and cleanup
+- **Mocking Strategy**: Proper dependency mocking for isolated testing
+- **Code Coverage Reports**: Automated coverage analysis and reporting
+- **CI/CD Ready**: GitHub Actions workflows for automated testing
+
+### 8. Development Standards
+- **Coding Standards**: C# naming conventions and best practices
+- **Documentation**: XML documentation for all public APIs
+- **Test-Driven Development**: TDD approach with comprehensive test coverage
+- **Test Coverage Goals**: Minimum 80% code coverage across all layers
+- **Testing Pyramid**: Unit tests (70%), Integration tests (20%), E2E tests (10%)
+- **Continuous Integration**: Automated testing pipeline with coverage reports
+- **Configuration Management**: Strongly-typed configuration classes
+- **Environment Support**: Development, staging, production configs
+- **Security Headers**: Proper security header configuration
+
+## Validation Commands
+```bash
+# Level 1: Syntax & Style
+dotnet format                    # Code formatting
+dotnet build                     # Compilation check
+dotnet build --verbosity normal  # Detailed build
+
+# Level 2: Unit Tests
+dotnet test                      # Run all tests
+dotnet test --collect:"XPlat Code Coverage"  # With coverage
+dotnet test --logger trx        # Test results
+
+# Level 3: Integration Tests
+dotnet run --project src/ProjectName.Api  # Start API
+dotnet test tests/ProjectName.IntegrationTests/  # Integration tests
+
+# Level 4: Quality Checks
+dotnet publish -c Release        # Production build
+dotnet sonarscanner begin       # SonarQube analysis
+dotnet build && dotnet sonarscanner end
+```
+
+## Common Integration Points
+```yaml
+DEPENDENCY_INJECTION:
+  - file: Program.cs
+  - pattern: builder.Services.AddScoped<IService, Service>()
+  - configuration: appsettings.json
+
+ENTITY_FRAMEWORK:
+  - file: Data/ApplicationDbContext.cs
+  - pattern: DbSet<Entity> Entities { get; set; }
+  - migrations: dotnet ef migrations add
+
+API_CONTROLLERS:
+  - file: Controllers/FeatureController.cs
+  - pattern: [ApiController], [Route("[controller]")]
+  - validation: Data annotations, FluentValidation
+
+MIDDLEWARE:
+  - file: Middleware/CustomMiddleware.cs
+  - pattern: IMiddleware implementation
+  - registration: app.UseMiddleware<CustomMiddleware>()
+
+TESTING:
+  - unit: xUnit with Moq
+  - integration: WebApplicationFactory
+  - pattern: Arrange-Act-Assert
+  - data: TestContainers for databases
+```
+
+## Reference Files
+- Gotchas: `./Gotchas/dotnet_gotchas.md`
+- Patterns: `./Gotchas/dotnet_patterns.md`
+- Anti-patterns: `./Gotchas/anti_patterns.md`
+- Validation: `./Gotchas/validation_commands.md`
+- Database: `./Gotchas/database_best_practices.md`

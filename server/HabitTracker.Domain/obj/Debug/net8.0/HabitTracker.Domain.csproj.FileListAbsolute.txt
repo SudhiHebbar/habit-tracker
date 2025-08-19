@@ -1,0 +1,11 @@
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\bin\Debug\net8.0\HabitTracker.Domain.deps.json
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\bin\Debug\net8.0\HabitTracker.Domain.dll
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\bin\Debug\net8.0\HabitTracker.Domain.pdb
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\HabitTracker.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\HabitTracker.Domain.AssemblyInfoInputs.cache
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\HabitTracker.Domain.AssemblyInfo.cs
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\HabitTracker.Domain.csproj.CoreCompileInputs.cache
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\HabitTracker.Domain.dll
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\refint\HabitTracker.Domain.dll
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\HabitTracker.Domain.pdb
+D:\Project\18_HabitTracker\server\HabitTracker.Domain\obj\Debug\net8.0\ref\HabitTracker.Domain.dll

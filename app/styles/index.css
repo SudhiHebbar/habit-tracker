@@ -1,0 +1,7 @@
+/* Global Styles Entry Point */
+
+/* Import global styles in the correct order */
+@import './global/variables.css';
+@import './global/reset.css';
+@import './global/themes.css';
+@import './global/grid.css';

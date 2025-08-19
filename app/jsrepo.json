@@ -1,0 +1,5 @@
+{
+  "default": "./src/shared/components",
+  "registries": ["https://reactbits.dev/default/"],
+  "types": "typescript"
+}

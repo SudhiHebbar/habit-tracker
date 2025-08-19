@@ -1,0 +1,51 @@
+/* Habit Management Feature Styles */
+
+.habitCard {
+  background: var(--color-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  transition: all var(--duration-fast) var(--ease-out);
+  position: relative;
+}
+
+.habitCard:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.habitColorBorder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: var(--border-radius-base) 0 0 var(--border-radius-base);
+}
+
+.habitForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.colorPicker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: var(--spacing-2);
+}
+
+.colorOption {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-full);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.colorOption:hover,
+.colorOption.selected {
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+}
