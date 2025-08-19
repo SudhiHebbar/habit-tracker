@@ -1,6 +1,7 @@
 using HabitTracker.Application.Interfaces;
 using HabitTracker.Domain.Entities;
 using HabitTracker.Infrastructure.Data;
+using HabitTracker.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -256,9 +257,9 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Checking if habit {HabitId} is completed on {Date}", habitId, date);
                 
-                var dateTime = date.ToDateTime(TimeOnly.MinValue);
+                var completionDateTime = date.ToDateTime();
                 return await _dbSet
-                    .AnyAsync(hc => hc.HabitId == habitId && hc.CompletionDate.Date == dateTime.Date && hc.IsCompleted, cancellationToken)
+                    .AnyAsync(hc => hc.HabitId == habitId && hc.CompletionDate.Date == completionDateTime.Date && hc.IsCompleted, cancellationToken)
                     .ConfigureAwait(false);
             }
             catch (Exception ex)
@@ -278,14 +279,14 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 if (startDate.HasValue)
                 {
-                    var startDateTime = startDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date >= startDateTime);
+                    var queryStartDateTime = startDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date >= queryStartDateTime);
                 }
                 
                 if (endDate.HasValue)
                 {
-                    var endDateTime = endDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date <= endDateTime);
+                    var queryEndDateTime = endDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date <= queryEndDateTime);
                 }
 
                 var completions = await query
@@ -345,8 +346,8 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 if (date.HasValue)
                 {
-                    var dateTime = date.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date == dateTime);
+                    var filterDateTime = date.Value.ToDateTime(TimeOnly.MinValue).Date;
+                    query = query.Where(hc => hc.CompletionDate.Date == filterDateTime);
                 }
 
                 return await query
@@ -374,8 +375,8 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 if (date.HasValue)
                 {
-                    var dateTime = date.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date == dateTime);
+                    var userFilterDateTime = date.Value.ToDateTime(TimeOnly.MinValue).Date;
+                    query = query.Where(hc => hc.CompletionDate.Date == userFilterDateTime);
                 }
 
                 return await query
@@ -400,8 +401,8 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Toggling completion for habit {HabitId} on {Date}", habitId, date);
                 
-                var dateTime = date.ToDateTime(TimeOnly.MinValue);
-                var existingCompletion = await GetCompletionByHabitAndDateAsync(habitId, dateTime, cancellationToken);
+                var completionDateTime = date.ToDateTime();
+                var existingCompletion = await GetCompletionByHabitAndDateAsync(habitId, completionDateTime, cancellationToken);
                 
                 if (existingCompletion != null)
                 {
@@ -417,7 +418,7 @@ namespace HabitTracker.Infrastructure.Repositories
                     var newCompletion = new HabitCompletion
                     {
                         HabitId = habitId,
-                        CompletionDate = dateTime,
+                        CompletionDate = completionDateTime,
                         IsCompleted = true,
                         Notes = notes,
                         CreatedAt = DateTime.UtcNow,
@@ -441,8 +442,8 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Marking habit {HabitId} as completed on {Date}", habitId, date);
                 
-                var dateTime = date.ToDateTime(TimeOnly.MinValue);
-                var existingCompletion = await GetCompletionByHabitAndDateAsync(habitId, dateTime, cancellationToken);
+                var completionDateTime = date.ToDateTime();
+                var existingCompletion = await GetCompletionByHabitAndDateAsync(habitId, completionDateTime, cancellationToken);
                 
                 if (existingCompletion != null)
                 {
@@ -456,7 +457,7 @@ namespace HabitTracker.Infrastructure.Repositories
                     var newCompletion = new HabitCompletion
                     {
                         HabitId = habitId,
-                        CompletionDate = dateTime,
+                        CompletionDate = completionDateTime,
                         IsCompleted = true,
                         Notes = notes,
                         CreatedAt = DateTime.UtcNow,
@@ -480,8 +481,8 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Marking habit {HabitId} as incomplete on {Date}", habitId, date);
                 
-                var dateTime = date.ToDateTime(TimeOnly.MinValue);
-                var existingCompletion = await GetCompletionByHabitAndDateAsync(habitId, dateTime, cancellationToken);
+                var completionDateTime = date.ToDateTime();
+                var existingCompletion = await GetCompletionByHabitAndDateAsync(habitId, completionDateTime, cancellationToken);
                 
                 if (existingCompletion != null)
                 {
@@ -494,7 +495,7 @@ namespace HabitTracker.Infrastructure.Repositories
                     var newCompletion = new HabitCompletion
                     {
                         HabitId = habitId,
-                        CompletionDate = dateTime,
+                        CompletionDate = completionDateTime,
                         IsCompleted = false,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
@@ -517,8 +518,8 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Removing completion for habit {HabitId} on {Date}", habitId, date);
                 
-                var dateTime = date.ToDateTime(TimeOnly.MinValue);
-                var completion = await GetCompletionByHabitAndDateAsync(habitId, dateTime, cancellationToken);
+                var completionDateTime = date.ToDateTime();
+                var completion = await GetCompletionByHabitAndDateAsync(habitId, completionDateTime, cancellationToken);
                 
                 if (completion != null)
                 {
@@ -608,14 +609,14 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 // Create completions for habits that don't have them
                 var newCompletions = new List<HabitCompletion>();
-                var dateTime = date.ToDateTime(TimeOnly.MinValue);
+                var newCompletionDateTime = date.ToDateTime();
                 
                 foreach (var habitId in allActiveHabits.Where(id => !existingHabitIds.Contains(id)))
                 {
                     var newCompletion = new HabitCompletion
                     {
                         HabitId = habitId,
-                        CompletionDate = dateTime,
+                        CompletionDate = newCompletionDateTime,
                         IsCompleted = false,
                         CreatedAt = DateTime.UtcNow,
                         UpdatedAt = DateTime.UtcNow
@@ -645,14 +646,14 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 if (startDate.HasValue)
                 {
-                    var startDateTime = startDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date >= startDateTime);
+                    var countStartDateTime = startDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date >= countStartDateTime);
                 }
                 
                 if (endDate.HasValue)
                 {
-                    var endDateTime = endDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date <= endDateTime);
+                    var countEndDateTime = endDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date <= countEndDateTime);
                 }
 
                 return await query.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -674,14 +675,14 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 if (startDate.HasValue)
                 {
-                    var startDateTime = startDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date >= startDateTime);
+                    var trackerCountStartDateTime = startDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date >= trackerCountStartDateTime);
                 }
                 
                 if (endDate.HasValue)
                 {
-                    var endDateTime = endDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date <= endDateTime);
+                    var trackerCountEndDateTime = endDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date <= trackerCountEndDateTime);
                 }
 
                 return await query.CountAsync(cancellationToken).ConfigureAwait(false);
@@ -920,18 +921,18 @@ namespace HabitTracker.Infrastructure.Repositories
                 var startDate = new DateOnly(year, month, 1);
                 var endDate = startDate.AddMonths(1).AddDays(-1);
                 
-                var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
-                var endDateTime = endDate.ToDateTime(TimeOnly.MinValue);
+                var calendarStartDateTime = startDate.ToDateTime();
+                var calendarEndDateTime = endDate.ToDateTime();
                 
-                var completions = await GetCompletionsByHabitAndDateRangeAsync(habitId, startDateTime, endDateTime, cancellationToken);
+                var completions = await GetCompletionsByHabitAndDateRangeAsync(habitId, calendarStartDateTime, calendarEndDateTime, cancellationToken);
                 
                 var calendar = new Dictionary<DateOnly, bool>();
                 var currentDate = startDate;
                 
                 while (currentDate <= endDate)
                 {
-                    var currentDateTime = currentDate.ToDateTime(TimeOnly.MinValue);
-                    var completion = completions.FirstOrDefault(c => c.CompletionDate.Date == currentDateTime.Date);
+                    var currentCalendarDateTime = currentDate.ToDateTime(TimeOnly.MinValue);
+                    var completion = completions.FirstOrDefault(c => c.CompletionDate.Date == currentCalendarDateTime.Date);
                     calendar[currentDate] = completion?.IsCompleted ?? false;
                     currentDate = currentDate.AddDays(1);
                 }
@@ -952,10 +953,10 @@ namespace HabitTracker.Infrastructure.Repositories
                 _logger.LogDebug("Getting weekly completions for tracker {TrackerId} starting {WeekStartDate}", trackerId, weekStartDate);
                 
                 var weekEndDate = weekStartDate.AddDays(6);
-                var startDateTime = weekStartDate.ToDateTime(TimeOnly.MinValue);
-                var endDateTime = weekEndDate.ToDateTime(TimeOnly.MinValue);
+                var weeklyStartDateTime = weekStartDate.ToDateTime();
+                var weeklyEndDateTime = weekEndDate.ToDateTime();
                 
-                var completions = await GetCompletionsByTrackerAndDateRangeAsync(trackerId, startDateTime, endDateTime, cancellationToken);
+                var completions = await GetCompletionsByTrackerAndDateRangeAsync(trackerId, weeklyStartDateTime, weeklyEndDateTime, cancellationToken);
                 
                 return completions
                     .GroupBy(c => DateOnly.FromDateTime(c.CompletionDate))
@@ -974,13 +975,13 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Getting daily completion counts for tracker {TrackerId} between {StartDate} and {EndDate}", trackerId, startDate, endDate);
                 
-                var startDateTime = startDate.ToDateTime(TimeOnly.MinValue).Date;
-                var endDateTime = endDate.ToDateTime(TimeOnly.MinValue).Date;
+                var dailyCountStartDateTime = startDate.ToDateTime().Date;
+                var dailyCountEndDateTime = endDate.ToDateTime().Date;
                 
                 return await _dbSet
                     .Where(hc => hc.Habit.TrackerId == trackerId && 
-                                hc.CompletionDate.Date >= startDateTime && 
-                                hc.CompletionDate.Date <= endDateTime && 
+                                hc.CompletionDate.Date >= dailyCountStartDateTime && 
+                                hc.CompletionDate.Date <= dailyCountEndDateTime && 
                                 hc.IsCompleted)
                     .GroupBy(hc => hc.CompletionDate.Date)
                     .ToDictionaryAsync(g => DateOnly.FromDateTime(g.Key), g => g.Count(), cancellationToken)
@@ -1004,14 +1005,14 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 if (startDate.HasValue)
                 {
-                    var startDateTime = startDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date >= startDateTime);
+                    var dayOfWeekStartDateTime = startDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date >= dayOfWeekStartDateTime);
                 }
                 
                 if (endDate.HasValue)
                 {
-                    var endDateTime = endDate.Value.ToDateTime(TimeOnly.MinValue).Date;
-                    query = query.Where(hc => hc.CompletionDate.Date <= endDateTime);
+                    var dayOfWeekEndDateTime = endDate.Value.ToDateTime().Date;
+                    query = query.Where(hc => hc.CompletionDate.Date <= dayOfWeekEndDateTime);
                 }
 
                 return await query
@@ -1086,9 +1087,9 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Deleting completions older than {CutoffDate}", cutoffDate);
                 
-                var cutoffDateTime = cutoffDate.ToDateTime(TimeOnly.MinValue).Date;
+                var deletionCutoffDateTime = cutoffDate.ToDateTime().Date;
                 var oldCompletions = await _dbSet
-                    .Where(hc => hc.CompletionDate.Date < cutoffDateTime)
+                    .Where(hc => hc.CompletionDate.Date < deletionCutoffDateTime)
                     .ToListAsync(cancellationToken)
                     .ConfigureAwait(false);
 

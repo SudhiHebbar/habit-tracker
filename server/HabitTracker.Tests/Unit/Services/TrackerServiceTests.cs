@@ -4,9 +4,11 @@ using FluentValidation;
 using FluentValidation.Results;
 using HabitTracker.Application.DTOs.Tracker;
 using HabitTracker.Application.Interfaces;
+using HabitTracker.Application.Options;
 using HabitTracker.Application.Services;
 using HabitTracker.Domain.Entities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
@@ -19,6 +21,7 @@ public class TrackerServiceTests
     private readonly IValidator<CreateTrackerDto> _mockCreateValidator;
     private readonly IValidator<UpdateTrackerDto> _mockUpdateValidator;
     private readonly ILogger<TrackerService> _mockLogger;
+    private readonly IOptions<TrackerLimitsOptions> _mockTrackerLimitsOptions;
     private readonly TrackerService _service;
 
     public TrackerServiceTests()
@@ -29,12 +32,23 @@ public class TrackerServiceTests
         _mockUpdateValidator = Substitute.For<IValidator<UpdateTrackerDto>>();
         _mockLogger = Substitute.For<ILogger<TrackerService>>();
         
+        var trackerLimitsOptions = new TrackerLimitsOptions
+        {
+            MaxTrackersPerUser = 20,
+            MaxHabitsPerTracker = 100,
+            MaxTrackerNameLength = 100,
+            MaxTrackerDescriptionLength = 500
+        };
+        _mockTrackerLimitsOptions = Substitute.For<IOptions<TrackerLimitsOptions>>();
+        _mockTrackerLimitsOptions.Value.Returns(trackerLimitsOptions);
+        
         _service = new TrackerService(
             _mockRepository, 
             _mockMapper, 
             _mockCreateValidator, 
             _mockUpdateValidator, 
-            _mockLogger);
+            _mockLogger,
+            _mockTrackerLimitsOptions);
     }
 
     [Fact]

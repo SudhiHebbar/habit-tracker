@@ -5,7 +5,8 @@ using HabitTracker.Api.Extensions;
 using HabitTracker.Application.Interfaces;
 using HabitTracker.Infrastructure.Repositories;
 using HabitTracker.Application.Services;
-using HabitTracker.Application.Mappings;
+using HabitTracker.Application.Configurations;
+using HabitTracker.Application.Options;
 using HabitTracker.Application.Validators;
 using FluentValidation;
 using HabitTracker.Application.DTOs.Tracker;
@@ -35,12 +36,12 @@ builder.Services.AddDbContext<HabitTrackerDbContext>(options =>
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITrackerRepository, TrackerRepository>();
 
+// Configure options
+builder.Services.Configure<TrackerLimitsOptions>(
+    builder.Configuration.GetSection(TrackerLimitsOptions.SectionName));
+
 // Configure AutoMapper
-var mapperConfig = new AutoMapper.MapperConfiguration(cfg =>
-{
-    cfg.AddProfile<TrackerMappingProfile>();
-});
-builder.Services.AddSingleton<AutoMapper.IMapper>(mapperConfig.CreateMapper());
+builder.Services.ConfigureAutoMapper();
 
 // Configure FluentValidation
 builder.Services.AddScoped<IValidator<CreateTrackerDto>, CreateTrackerValidator>();

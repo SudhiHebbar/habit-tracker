@@ -2,8 +2,10 @@ using AutoMapper;
 using FluentValidation;
 using HabitTracker.Application.DTOs.Tracker;
 using HabitTracker.Application.Interfaces;
+using HabitTracker.Application.Options;
 using HabitTracker.Domain.Entities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace HabitTracker.Application.Services
 {
@@ -14,20 +16,22 @@ namespace HabitTracker.Application.Services
         private readonly IValidator<CreateTrackerDto> _createValidator;
         private readonly IValidator<UpdateTrackerDto> _updateValidator;
         private readonly ILogger<TrackerService> _logger;
-        private const int MaxTrackersPerUser = 20;
+        private readonly TrackerLimitsOptions _trackerLimits;
 
         public TrackerService(
             ITrackerRepository trackerRepository,
             IMapper mapper,
             IValidator<CreateTrackerDto> createValidator,
             IValidator<UpdateTrackerDto> updateValidator,
-            ILogger<TrackerService> logger)
+            ILogger<TrackerService> logger,
+            IOptions<TrackerLimitsOptions> trackerLimitsOptions)
         {
             _trackerRepository = trackerRepository;
             _mapper = mapper;
             _createValidator = createValidator;
             _updateValidator = updateValidator;
             _logger = logger;
+            _trackerLimits = trackerLimitsOptions.Value;
         }
 
         public async Task<IEnumerable<TrackerResponseDto>> GetAllTrackersAsync(string? userId, CancellationToken cancellationToken = default)
@@ -92,9 +96,9 @@ namespace HabitTracker.Application.Services
             }
 
             var existingTrackers = await _trackerRepository.GetActiveTrackersByUserIdAsync(userId, cancellationToken);
-            if (existingTrackers.Count() >= MaxTrackersPerUser)
+            if (existingTrackers.Count() >= _trackerLimits.MaxTrackersPerUser)
             {
-                throw new InvalidOperationException($"Maximum number of trackers ({MaxTrackersPerUser}) reached");
+                throw new InvalidOperationException($"Maximum number of trackers ({_trackerLimits.MaxTrackersPerUser}) reached");
             }
 
             if (!await _trackerRepository.IsTrackerNameUniqueForUserAsync(userId, createDto.Name, null, cancellationToken))

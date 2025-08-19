@@ -1,6 +1,7 @@
 using HabitTracker.Application.Interfaces;
 using HabitTracker.Domain.Entities;
 using HabitTracker.Infrastructure.Data;
+using HabitTracker.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -184,7 +185,7 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 streak.CurrentStreak = currentStreak;
                 if (lastCompletionDate.HasValue)
-                    streak.LastCompletionDate = lastCompletionDate.Value.ToDateTime(TimeOnly.MinValue);
+                    streak.LastCompletionDate = lastCompletionDate.Value.ToDateTime();
                 
                 // Update longest streak if current exceeds it
                 if (currentStreak > streak.LongestStreak)

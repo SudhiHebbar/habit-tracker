@@ -231,9 +231,4 @@ namespace HabitTracker.Api.Controllers
         }
     }
 
-    public class TrackerOrderDto
-    {
-        public int TrackerId { get; set; }
-        public int DisplayOrder { get; set; }
-    }
 }
