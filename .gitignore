@@ -11,6 +11,9 @@ server/**/Debug/
 
 # Environment files
 app/.env*
+!app/.env.example
+*.env.local
+*.env.*.local
 
 # Logs
 *.log
@@ -20,7 +23,13 @@ app/.env*
 
 # OS generated files
 .DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
 
 # Others
 app/.next/
@@ -38,12 +47,23 @@ yarn.lock
 
 # Ignore temporary files
 *.tmp
+*.temp
 *.swp
 *.swo
+*~
+.#*
+#*#
 
 # Ignore IDE files
 .idea/
 *.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
 
 # Ignore Figma design exports
 *.fig
@@ -51,3 +71,47 @@ yarn.lock
 
 # Ignore local settings
 *.local.json
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+nyc_output/
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.parcel-cache
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test

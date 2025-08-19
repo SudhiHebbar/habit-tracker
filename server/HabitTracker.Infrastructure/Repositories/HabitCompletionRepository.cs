@@ -1014,14 +1014,10 @@ namespace HabitTracker.Infrastructure.Repositories
                     query = query.Where(hc => hc.CompletionDate.Date <= endDateTime);
                 }
 
-                var completions = await query
-                    .Select(hc => hc.CompletionDate)
-                    .ToListAsync(cancellationToken)
+                return await query
+                    .GroupBy(hc => hc.CompletionDate.DayOfWeek)
+                    .ToDictionaryAsync(g => g.Key, g => g.Count(), cancellationToken)
                     .ConfigureAwait(false);
-
-                return completions
-                    .GroupBy(date => date.DayOfWeek)
-                    .ToDictionary(g => g.Key, g => g.Count());
             }
             catch (Exception ex)
             {

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../../test/test-utils';
-import CreateTrackerModal from './CreateTrackerModal';
+import { CreateTrackerModal } from './CreateTrackerModal';
 import { useCreateTracker } from '../hooks/useCreateTracker';
 
 // Mock the custom hook
@@ -25,9 +25,9 @@ describe('CreateTrackerModal Component', () => {
   it('renders modal when open is true', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -39,9 +39,9 @@ describe('CreateTrackerModal Component', () => {
   it('does not render modal when open is false', () => {
     render(
       <CreateTrackerModal 
-        open={false} 
+        isOpen={false} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -51,9 +51,9 @@ describe('CreateTrackerModal Component', () => {
   it('calls onClose when close button is clicked', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -66,9 +66,9 @@ describe('CreateTrackerModal Component', () => {
   it('calls onClose when cancel button is clicked', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -81,9 +81,9 @@ describe('CreateTrackerModal Component', () => {
   it('calls onClose when backdrop is clicked', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -102,9 +102,9 @@ describe('CreateTrackerModal Component', () => {
 
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -135,9 +135,9 @@ describe('CreateTrackerModal Component', () => {
 
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -161,9 +161,9 @@ describe('CreateTrackerModal Component', () => {
 
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -183,9 +183,9 @@ describe('CreateTrackerModal Component', () => {
 
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -196,9 +196,9 @@ describe('CreateTrackerModal Component', () => {
   it('validates required fields', async () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -216,9 +216,9 @@ describe('CreateTrackerModal Component', () => {
   it('validates name length constraints', async () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -241,9 +241,9 @@ describe('CreateTrackerModal Component', () => {
   it('validates description length constraints', async () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -267,9 +267,9 @@ describe('CreateTrackerModal Component', () => {
   it('resets form when modal is reopened', () => {
     const { rerender } = render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -283,18 +283,18 @@ describe('CreateTrackerModal Component', () => {
     // Close modal
     rerender(
       <CreateTrackerModal 
-        open={false} 
+        isOpen={false} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
     // Reopen modal
     rerender(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -309,9 +309,9 @@ describe('CreateTrackerModal Component', () => {
   it('handles escape key to close modal', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -323,9 +323,9 @@ describe('CreateTrackerModal Component', () => {
   it('focuses on name input when modal opens', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -336,15 +336,13 @@ describe('CreateTrackerModal Component', () => {
   it('traps focus within modal', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
     const nameInput = screen.getByLabelText(/tracker name/i);
-    const cancelButton = screen.getByText(/cancel/i);
-    const submitButton = screen.getByText(/create tracker/i);
     
     // Tab through elements
     nameInput.focus();
@@ -357,9 +355,9 @@ describe('CreateTrackerModal Component', () => {
   it('prevents form submission on Enter in text inputs', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -374,9 +372,9 @@ describe('CreateTrackerModal Component', () => {
   it('shows character count for name input', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
@@ -389,9 +387,9 @@ describe('CreateTrackerModal Component', () => {
   it('shows character count for description input', () => {
     render(
       <CreateTrackerModal 
-        open={true} 
+        isOpen={true} 
         onClose={mockOnClose} 
-        onSuccess={mockOnSuccess} 
+        onSubmit={mockOnSuccess} 
       />
     );
     
