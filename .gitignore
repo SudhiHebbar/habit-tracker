@@ -1,0 +1,53 @@
+# Node modules
+app/node_modules/
+
+# Build output
+app/dist/
+
+# Backend build and debug folders
+server/**/bin/
+server/**/obj/
+server/**/Debug/
+
+# Environment files
+app/.env*
+
+# Logs
+*.log
+
+# VS Code settings
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Others
+app/.next/
+app/.turbo/
+app/.cache/
+
+# Ignore coverage and test output
+coverage/
+app/coverage/
+server/**/TestResults/
+
+# Ignore package-lock and yarn lock if needed
+app/package-lock.json
+yarn.lock
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore IDE files
+.idea/
+*.iml
+
+# Ignore Figma design exports
+*.fig
+*.sketch
+
+# Ignore local settings
+*.local.json

@@ -36,5 +36,8 @@ namespace HabitTracker.Application.Interfaces
         // Statistics and analytics
         Task<Dictionary<int, int>> GetHabitCountsByTrackerAsync(string? userId, CancellationToken cancellationToken = default);
         Task<DateTime?> GetLastActivityDateAsync(int trackerId, CancellationToken cancellationToken = default);
+        
+        // Save changes for repository operations
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

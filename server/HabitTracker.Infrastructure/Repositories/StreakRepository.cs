@@ -102,7 +102,10 @@ namespace HabitTracker.Infrastructure.Repositories
                     .ToListAsync(cancellationToken)
                     .ConfigureAwait(false);
 
-                if (!completions.Any())
+                // Convert DateTime to DateOnly for calculations
+                var completionDates = completions.Select(c => DateOnly.FromDateTime(c)).ToList();
+
+                if (!completionDates.Any())
                 {
                     // No completions, reset everything
                     streak.CurrentStreak = 0;
@@ -119,15 +122,15 @@ namespace HabitTracker.Infrastructure.Repositories
 
                     // Calculate current streak (consecutive days from today backwards)
                     var today = DateOnly.FromDateTime(DateTime.UtcNow);
-                    var currentStreak = CalculateCurrentStreakFromCompletions(completions, today);
+                    var currentStreak = CalculateCurrentStreakFromCompletions(completionDates, today);
                     streak.CurrentStreak = currentStreak;
 
                     // Calculate longest streak
-                    var longestStreak = CalculateLongestStreakFromCompletions(completions);
+                    var longestStreak = CalculateLongestStreakFromCompletions(completionDates);
                     streak.LongestStreak = Math.Max(streak.LongestStreak, longestStreak);
 
                     // Calculate completion rate (from first completion to today)
-                    var firstCompletion = completions.First();
+                    var firstCompletion = completionDates.First();
                     var daysSinceFirst = (today.DayNumber - firstCompletion.DayNumber) + 1;
                     streak.CompletionRate = daysSinceFirst > 0 ? (decimal)completions.Count / daysSinceFirst * 100 : 0;
                 }
@@ -181,7 +184,7 @@ namespace HabitTracker.Infrastructure.Repositories
                 
                 streak.CurrentStreak = currentStreak;
                 if (lastCompletionDate.HasValue)
-                    streak.LastCompletionDate = lastCompletionDate.Value;
+                    streak.LastCompletionDate = lastCompletionDate.Value.ToDateTime(TimeOnly.MinValue);
                 
                 // Update longest streak if current exceeds it
                 if (currentStreak > streak.LongestStreak)
@@ -359,7 +362,7 @@ namespace HabitTracker.Infrastructure.Repositories
                     .Where(s => s.Habit.TrackerId == trackerId 
                              && s.Habit.IsActive 
                              && s.CurrentStreak > 0 
-                             && (s.LastCompletionDate == null || s.LastCompletionDate < cutoffDate))
+                             && (s.LastCompletionDate == null || DateOnly.FromDateTime(s.LastCompletionDate.Value) < cutoffDate))
                     .Include(s => s.Habit)
                     .AsNoTracking()
                     .OrderByDescending(s => s.CurrentStreak)
@@ -884,7 +887,7 @@ namespace HabitTracker.Infrastructure.Repositories
                 var cutoffDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-days));
                 
                 return await _dbSet
-                    .Where(s => s.Habit.TrackerId == trackerId && s.LastCompletionDate >= cutoffDate)
+                    .Where(s => s.Habit.TrackerId == trackerId && s.LastCompletionDate.HasValue && DateOnly.FromDateTime(s.LastCompletionDate.Value) >= cutoffDate)
                     .Include(s => s.Habit)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken)
@@ -904,7 +907,7 @@ namespace HabitTracker.Infrastructure.Repositories
                 var cutoffDate = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(-days));
                 
                 return await _dbSet
-                    .Where(s => s.Habit.TrackerId == trackerId && (s.LastCompletionDate == null || s.LastCompletionDate < cutoffDate))
+                    .Where(s => s.Habit.TrackerId == trackerId && (s.LastCompletionDate == null || DateOnly.FromDateTime(s.LastCompletionDate.Value) < cutoffDate))
                     .Include(s => s.Habit)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken)
@@ -934,8 +937,9 @@ namespace HabitTracker.Infrastructure.Repositories
                     .ToListAsync(cancellationToken)
                     .ConfigureAwait(false);
 
-                var expectedCurrentStreak = CalculateCurrentStreakFromCompletions(completions, DateOnly.FromDateTime(DateTime.UtcNow));
-                var expectedLongestStreak = CalculateLongestStreakFromCompletions(completions);
+                var completionDates = completions.Select(c => DateOnly.FromDateTime(c)).ToList();
+                var expectedCurrentStreak = CalculateCurrentStreakFromCompletions(completionDates, DateOnly.FromDateTime(DateTime.UtcNow));
+                var expectedLongestStreak = CalculateLongestStreakFromCompletions(completionDates);
                 var expectedTotalCompletions = completions.Count;
 
                 return streak.CurrentStreak == expectedCurrentStreak

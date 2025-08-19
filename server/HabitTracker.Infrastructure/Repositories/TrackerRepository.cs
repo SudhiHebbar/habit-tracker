@@ -437,5 +437,20 @@ namespace HabitTracker.Infrastructure.Repositories
                 throw;
             }
         }
+
+        // Save changes for repository operations
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogDebug("Saving changes to database");
+                return await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving changes to database");
+                throw;
+            }
+        }
     }
 }

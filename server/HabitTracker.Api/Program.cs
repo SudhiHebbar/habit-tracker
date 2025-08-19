@@ -4,6 +4,11 @@ using HabitTracker.Infrastructure.Data;
 using HabitTracker.Api.Extensions;
 using HabitTracker.Application.Interfaces;
 using HabitTracker.Infrastructure.Repositories;
+using HabitTracker.Application.Services;
+using HabitTracker.Application.Mappings;
+using HabitTracker.Application.Validators;
+using FluentValidation;
+using HabitTracker.Application.DTOs.Tracker;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,10 +34,20 @@ builder.Services.AddDbContext<HabitTrackerDbContext>(options =>
 // Configure Repository Pattern and Unit of Work
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITrackerRepository, TrackerRepository>();
-builder.Services.AddScoped<IHabitRepository, HabitRepository>();
-builder.Services.AddScoped<IHabitCompletionRepository, HabitCompletionRepository>();
-builder.Services.AddScoped<IStreakRepository, StreakRepository>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// Configure AutoMapper
+var mapperConfig = new AutoMapper.MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<TrackerMappingProfile>();
+});
+builder.Services.AddSingleton<AutoMapper.IMapper>(mapperConfig.CreateMapper());
+
+// Configure FluentValidation
+builder.Services.AddScoped<IValidator<CreateTrackerDto>, CreateTrackerValidator>();
+builder.Services.AddScoped<IValidator<UpdateTrackerDto>, UpdateTrackerValidator>();
+
+// Configure Application Services
+builder.Services.AddScoped<ITrackerService, TrackerService>();
 
 // Configure CORS for React frontend
 builder.Services.AddCors(options =>

@@ -1,0 +1,61 @@
+.trackerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.loadingContainer,
+.errorContainer,
+.emptyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.loadingSpinner {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary, #6b7280);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.errorMessage {
+  color: var(--color-danger, #ef4444);
+  font-size: 1rem;
+  margin: 0;
+  padding: 1rem;
+  background: var(--color-danger-light, #fee2e2);
+  border-radius: 8px;
+  border: 1px solid var(--color-danger-border, #fecaca);
+}
+
+.emptyMessage {
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .trackerGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .trackerGrid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}

@@ -13,15 +13,16 @@ namespace HabitTracker.Tests.TestHelpers
         {
             builder.ConfigureServices(services =>
             {
-                // Remove the existing DbContext registration
-                var dbContextDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<HabitTrackerDbContext>));
-                if (dbContextDescriptor != null)
-                    services.Remove(dbContextDescriptor);
-
-                // Remove the DbContext itself
-                var dbContextServiceDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(HabitTrackerDbContext));
-                if (dbContextServiceDescriptor != null)
-                    services.Remove(dbContextServiceDescriptor);
+                // Remove all existing DbContext registrations
+                var descriptorsToRemove = services.Where(d => 
+                    d.ServiceType == typeof(DbContextOptions<HabitTrackerDbContext>) ||
+                    d.ServiceType == typeof(HabitTrackerDbContext) ||
+                    d.ServiceType == typeof(DbContextOptions)).ToList();
+                
+                foreach (var descriptor in descriptorsToRemove)
+                {
+                    services.Remove(descriptor);
+                }
 
                 // Add in-memory database for testing
                 services.AddDbContext<HabitTrackerDbContext>(options =>
