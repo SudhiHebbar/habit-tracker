@@ -132,7 +132,7 @@ namespace HabitTracker.Infrastructure.Repositories
                     // Calculate completion rate (from first completion to today)
                     var firstCompletion = completionDates.First();
                     var daysSinceFirst = (today.DayNumber - firstCompletion.DayNumber) + 1;
-                    streak.CompletionRate = daysSinceFirst > 0 ? (decimal)completions.Count / daysSinceFirst * 100 : 0;
+                    streak.CompletionRate = daysSinceFirst > 0 ? (decimal)completionDates.Distinct().Count() / daysSinceFirst * 100 : 0;
                 }
 
                 streak.UpdatedAt = DateTime.UtcNow;
