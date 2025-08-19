@@ -1,0 +1,38 @@
+# Ignore build directories
+dist/
+build/
+coverage/
+
+# Ignore node_modules
+node_modules/
+
+# Ignore package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore generated files
+*.min.js
+*.min.css
+
+# Ignore configuration files
+vite.config.ts
+tsconfig.json
+tsconfig.*.json
+
+# Ignore environment files
+.env*
+
+# Ignore IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Ignore documentation
+*.md
+CHANGELOG.md
+
+# Ignore git files
+.gitignore
+.gitattributes

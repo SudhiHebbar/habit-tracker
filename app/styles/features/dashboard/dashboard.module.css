@@ -1,0 +1,57 @@
+/* Dashboard Feature Styles */
+
+.dashboard {
+  display: grid;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+  max-width: var(--breakpoint-desktop);
+  margin: 0 auto;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+}
+
+.dashboardTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.dashboardStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.statCard {
+  background: var(--color-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-6);
+  text-align: center;
+}
+
+.habitGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-6);
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: var(--spacing-4);
+  }
+  
+  .habitGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboardStats {
+    grid-template-columns: 1fr;
+  }
+}

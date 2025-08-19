@@ -1,0 +1,68 @@
+/* Modal Component Styles */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-index-modal-backdrop);
+  padding: var(--spacing-4);
+}
+
+.modalContent {
+  background: var(--color-background);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modalHeader {
+  padding: var(--spacing-6) var(--spacing-8);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.modalCloseButton {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: var(--spacing-2);
+  border-radius: var(--border-radius-base);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.modalCloseButton:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--text-primary);
+}
+
+.modalBody {
+  padding: var(--spacing-8);
+}
+
+.modalFooter {
+  padding: var(--spacing-6) var(--spacing-8);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+}

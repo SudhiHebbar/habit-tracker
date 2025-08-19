@@ -1,0 +1,135 @@
+# React Configuration Template
+
+## Tech Stack Configuration
+```yaml
+Primary Language: TypeScript
+Framework/Library: React 19
+Package Manager: npm
+Build Tool: Vite
+Testing Framework: Jest + React Testing Library
+Linter: ESLint
+Type Checker: TypeScript
+```
+
+### Development Features
+- **Path Aliases**: Clean imports with @ prefixes
+- **CSS Modules**: Scoped styling with automatic class name generation
+- **SCSS Support**: Advanced styling features and mixins  
+- **Component Variants**: Systematic component styling with CSS classes
+- **Type Safety**: Full TypeScript configuration
+- **Modern Patterns**: React 19 best practices
+- **Performance**: Optimized bundle and dev experience
+
+### Example Implementation
+The setup includes a complete user profile feature slice demonstrating:
+- Service layer with mock API integration
+- Custom hooks for data fetching and mutations
+- Reusable components with CSS Module styling
+- Feature-specific stylesheets with proper organization
+- Page components with error and loading states
+- Responsive design with CSS Grid and Flexbox
+- Theme-aware styling with CSS custom properties
+
+### Project Structure
+
+```
+$project-directory/                          # Project root folder
+└── app/                            # React App root
+    ├── src/
+    │   ├── features/                # Feature slices (VSA)
+    │   │   └── user-profile/
+    │   │       ├── components/      # Feature components
+    │   │       ├── hooks/          # Feature hooks  
+    │   │       ├── services/       # Feature services
+    │   │       ├── types/          # Feature types
+    │   │       ├── styles/         # Feature-specific styles
+    │   │       └── pages/          # Feature pages
+    │   ├── shared/                 # Shared resources
+    │   │   ├── components/ui/      # UI components
+    │   │   ├── hooks/             # Shared hooks
+    │   │   ├── services/          # Shared services
+    │   │   ├── types/             # Shared types
+    │   │   ├── utils/             # Utilities
+    │   │   ├── constants/         # Constants
+    │   │   └── styles/            # Shared styles & design system
+    │   ├── layouts/               # Layout components
+    │   ├── pages/                 # Route pages
+    │   ├── styles/                # Global styles & themes
+    │   │   ├── globals.css        # Global CSS & Tailwind imports
+    │   │   ├── components/        # Component-specific CSS modules
+    │   │   ├── layouts/          # Layout-specific styles
+    │   │   └── themes/           # Theme definitions
+    │   └── App.tsx               # Root component
+    ├── public/                   # Static assets
+    │   ├── index.html           # HTML template
+    │   └── assets/              # Images, icons, etc.
+    ├── docs/                    # Project documentation
+    │   ├── components/          # Component documentation
+    │   ├── features/           # Feature documentation
+    │   └── setup/              # Setup & deployment guides
+    ├── tests/                   # Test configuration
+    │   ├── setup.ts            # Test setup file
+    │   ├── mocks/              # Mock configurations
+    │   └── utils/              # Test utilities
+    ├── .env                     # Environment variables
+    ├── .env.example            # Environment template
+    ├── .gitignore              # Git ignore file
+    ├── package.json            # NPM dependencies & scripts
+    ├── package-lock.json       # NPM lock file
+    ├── tsconfig.json           # TypeScript configuration
+    ├── tailwind.config.js      # Tailwind CSS configuration
+    ├── vite.config.ts          # Vite configuration
+    ├── eslint.config.js        # ESLint configuration
+    ├── prettier.config.js      # Prettier configuration
+    └── README.md               # Project documentation
+```
+
+## Validation Commands
+```bash
+# Level 1: Syntax & Style
+npm run lint                 # ESLint
+npm run format              # Prettier
+npx tsc --noEmit            # TypeScript check
+
+# Level 2: Unit Tests
+npm test                    # Jest + RTL
+npm run test:watch         # Watch mode
+
+# Level 3: Integration Tests
+npm run dev                # Start dev server
+npm run e2e                # End-to-end tests
+
+# Level 4: Quality Checks
+npm run build              # Production build
+npm run lighthouse         # Performance audit
+```
+
+## Common Integration Points
+```yaml
+ROUTING:
+  - file: src/App.tsx
+  - pattern: <Route path="/feature" element={<FeatureComponent />} />
+
+STATE_MANAGEMENT:
+  - local: useState/useReducer
+  - global: Context API or external store (Redux/Zustand)
+
+STYLING:
+  - approach: CSS Modules / styled-components / Tailwind
+  - file: src/styles/
+
+API_INTEGRATION:
+  - file: src/services/api.ts
+  - pattern: async/await with error handling
+
+TESTING:
+  - unit: React Testing Library
+  - integration: Playwright/Cypress
+  - pattern: test-id attributes for stable selectors
+```
+
+## Reference Files
+- Gotchas: `./Gotchas/react_gotchas.md`
+- Patterns: `./Gotchas/frontend_best_practices.md`
+- Anti-patterns: `./Gotchas/anti_patterns.md`
+- Validation: `./Gotchas/validation_commands.md`
