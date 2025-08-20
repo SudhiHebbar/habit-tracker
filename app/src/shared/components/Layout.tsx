@@ -1,6 +1,6 @@
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
-import styles from '../../../styles/shared/layouts/main-layout.module.css';
+import styles from '../../styles/shared/layouts/main-layout.module.css';
 
 interface LayoutProps {
   children: React.ReactNode;

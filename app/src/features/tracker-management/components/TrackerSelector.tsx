@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { Tracker } from '../types/tracker.types';
-import styles from '../../../styles/features/tracker-management/TrackerSelector.module.css';
+import styles from '../../../src/styles/features/tracker-management/TrackerSelector.module.css';
 
 interface TrackerSelectorProps {
   trackers: Tracker[];

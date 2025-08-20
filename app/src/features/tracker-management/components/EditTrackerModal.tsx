@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { UpdateTrackerDto, Tracker } from '../types/tracker.types';
-import styles from '../../../styles/features/tracker-management/EditTrackerModal.module.css';
+import styles from '../../../src/styles/features/tracker-management/EditTrackerModal.module.css';
 
 interface EditTrackerModalProps {
   isOpen: boolean;

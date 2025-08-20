@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Tracker } from '../types/tracker.types';
 import { TrackerCard } from './TrackerCard';
-import styles from '../../../styles/features/tracker-management/TrackerList.module.css';
+import styles from '../../../src/styles/features/tracker-management/TrackerList.module.css';
 
 interface TrackerListProps {
   trackers: Tracker[];
