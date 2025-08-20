@@ -10,6 +10,7 @@ using HabitTracker.Application.Options;
 using HabitTracker.Application.Validators;
 using FluentValidation;
 using HabitTracker.Application.DTOs.Tracker;
+using HabitTracker.Application.DTOs.Habit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,10 +36,16 @@ builder.Services.AddDbContext<HabitTrackerDbContext>(options =>
 // Configure Repository Pattern and Unit of Work
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITrackerRepository, TrackerRepository>();
+builder.Services.AddScoped<IHabitRepository, HabitRepository>();
+builder.Services.AddScoped<IHabitCompletionRepository, HabitCompletionRepository>();
+builder.Services.AddScoped<IStreakRepository, StreakRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Configure options
 builder.Services.Configure<TrackerLimitsOptions>(
     builder.Configuration.GetSection(TrackerLimitsOptions.SectionName));
+builder.Services.Configure<HabitLimitsOptions>(
+    builder.Configuration.GetSection(HabitLimitsOptions.SectionName));
 
 // Configure AutoMapper
 builder.Services.ConfigureAutoMapper();
@@ -46,9 +53,12 @@ builder.Services.ConfigureAutoMapper();
 // Configure FluentValidation
 builder.Services.AddScoped<IValidator<CreateTrackerDto>, CreateTrackerValidator>();
 builder.Services.AddScoped<IValidator<UpdateTrackerDto>, UpdateTrackerValidator>();
+builder.Services.AddScoped<IValidator<CreateHabitDto>, CreateHabitValidator>();
+builder.Services.AddScoped<IValidator<UpdateHabitDto>, UpdateHabitValidator>();
 
 // Configure Application Services
 builder.Services.AddScoped<ITrackerService, TrackerService>();
+builder.Services.AddScoped<IHabitService, HabitService>();
 
 // Configure CORS for React frontend
 builder.Services.AddCors(options =>
