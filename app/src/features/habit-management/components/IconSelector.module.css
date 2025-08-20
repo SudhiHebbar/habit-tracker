@@ -1,0 +1,377 @@
+/* Icon Selector Component Styles */
+.iconSelector {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.searchInput:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.categorySelect {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background-color: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.categorySelect:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.categorySelect:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+/* Selected Icon Display */
+.selectedIconDisplay {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.selectedLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.selectedIconPreview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selectedIconName {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.clearButton {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearButton:hover:not(:disabled) {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.clearButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icon Grid */
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+/* Size variants for grid */
+.iconSelector.small .iconGrid {
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  gap: 6px;
+  max-height: 240px;
+  padding: 12px;
+}
+
+.iconSelector.large .iconGrid {
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 12px;
+  max-height: 360px;
+  padding: 20px;
+}
+
+/* Icon Buttons */
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 8px;
+  aspect-ratio: 1;
+}
+
+.iconButton:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.iconButton.selected {
+  background-color: #eef2ff;
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.iconButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Size variants for buttons */
+.iconButton.small {
+  padding: 6px;
+}
+
+.iconButton.large {
+  padding: 12px;
+}
+
+/* Icon SVG */
+.iconSvg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconSvg svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.small .iconSvg svg {
+  width: 16px;
+  height: 16px;
+}
+
+.large .iconSvg svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* No Results State */
+.noResults {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.noResultsIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  stroke-width: 1.5;
+}
+
+.noResults p {
+  margin: 4px 0;
+  font-size: 0.875rem;
+}
+
+.noResultsHint {
+  font-size: 0.75rem !important;
+  color: #9ca3af !important;
+}
+
+/* Icon Count */
+.iconCount {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Scrollbar Styling */
+.iconGrid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.iconGrid::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.iconGrid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.iconGrid::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .searchInput,
+  .categorySelect {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .selectedIconDisplay {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .selectedLabel {
+    color: #d1d5db;
+  }
+
+  .selectedIconName {
+    color: #9ca3af;
+  }
+
+  .iconGrid {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .iconButton {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+
+  .iconButton:hover:not(:disabled) {
+    background-color: #4b5563;
+    border-color: #6b7280;
+  }
+
+  .iconButton.selected {
+    background-color: #312e81;
+    border-color: #6366f1;
+    color: #a5b4fc;
+  }
+
+  .noResults {
+    color: #9ca3af;
+  }
+
+  .iconCount {
+    color: #9ca3af;
+  }
+
+  .iconGrid::-webkit-scrollbar-track {
+    background: #374151;
+  }
+
+  .iconGrid::-webkit-scrollbar-thumb {
+    background: #4b5563;
+  }
+
+  .iconGrid::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .controls {
+    flex-direction: column;
+  }
+
+  .searchBox {
+    min-width: unset;
+  }
+
+  .categorySelect {
+    min-width: unset;
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    max-height: 250px;
+  }
+
+  .selectedIconDisplay {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .clearButton {
+    margin-left: 0;
+    order: -1;
+  }
+}

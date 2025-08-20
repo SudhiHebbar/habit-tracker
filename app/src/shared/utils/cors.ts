@@ -43,28 +43,19 @@ export const isOriginAllowed = (origin: string): boolean => {
 
 /**
  * Get headers for cross-origin requests
+ * Note: CORS headers are set by the server, not the client
  */
 export const getCorsHeaders = (): Record<string, string> => {
-  const config = getCorsConfig();
-  
-  return {
-    'Access-Control-Allow-Origin': window.location.origin,
-    'Access-Control-Allow-Methods': config.allowedMethods.join(', '),
-    'Access-Control-Allow-Headers': config.allowedHeaders.join(', '),
-    'Access-Control-Allow-Credentials': config.credentials.toString(),
-  };
+  // Client should not set CORS headers - these are server-side only
+  return {};
 };
 
 /**
- * Middleware function to add CORS headers to fetch requests
+ * Middleware function to add standard headers to fetch requests
  */
 export const withCorsHeaders = (headers: Record<string, string> = {}): Record<string, string> => {
-  const corsHeaders = getCorsHeaders();
-  
-  return {
-    ...corsHeaders,
-    ...headers,
-  };
+  // Only add standard request headers, not CORS headers
+  return headers;
 };
 
 /**
@@ -90,14 +81,11 @@ export const handlePreflightRequest = (
 export const createCorsRequestOptions = (
   options: RequestInit = {}
 ): RequestInit => {
-  const corsHeaders = getCorsHeaders();
-  
   return {
     ...options,
     mode: 'cors' as RequestMode,
     credentials: 'include' as RequestCredentials,
     headers: {
-      ...corsHeaders,
       ...options.headers,
     },
   };

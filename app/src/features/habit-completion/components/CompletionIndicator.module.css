@@ -1,0 +1,105 @@
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  position: relative;
+  border-radius: 50%;
+  background: #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.indicator[data-completed="true"] .dot {
+  background: var(--indicator-color, #10B981);
+}
+
+.indicator[data-optimistic="true"] .dot {
+  opacity: 0.7;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* Size variations */
+.small .dot {
+  width: 8px;
+  height: 8px;
+}
+
+.medium .dot {
+  width: 12px;
+  height: 12px;
+}
+
+.large .dot {
+  width: 16px;
+  height: 16px;
+}
+
+/* Check icon */
+.check {
+  width: 70%;
+  height: 70%;
+  color: white;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Label */
+.label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.indicator[data-completed="true"] .label {
+  color: var(--indicator-color, #10B981);
+}
+
+.small .label {
+  font-size: 10px;
+}
+
+.large .label {
+  font-size: 14px;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .dot {
+    background: #374151;
+  }
+  
+  .label {
+    color: #9CA3AF;
+  }
+  
+  .indicator[data-completed="true"] .label {
+    color: var(--indicator-color, #10B981);
+  }
+}

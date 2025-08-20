@@ -10,6 +10,7 @@ using HabitTracker.Application.Options;
 using HabitTracker.Application.Validators;
 using FluentValidation;
 using HabitTracker.Application.DTOs.Tracker;
+using HabitTracker.Application.DTOs.Habit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,10 +36,16 @@ builder.Services.AddDbContext<HabitTrackerDbContext>(options =>
 // Configure Repository Pattern and Unit of Work
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITrackerRepository, TrackerRepository>();
+builder.Services.AddScoped<IHabitRepository, HabitRepository>();
+builder.Services.AddScoped<IHabitCompletionRepository, HabitCompletionRepository>();
+builder.Services.AddScoped<IStreakRepository, StreakRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Configure options
 builder.Services.Configure<TrackerLimitsOptions>(
     builder.Configuration.GetSection(TrackerLimitsOptions.SectionName));
+builder.Services.Configure<HabitLimitsOptions>(
+    builder.Configuration.GetSection(HabitLimitsOptions.SectionName));
 
 // Configure AutoMapper
 builder.Services.ConfigureAutoMapper();
@@ -46,16 +53,23 @@ builder.Services.ConfigureAutoMapper();
 // Configure FluentValidation
 builder.Services.AddScoped<IValidator<CreateTrackerDto>, CreateTrackerValidator>();
 builder.Services.AddScoped<IValidator<UpdateTrackerDto>, UpdateTrackerValidator>();
+builder.Services.AddScoped<IValidator<CreateHabitDto>, CreateHabitValidator>();
+builder.Services.AddScoped<IValidator<UpdateHabitDto>, UpdateHabitValidator>();
 
 // Configure Application Services
 builder.Services.AddScoped<ITrackerService, TrackerService>();
+builder.Services.AddScoped<IHabitService, HabitService>();
+builder.Services.AddScoped<IHabitCompletionService, HabitCompletionService>();
+
+// Add Memory Cache for performance optimization
+builder.Services.AddMemoryCache();
 
 // Configure CORS for React frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

@@ -1,0 +1,484 @@
+/* Edit Habit Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: modalSlideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Progress Steps */
+.stepsContainer {
+  display: flex;
+  padding: 20px 24px;
+  gap: 16px;
+  border-bottom: 1px solid #e5e5e5;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.step.currentStep {
+  opacity: 1;
+}
+
+.step.completedStep {
+  opacity: 0.8;
+}
+
+.stepNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.currentStep .stepNumber {
+  background-color: #6366f1;
+  color: white;
+}
+
+.completedStep .stepNumber {
+  background-color: #10b981;
+  color: white;
+}
+
+.stepInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stepTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  white-space: nowrap;
+}
+
+.stepDescription {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+/* Step Content */
+.stepContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.input:disabled,
+.textarea:disabled {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.errorMessage {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #ef4444;
+}
+
+.helpText {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  margin: 0;
+}
+
+/* Preview Section */
+.previewSection {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.previewTitle {
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.previewCard {
+  padding: 16px;
+  border: 2px solid #e5e5e5;
+  border-radius: 8px;
+  background-color: #f9fafb;
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.previewIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+.previewName {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1f2937;
+}
+
+.previewDescription {
+  margin: 0 0 12px 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.previewMeta {
+  display: flex;
+  gap: 16px;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-top: 1px solid #e5e5e5;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.stepIndicator {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.backButton,
+.nextButton,
+.submitButton {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  min-width: 100px;
+}
+
+.backButton {
+  background-color: #ffffff;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.backButton:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.nextButton,
+.submitButton {
+  background-color: #6366f1;
+  color: #ffffff;
+  border-color: #6366f1;
+}
+
+.nextButton:hover:not(:disabled),
+.submitButton:hover:not(:disabled) {
+  background-color: #5856eb;
+  border-color: #5856eb;
+}
+
+.backButton:disabled,
+.nextButton:disabled,
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+
+  .modalHeader {
+    border-bottom-color: #374151;
+  }
+
+  .modalHeader h2 {
+    color: #f9fafb;
+  }
+
+  .stepsContainer {
+    border-bottom-color: #374151;
+  }
+
+  .stepTitle {
+    color: #f9fafb;
+  }
+
+  .label {
+    color: #d1d5db;
+  }
+
+  .input,
+  .textarea {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .input:disabled,
+  .textarea:disabled {
+    background-color: #4b5563;
+    color: #9ca3af;
+  }
+
+  .helpText {
+    color: #9ca3af;
+  }
+
+  .checkboxLabel {
+    color: #d1d5db;
+  }
+
+  .previewTitle,
+  .previewName {
+    color: #f9fafb;
+  }
+
+  .previewCard {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .previewDescription,
+  .previewMeta {
+    color: #9ca3af;
+  }
+
+  .navigation {
+    border-top-color: #374151;
+  }
+
+  .stepIndicator {
+    color: #9ca3af;
+  }
+
+  .backButton {
+    background-color: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+
+  .backButton:hover:not(:disabled) {
+    background-color: #4b5563;
+    border-color: #6b7280;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 10px;
+  }
+
+  .modal {
+    max-height: 95vh;
+  }
+
+  .stepsContainer {
+    padding: 16px 20px;
+  }
+
+  .stepContent {
+    padding: 20px;
+  }
+
+  .navigation {
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .stepIndicator {
+    order: -1;
+  }
+
+  .backButton,
+  .nextButton,
+  .submitButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .stepsContainer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .step {
+    min-width: unset;
+  }
+
+  .stepTitle,
+  .stepDescription {
+    white-space: normal;
+  }
+}
