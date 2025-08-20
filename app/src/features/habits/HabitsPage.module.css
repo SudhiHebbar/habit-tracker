@@ -1,30 +1,171 @@
 .habitsPage {
-  padding: var(--spacing-xl);
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
 .title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-900);
-  margin-bottom: var(--spacing-sm);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1f2937);
+  margin-bottom: 0.5rem;
 }
 
 .subtitle {
-  font-size: var(--font-size-lg);
-  color: var(--color-gray-600);
+  font-size: 1.125rem;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
 }
 
 .content {
+  width: 100%;
+}
+
+.loading,
+.noTrackers {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 40vh;
+  min-height: 300px;
+  text-align: center;
+}
+
+.helpText {
+  margin-top: 1rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.helpText a {
+  color: var(--color-primary, #6366f1);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.helpText a:hover {
+  text-decoration: underline;
+}
+
+.habitsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.trackerSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 300px;
+}
+
+.selectorLabel {
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.trackerSelect {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border, #d1d5db);
+  border-radius: 0.5rem;
+  background: var(--color-background, white);
+  color: var(--color-text-primary, #1f2937);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.trackerSelect:focus {
+  outline: none;
+  border-color: var(--color-primary, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.currentTracker {
+  padding: 1rem;
+  background: var(--color-surface, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 0.75rem;
+}
+
+.currentTracker h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.habitsList {
+  width: 100%;
 }
 
 .placeholder {
   text-align: center;
+  padding: 3rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+  
+  .subtitle {
+    color: var(--color-text-secondary-dark, #9ca3af);
+  }
+  
+  .helpText {
+    color: var(--color-text-secondary-dark, #9ca3af);
+  }
+  
+  .selectorLabel {
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+  
+  .trackerSelect {
+    background: var(--color-background-dark, #1f2937);
+    border-color: var(--color-border-dark, #374151);
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+  
+  .currentTracker {
+    background: var(--color-surface-dark, #374151);
+    border-color: var(--color-border-dark, #4b5563);
+  }
+  
+  .currentTracker h3 {
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .habitsPage {
+    padding: 1rem;
+  }
+  
+  .header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .title {
+    font-size: 1.75rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .habitsSection {
+    gap: 1.5rem;
+  }
+  
+  .trackerSelector {
+    max-width: none;
+  }
 }

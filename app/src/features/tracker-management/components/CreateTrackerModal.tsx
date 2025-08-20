@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import type { CreateTrackerDto } from '../types/tracker.types';
-import styles from '../../../src/styles/features/tracker-management/CreateTrackerModal.module.css';
+import styles from '../../../styles/features/tracker-management/CreateTrackerModal.module.css';
 
 interface CreateTrackerModalProps {
   isOpen: boolean;

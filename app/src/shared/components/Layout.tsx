@@ -23,13 +23,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   </a>
                 </li>
                 <li>
-                  <a href="/trackers" className={styles.navigationLink}>
-                    Trackers
+                  <a href="/habits" className={styles.navigationLink}>
+                    Habits
                   </a>
                 </li>
                 <li>
-                  <a href="/habits" className={styles.navigationLink}>
-                    Habits
+                  <a href="/settings" className={styles.navigationLink}>
+                    Settings
                   </a>
                 </li>
               </ul>
