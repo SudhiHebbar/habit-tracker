@@ -6,7 +6,7 @@ import type {
   TrackerError 
 } from '../types/tracker.types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5281/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5281/api';
 
 class TrackerApiService {
   private baseUrl = `${API_BASE_URL}/trackers`;
