@@ -76,7 +76,7 @@ export const HabitList: React.FC<HabitListProps> = ({
 
     // Sort habits
     filtered.sort((a, b) => {
-      let aValue: any, bValue: any;
+      let aValue: string | number | Date, bValue: string | number | Date;
 
       switch (sortOption.field) {
         case 'name':

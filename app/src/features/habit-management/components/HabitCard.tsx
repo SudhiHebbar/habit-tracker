@@ -49,7 +49,6 @@ export const HabitCard: React.FC<HabitCardProps> = ({
     onDelete?.(habit);
   };
 
-
   const formatDate = (dateString?: string) => {
     if (!dateString) return 'Never';
     return new Date(dateString).toLocaleDateString();
@@ -78,9 +77,8 @@ export const HabitCard: React.FC<HabitCardProps> = ({
               date={completionDate || new Date().toISOString().split('T')[0]}
               size="large"
               showStreak={true}
-              onToggle={(isCompleted) => {
+              onToggle={() => {
                 // Optional: Handle completion state change
-                console.log(`${habit.name} completion toggled for ${completionDate}:`, isCompleted);
               }}
               className={styles.completionCheckbox}
             />

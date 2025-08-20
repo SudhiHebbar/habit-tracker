@@ -697,7 +697,7 @@ namespace HabitTracker.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Streak>> BulkUpdateStreaksAsync(IEnumerable<Streak> streaks, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<Streak>> BulkUpdateStreaksAsync(IEnumerable<Streak> streaks, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -710,7 +710,7 @@ namespace HabitTracker.Infrastructure.Repositories
                 }
                 
                 _dbSet.UpdateRange(streakList);
-                return streakList;
+                return Task.FromResult<IEnumerable<Streak>>(streakList);
             }
             catch (Exception ex)
             {
