@@ -15,6 +15,7 @@ namespace HabitTracker.Application.Interfaces
         Task<Streak> UpdateCurrentStreakAsync(int habitId, int currentStreak, DateOnly? lastCompletionDate = null, CancellationToken cancellationToken = default);
         Task<Streak> UpdateLongestStreakAsync(int habitId, int longestStreak, CancellationToken cancellationToken = default);
         Task<Streak> ResetCurrentStreakAsync(int habitId, CancellationToken cancellationToken = default);
+        Task<Streak> UpdateStreakAsync(int habitId, int currentStreak, int longestStreak, DateTime? lastCompletionDate, int totalCompletions, double completionRate, CancellationToken cancellationToken = default);
         
         // Advanced queries with relationships
         Task<Streak?> GetStreakWithHabitAsync(int habitId, CancellationToken cancellationToken = default);

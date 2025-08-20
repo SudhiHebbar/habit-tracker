@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import type { Habit, HabitFilter, HabitSortOption } from '../types/habit.types';
 import HabitCard from './HabitCard';
+import HabitCalendarCard from './HabitCalendarCard';
 import styles from './HabitList.module.css';
 
 interface HabitListProps {
@@ -12,7 +13,7 @@ interface HabitListProps {
   onDeleteHabit?: (habit: Habit) => void;
   onToggleComplete?: (habit: Habit) => void;
   showStats?: boolean;
-  viewMode?: 'grid' | 'list';
+  viewMode?: 'grid' | 'list' | 'calendar';
   className?: string;
 }
 
@@ -165,16 +166,40 @@ export const HabitList: React.FC<HabitListProps> = ({
         </div>
         
         {onCreateHabit && (
-          <button
-            className={styles.createButton}
-            onClick={onCreateHabit}
-            aria-label="Create new habit"
-          >
-            <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
-              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-            </svg>
-            Add Habit
-          </button>
+          <div className={styles.headerActions}>
+            {/* View Mode Toggle */}
+            <div className={styles.viewToggle}>
+              <button
+                className={`${styles.viewButton} ${viewMode === 'grid' ? styles.active : ''}`}
+                onClick={() => {/* Set view mode to grid */}}
+                title="Grid view"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.viewIcon}>
+                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zM9 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V4zM9 10a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1v-2z" clipRule="evenodd" />
+                </svg>
+              </button>
+              <button
+                className={`${styles.viewButton} ${viewMode === 'calendar' ? styles.active : ''}`}
+                onClick={() => {/* Set view mode to calendar */}}
+                title="Calendar view with weekly completion tracking"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.viewIcon}>
+                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM4 8h12v8H4V8z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            
+            <button
+              className={styles.createButton}
+              onClick={onCreateHabit}
+              aria-label="Create new habit"
+            >
+              <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
+                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+              </svg>
+              Add Habit
+            </button>
+          </div>
         )}
       </div>
 
@@ -272,15 +297,26 @@ export const HabitList: React.FC<HabitListProps> = ({
       ) : (
         <div className={`${styles.habitGrid} ${styles[viewMode]}`}>
           {filteredAndSortedHabits.map((habit) => (
-            <HabitCard
-              key={habit.id}
-              habit={habit}
-              {...(onEditHabit && { onEdit: onEditHabit })}
-              {...(onDeleteHabit && { onDelete: onDeleteHabit })}
-              {...(onToggleComplete && { onToggleComplete: onToggleComplete })}
-              showStats={showStats}
-              className={styles.habitCardItem}
-            />
+            viewMode === 'calendar' ? (
+              <HabitCalendarCard
+                key={habit.id}
+                habit={habit}
+                {...(onEditHabit && { onEdit: onEditHabit })}
+                {...(onDeleteHabit && { onDelete: onDeleteHabit })}
+                showStats={showStats}
+                className={styles.habitCardItem}
+              />
+            ) : (
+              <HabitCard
+                key={habit.id}
+                habit={habit}
+                {...(onEditHabit && { onEdit: onEditHabit })}
+                {...(onDeleteHabit && { onDelete: onDeleteHabit })}
+                {...(onToggleComplete && { onToggleComplete: onToggleComplete })}
+                showStats={showStats}
+                className={styles.habitCardItem}
+              />
+            )
           ))}
         </div>
       )}

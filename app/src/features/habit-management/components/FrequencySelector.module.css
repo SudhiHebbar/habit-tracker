@@ -1,0 +1,369 @@
+/* Frequency Selector Component Styles */
+.frequencySelector {
+  width: 100%;
+}
+
+/* Frequency Options */
+.frequencyOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.frequencyOption {
+  display: block;
+  padding: 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.frequencyOption:hover:not(.disabled) {
+  border-color: #d1d5db;
+  background-color: #f9fafb;
+}
+
+.frequencyOption.selected {
+  border-color: #6366f1;
+  background-color: #eef2ff;
+}
+
+.frequencyOption.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f9fafb;
+}
+
+.radioInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.optionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.optionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.optionIcon {
+  font-size: 1.2rem;
+}
+
+.optionLabel {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1f2937;
+}
+
+.optionDescription {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-left: 28px; /* Align with label text */
+}
+
+/* Custom Frequency Configuration */
+.customFrequencyConfig {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.customTitle {
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.customOption {
+  margin-bottom: 20px;
+}
+
+.customLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.customLabel input[type="radio"] {
+  margin: 0;
+}
+
+.customControl {
+  margin-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rangeInput {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background-color: #e5e7eb;
+  outline: none;
+  cursor: pointer;
+}
+
+.rangeInput::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #6366f1;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rangeInput::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #6366f1;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rangeInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rangeValue {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Specific Days Selection */
+.specificDays {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.daysTitle {
+  margin: 0 0 4px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.daysDescription {
+  margin: 0 0 12px 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.daysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.dayButton {
+  padding: 8px 4px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.dayButton:hover:not(:disabled) {
+  border-color: #6366f1;
+  background-color: #f0f9ff;
+}
+
+.dayButton.selectedDay {
+  background-color: #6366f1;
+  border-color: #6366f1;
+  color: #ffffff;
+}
+
+.dayButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selectedDaysText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Frequency Summary */
+.frequencySummary {
+  background-color: #f0f9ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.summaryTitle {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.summaryText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #1e3a8a;
+  line-height: 1.4;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .frequencyOption {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .frequencyOption:hover:not(.disabled) {
+    border-color: #4b5563;
+    background-color: #374151;
+  }
+
+  .frequencyOption.selected {
+    border-color: #6366f1;
+    background-color: #312e81;
+  }
+
+  .frequencyOption.disabled {
+    background-color: #374151;
+  }
+
+  .optionLabel {
+    color: #f9fafb;
+  }
+
+  .optionDescription {
+    color: #9ca3af;
+  }
+
+  .customFrequencyConfig {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .customTitle {
+    color: #f9fafb;
+  }
+
+  .customLabel {
+    color: #d1d5db;
+  }
+
+  .rangeInput {
+    background-color: #4b5563;
+  }
+
+  .rangeValue {
+    color: #9ca3af;
+  }
+
+  .specificDays {
+    border-top-color: #4b5563;
+  }
+
+  .daysTitle {
+    color: #d1d5db;
+  }
+
+  .daysDescription,
+  .selectedDaysText {
+    color: #9ca3af;
+  }
+
+  .dayButton {
+    background-color: #4b5563;
+    border-color: #6b7280;
+    color: #d1d5db;
+  }
+
+  .dayButton:hover:not(:disabled) {
+    border-color: #6366f1;
+    background-color: #312e81;
+  }
+
+  .dayButton.selectedDay {
+    background-color: #6366f1;
+    border-color: #6366f1;
+    color: #ffffff;
+  }
+
+  .frequencySummary {
+    background-color: #1e3a8a;
+    border-color: #3730a3;
+  }
+
+  .summaryTitle {
+    color: #a5b4fc;
+  }
+
+  .summaryText {
+    color: #c7d2fe;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .frequencyOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .customFrequencyConfig {
+    padding: 16px;
+  }
+
+  .daysGrid {
+    gap: 4px;
+  }
+
+  .dayButton {
+    padding: 6px 2px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .optionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .optionDescription {
+    margin-left: 0;
+  }
+
+  .customControl {
+    margin-left: 16px;
+  }
+}

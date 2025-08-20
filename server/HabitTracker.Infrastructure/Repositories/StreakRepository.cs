@@ -31,6 +31,11 @@ namespace HabitTracker.Infrastructure.Repositories
                 throw;
             }
         }
+        
+        public async Task<Streak?> GetByHabitIdAsync(int habitId, CancellationToken cancellationToken = default)
+        {
+            return await GetStreakByHabitIdAsync(habitId, cancellationToken);
+        }
 
         public async Task<IEnumerable<Streak>> GetStreaksByTrackerIdAsync(int trackerId, CancellationToken cancellationToken = default)
         {
@@ -237,6 +242,30 @@ namespace HabitTracker.Infrastructure.Repositories
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error resetting current streak for habit {HabitId}", habitId);
+                throw;
+            }
+        }
+        
+        public async Task<Streak> UpdateStreakAsync(int habitId, int currentStreak, int longestStreak, DateTime? lastCompletionDate, int totalCompletions, double completionRate, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogDebug("Updating streak for habit {HabitId}", habitId);
+                
+                var streak = await GetOrCreateStreakAsync(habitId, cancellationToken);
+                
+                streak.CurrentStreak = currentStreak;
+                streak.LongestStreak = Math.Max(streak.LongestStreak, longestStreak);
+                streak.LastCompletionDate = lastCompletionDate;
+                streak.TotalCompletions = totalCompletions;
+                streak.CompletionRate = (decimal)completionRate;
+                streak.UpdatedAt = DateTime.UtcNow;
+                
+                return streak;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating streak for habit {HabitId}", habitId);
                 throw;
             }
         }

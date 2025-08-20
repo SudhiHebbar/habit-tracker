@@ -1,33 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CompletionCheckbox } from '../../habit-completion/components/CompletionCheckbox';
 import { useCompletion } from '../../habit-completion/hooks/useCompletion';
 import type { Habit } from '../types/habit.types';
-import styles from './HabitCard.module.css';
+import styles from './HabitCalendarCard.module.css';
 
-interface HabitCardProps {
+interface HabitCalendarCardProps {
   habit: Habit;
   onEdit?: (habit: Habit) => void;
   onDelete?: (habit: Habit) => void;
-  onToggleComplete?: (habit: Habit) => void;
-  isCompleted?: boolean;
   showStats?: boolean;
-  completionDate?: string; // Date for which to track completion (YYYY-MM-DD)
   className?: string;
 }
 
-export const HabitCard: React.FC<HabitCardProps> = ({
+export const HabitCalendarCard: React.FC<HabitCalendarCardProps> = ({
   habit,
   onEdit,
   onDelete,
-  onToggleComplete,
-  isCompleted = false,
   showStats = true,
-  completionDate,
   className = ''
 }) => {
-  const currentDate = completionDate || new Date().toISOString().split('T')[0];
-  
-  // Get real-time completion data
+  // Generate last 7 days for quick completion tracking
+  const generateWeekDates = () => {
+    const dates = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      dates.push(date.toISOString().split('T')[0]);
+    }
+    return dates;
+  };
+
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const weekDates = generateWeekDates();
+
+  // Get real-time completion data for selected date
   const {
     stats,
     currentStreak,
@@ -35,7 +42,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({
     completionRate
   } = useCompletion({
     habitId: habit.id,
-    date: currentDate,
+    date: selectedDate,
     autoFetch: showStats
   });
 
@@ -49,10 +56,23 @@ export const HabitCard: React.FC<HabitCardProps> = ({
     onDelete?.(habit);
   };
 
-
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return 'Never';
-    return new Date(dateString).toLocaleDateString();
+  const formatDateDisplay = (dateString: string) => {
+    const date = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    
+    if (dateString === today.toISOString().split('T')[0]) {
+      return 'Today';
+    } else if (dateString === yesterday.toISOString().split('T')[0]) {
+      return 'Yesterday';
+    } else {
+      return date.toLocaleDateString('en-US', { 
+        weekday: 'short', 
+        month: 'short', 
+        day: 'numeric' 
+      });
+    }
   };
 
   const getFrequencyDisplay = (frequency: string, targetCount: number) => {
@@ -63,28 +83,13 @@ export const HabitCard: React.FC<HabitCardProps> = ({
 
   return (
     <div 
-      className={`${styles.habitCard} ${isCompleted ? styles.completed : ''} ${className}`}
+      className={`${styles.habitCalendarCard} ${className}`}
       style={{ '--habit-color': habit.color } as React.CSSProperties}
     >
       {/* Header with color bar and actions */}
       <div className={styles.header}>
         <div className={styles.colorBar} />
         <div className={styles.actions}>
-          {onToggleComplete && (
-            <CompletionCheckbox
-              habitId={habit.id}
-              habitName={habit.name}
-              habitColor={habit.color}
-              date={completionDate || new Date().toISOString().split('T')[0]}
-              size="large"
-              showStreak={true}
-              onToggle={(isCompleted) => {
-                // Optional: Handle completion state change
-                console.log(`${habit.name} completion toggled for ${completionDate}:`, isCompleted);
-              }}
-              className={styles.completionCheckbox}
-            />
-          )}
           {onEdit && (
             <button
               className={`${styles.actionButton} ${styles.editButton}`}
@@ -140,6 +145,33 @@ export const HabitCard: React.FC<HabitCardProps> = ({
           </span>
         </div>
 
+        {/* Week view with completion checkboxes */}
+        <div className={styles.weekView}>
+          <h4 className={styles.weekTitle}>This Week</h4>
+          <div className={styles.weekDays}>
+            {weekDates.map((date) => (
+              <div 
+                key={date} 
+                className={`${styles.dayColumn} ${selectedDate === date ? styles.selected : ''}`}
+                onClick={() => setSelectedDate(date)}
+              >
+                <div className={styles.dayLabel}>
+                  {formatDateDisplay(date)}
+                </div>
+                <CompletionCheckbox
+                  habitId={habit.id}
+                  habitName={habit.name}
+                  habitColor={habit.color}
+                  date={date}
+                  size="medium"
+                  showStreak={false}
+                  className={styles.dayCheckbox}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Statistics */}
         {showStats && (
           <div className={styles.stats}>
@@ -160,7 +192,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({
             <div className={styles.statGroup}>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  {stats ? (stats.totalCompletions || 0) : (habit.completionsThisWeek || 0)}
+                  {stats?.totalCompletions || 0}
                 </span>
                 <span className={styles.statLabel}>Total Done</span>
               </div>
@@ -174,25 +206,15 @@ export const HabitCard: React.FC<HabitCardProps> = ({
           </div>
         )}
 
-        {/* Last completion */}
-        {habit.lastCompletedDate && (
-          <div className={styles.lastCompletion}>
-            <span className={styles.lastCompletionLabel}>Last completed:</span>
-            <span className={styles.lastCompletionDate}>
-              {formatDate(habit.lastCompletedDate)}
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Footer with creation date */}
-      <div className={styles.footer}>
-        <span className={styles.createdDate}>
-          Created {formatDate(habit.createdAt)}
-        </span>
+        {/* Selected date info */}
+        <div className={styles.selectedDateInfo}>
+          <span className={styles.selectedDateLabel}>
+            Viewing: {formatDateDisplay(selectedDate)}
+          </span>
+        </div>
       </div>
     </div>
   );
 };
 
-export default HabitCard;
+export default HabitCalendarCard;

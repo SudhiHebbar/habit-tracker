@@ -4,14 +4,19 @@ import FadeText from '../../shared/components/FadeText';
 import { useAppNavigation } from '../../shared/utils/navigation';
 import { useTrackers } from '../tracker-management/hooks/useTrackers';
 import { HabitList } from '../habit-management/components/HabitList';
+import { CreateHabitModal } from '../habit-management/components/CreateHabitModal';
+import { EditHabitModal } from '../habit-management/components/EditHabitModal';
 import { useHabits, useCreateHabit, useUpdateHabit, useDeleteHabit } from '../habit-management/hooks';
-import type { Habit, CreateHabitRequest } from '../habit-management/types/habit.types';
+import { completionApi } from '../habit-completion/services/completionApi';
+import type { Habit, CreateHabitRequest, UpdateHabitRequest } from '../habit-management/types/habit.types';
 import styles from './HabitsPage.module.css';
 
 const HabitsPage = () => {
   const { routeParams } = useAppNavigation();
   const { trackers, isLoading: trackersLoading } = useTrackers();
   const [selectedTrackerId, setSelectedTrackerId] = useState<number | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
   
   // Use the first active tracker by default
   React.useEffect(() => {
@@ -26,16 +31,15 @@ const HabitsPage = () => {
   const { updateHabit } = useUpdateHabit();
   const { deleteHabit } = useDeleteHabit();
 
-  const handleCreateHabit = async () => {
+  const handleCreateHabit = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCreateHabitSubmit = async (habitData: CreateHabitRequest) => {
     if (!selectedTrackerId) return;
     
-    // For now, create a simple habit - this will be replaced with a proper modal later
     const newHabit: CreateHabitRequest = {
-      name: `New Habit ${habits.length + 1}`,
-      description: 'Description for new habit',
-      targetFrequency: 'Daily',
-      targetCount: 1,
-      color: '#6366F1',
+      ...habitData,
       displayOrder: habits.length
     };
 
@@ -45,14 +49,12 @@ const HabitsPage = () => {
     }
   };
 
-  const handleEditHabit = async (habit: Habit) => {
-    // For now, just update the name - this will be replaced with a proper modal later
-    const updated = await updateHabit(habit.id, {
-      ...habit,
-      name: habit.name + ' (edited)',
-      displayOrder: habit.displayOrder
-    });
-    
+  const handleEditHabit = (habit: Habit) => {
+    setEditingHabit(habit);
+  };
+
+  const handleEditHabitSubmit = async (habitId: number, data: UpdateHabitRequest) => {
+    const updated = await updateHabit(habitId, data);
     if (updated) {
       refetch();
     }
@@ -68,8 +70,12 @@ const HabitsPage = () => {
   };
 
   const handleToggleComplete = async (habit: Habit) => {
-    // This would integrate with habit completion API when implemented
-    console.log('Toggle completion for habit:', habit.name);
+    try {
+      await completionApi.toggleCompletion(habit.id);
+      // The optimistic updates in the completion components will handle UI updates
+    } catch (error) {
+      console.error('Failed to toggle completion for habit:', habit.name, error);
+    }
   };
 
   if (routeParams.id) {
@@ -177,6 +183,23 @@ const HabitsPage = () => {
           </div>
         )}
       </div>
+
+      {/* Create Habit Modal */}
+      <CreateHabitModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreateHabitSubmit}
+        isLoading={createLoading}
+      />
+
+      {/* Edit Habit Modal */}
+      <EditHabitModal
+        isOpen={!!editingHabit}
+        habit={editingHabit}
+        onClose={() => setEditingHabit(null)}
+        onSubmit={handleEditHabitSubmit}
+        isLoading={false}
+      />
     </div>
   );
 };

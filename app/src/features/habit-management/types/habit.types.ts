@@ -1,6 +1,7 @@
 // Core habit types that match the backend DTOs
 
 export type HabitFrequency = 'Daily' | 'Weekly' | 'Custom';
+export type FrequencyType = HabitFrequency;
 
 export interface Habit {
   id: number;
@@ -94,9 +95,15 @@ export interface ColorOption {
 export interface IconOption {
   id: string;
   name: string;
-  component: React.ComponentType<{ className?: string }>;
-  category: 'fitness' | 'health' | 'productivity' | 'education' | 'social' | 'hobby' | 'other';
-  keywords: string[];
+  svg: string;
+  category: 'health' | 'learning' | 'work' | 'lifestyle' | 'nature' | 'misc';
+}
+
+// Custom frequency configuration
+export interface CustomFrequency {
+  timesPerWeek: number;
+  specificDays: number[]; // 0=Sunday, 1=Monday, etc.
+  timesPerMonth: number | null;
 }
 
 // Frequency configuration options
