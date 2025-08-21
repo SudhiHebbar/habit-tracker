@@ -13,5 +13,7 @@ namespace HabitTracker.Application.Interfaces
         Task<bool> RestoreTrackerAsync(int id, string? userId, CancellationToken cancellationToken = default);
         Task<IEnumerable<TrackerResponseDto>> GetSharedTrackersAsync(CancellationToken cancellationToken = default);
         Task<bool> UpdateDisplayOrderAsync(string? userId, List<(int TrackerId, int DisplayOrder)> trackerOrders, CancellationToken cancellationToken = default);
+        Task<IEnumerable<TrackerSummaryDto>> GetTrackerSummariesAsync(string? userId, CancellationToken cancellationToken = default);
+        Task<TrackerWithStatsDto?> GetTrackerWithStatsAsync(int id, string? userId, CancellationToken cancellationToken = default);
     }
 }

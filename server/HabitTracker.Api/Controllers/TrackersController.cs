@@ -79,6 +79,50 @@ namespace HabitTracker.Api.Controllers
             }
         }
 
+        [HttpGet("summaries")]
+        [ProducesResponseType(typeof(IEnumerable<TrackerSummaryDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<TrackerSummaryDto>>> GetTrackerSummaries(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var summaries = await _trackerService.GetTrackerSummariesAsync(userId, cancellationToken);
+                
+                Response.Headers["Cache-Control"] = "public, max-age=60";
+                return Ok(summaries);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting tracker summaries");
+                return StatusCode(500, new { message = "An error occurred while retrieving tracker summaries" });
+            }
+        }
+
+        [HttpGet("{id}/full")]
+        [ProducesResponseType(typeof(TrackerWithStatsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<TrackerWithStatsDto>> GetTrackerWithStats(int id, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var tracker = await _trackerService.GetTrackerWithStatsAsync(id, userId, cancellationToken);
+                
+                if (tracker == null)
+                {
+                    return NotFound(new { message = $"Tracker with ID {id} not found" });
+                }
+                
+                Response.Headers["Cache-Control"] = "public, max-age=30";
+                return Ok(tracker);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting full tracker data for {TrackerId}", id);
+                return StatusCode(500, new { message = "An error occurred while retrieving the tracker data" });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(TrackerResponseDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

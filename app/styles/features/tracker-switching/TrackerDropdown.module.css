@@ -1,0 +1,209 @@
+.trackerDropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdownTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.dropdownTrigger:hover:not(:disabled) {
+  background: var(--color-surface-hover);
+  border-color: var(--color-primary);
+}
+
+.dropdownTrigger:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.dropdownTrigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.currentTracker {
+  flex: 1;
+  text-align: left;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.dropdownIcon {
+  margin-left: 0.5rem;
+  color: var(--color-text-secondary);
+  transition: transform 200ms ease;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  max-height: 400px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 200ms ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searchContainer {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  transition: all 200ms ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.section {
+  padding: 0.5rem 0;
+}
+
+.sectionTitle {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 0.25rem 0;
+}
+
+.trackerList {
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.trackerItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.trackerItem:hover {
+  background: var(--color-surface-hover);
+}
+
+.trackerItem.active {
+  background: var(--color-primary-light);
+}
+
+.trackerItem.highlighted {
+  background: var(--color-surface-active);
+}
+
+.trackerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.trackerName {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.activeIndicator {
+  color: var(--color-primary);
+  font-size: 0.75rem;
+}
+
+.trackerDescription {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trackerStats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem;
+}
+
+.habitCount {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.streak {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-warning);
+}
+
+.noResults {
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/* Scrollbar styling */
+.trackerList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.trackerList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.trackerList::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+.trackerList::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}

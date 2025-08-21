@@ -58,6 +58,7 @@ builder.Services.AddScoped<IValidator<UpdateHabitDto>, UpdateHabitValidator>();
 
 // Configure Application Services
 builder.Services.AddScoped<ITrackerService, TrackerService>();
+builder.Services.AddScoped<ITrackerSwitchingService, TrackerSwitchingService>();
 builder.Services.AddScoped<IHabitService, HabitService>();
 builder.Services.AddScoped<IHabitCompletionService, HabitCompletionService>();
 
