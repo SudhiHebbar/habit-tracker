@@ -154,12 +154,12 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
 
     if (formData.name !== habit.name) changes.name = formData.name;
     if (formData.description !== habit.description) {
-      changes.description = formData.description || undefined;
+      changes.description = formData.description || '';
     }
     if (formData.targetFrequency !== habit.targetFrequency) changes.targetFrequency = formData.targetFrequency;
     if (formData.targetCount !== habit.targetCount) changes.targetCount = formData.targetCount;
     if (formData.color !== habit.color) changes.color = formData.color;
-    if (formData.icon !== habit.icon) changes.icon = formData.icon || undefined;
+    if (formData.icon !== habit.icon) changes.icon = formData.icon || '';
     if (formData.displayOrder !== habit.displayOrder) changes.displayOrder = formData.displayOrder;
     if (formData.isActive !== habit.isActive) changes.isActive = formData.isActive;
 

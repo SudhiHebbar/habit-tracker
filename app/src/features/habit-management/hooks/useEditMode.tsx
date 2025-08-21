@@ -1,5 +1,5 @@
-import { useState, useCallback, useContext, createContext, useRef, useEffect } from 'react';
-import { Habit } from '../types/habit.types';
+import { useState, useCallback, useContext, createContext, useRef, useEffect, type ReactNode } from 'react';
+import type { Habit } from '../types/habit.types';
 
 interface EditSession {
   habitId: string;
@@ -47,7 +47,7 @@ const useStandaloneEditMode = () => {
     isDirty: false
   });
 
-  const sessionTimeoutRef = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const sessionTimeoutRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   // Auto-cleanup edit sessions after 30 minutes of inactivity
   const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
@@ -197,7 +197,11 @@ const useStandaloneEditMode = () => {
 };
 
 // Provider component for sharing edit mode state across components
-export const EditModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface EditModeProviderProps {
+  children: ReactNode;
+}
+
+export const EditModeProvider = ({ children }: EditModeProviderProps) => {
   const editMode = useStandaloneEditMode();
 
   return (

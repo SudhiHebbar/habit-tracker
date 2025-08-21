@@ -157,7 +157,7 @@ export const HabitList: React.FC<HabitListProps> = ({
   };
 
   const selectAllHabits = () => {
-    const allHabitIds = filteredAndSortedHabits.map(h => h.id);
+    const allHabitIds = filteredAndSortedHabits.map(h => h.id.toString());
     setSelectedHabits(new Set(allHabitIds));
   };
 
@@ -166,7 +166,7 @@ export const HabitList: React.FC<HabitListProps> = ({
   };
 
   const handleBulkEdit = async (updates: any) => {
-    const habitsToEdit = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id));
+    const habitsToEdit = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id.toString()));
     if (onBulkEdit) {
       await onBulkEdit(habitsToEdit, updates);
     }
@@ -174,7 +174,7 @@ export const HabitList: React.FC<HabitListProps> = ({
     setBulkSelectMode(false);
   };
 
-  const selectedHabitObjects = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id));
+  const selectedHabitObjects = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id.toString()));
   const hasActiveFilters = Object.keys(filter).length > 0 || searchQuery.length > 0;
 
   if (loading) {
@@ -389,8 +389,8 @@ export const HabitList: React.FC<HabitListProps> = ({
                 <div className={styles.selectionCheckbox}>
                   <input
                     type="checkbox"
-                    checked={selectedHabits.has(habit.id)}
-                    onChange={() => toggleHabitSelection(habit.id)}
+                    checked={selectedHabits.has(habit.id.toString())}
+                    onChange={() => toggleHabitSelection(habit.id.toString())}
                     className={styles.checkbox}
                   />
                 </div>

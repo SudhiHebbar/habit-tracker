@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { habitApi } from '../services/habitApi';
-import type { Habit, UpdateHabitRequest, EditHabitRequest } from '../types/habit.types';
+import type { EditHabitRequest } from '../types/habit.types';
 
 interface UseEditHabitReturn {
   editHabit: (id: number, data: EditHabitRequest) => Promise<any>;

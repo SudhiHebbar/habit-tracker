@@ -126,7 +126,7 @@ class TrackerCache {
     this.clear();
   }
 
-  preload(trackerIds: number[]): void {
+  preload(_trackerIds: number[]): void {
     // This would trigger background loading
     // Implementation would depend on the API service
     // TODO: Implement actual preloading logic
