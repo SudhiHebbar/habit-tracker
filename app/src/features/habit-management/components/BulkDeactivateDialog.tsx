@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../../../styles/features/habit-management/BulkDeactivateDialog.module.css';
-import { Habit } from '../types/habit.types';
+import type { Habit } from '../types/habit.types';
 
 interface BulkDeactivateDialogProps {
   isOpen: boolean;
@@ -37,7 +37,7 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
 
   const handleConfirm = async () => {
     const deactivationReason = reason === 'other' ? customReason : reason;
-    const habitIds = selectedHabits.map(h => h.id);
+    const habitIds = selectedHabits.map(h => h.id.toString());
     
     await onBulkDeactivate(habitIds, deactivationReason);
     resetForm();

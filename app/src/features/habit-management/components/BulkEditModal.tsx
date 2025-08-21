@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../../../styles/features/habit-management/BulkEditModal.module.css';
-import { Habit, UpdateHabitDto } from '../types/habit.types';
+import type { Habit, UpdateHabitRequest } from '../types/habit.types';
 import { ColorPicker } from './ColorPicker';
 import { IconSelector } from './IconSelector';
 import { FrequencySelector } from './FrequencySelector';
@@ -11,7 +11,7 @@ interface BulkEditModalProps {
   isOpen: boolean;
   onClose: () => void;
   selectedHabits: Habit[];
-  onBulkEdit: (updates: Partial<UpdateHabitDto>) => Promise<void>;
+  onBulkEdit: (updates: Partial<UpdateHabitRequest>) => Promise<void>;
   onBulkDeactivate?: (habitIds: string[], reason?: string) => Promise<void>;
   isLoading?: boolean;
 }
@@ -20,7 +20,7 @@ interface BulkEditFormData {
   name?: string;
   color?: string;
   icon?: string;
-  frequency?: 'daily' | 'weekly' | 'monthly';
+  frequency?: 'Daily' | 'Weekly' | 'Custom';
   isActive?: boolean;
 }
 
@@ -62,7 +62,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
   };
 
   const handleConfirm = async () => {
-    const updates: Partial<UpdateHabitDto> = {};
+    const updates: Partial<UpdateHabitRequest> = {};
     fieldsToUpdate.forEach(field => {
       if (formData[field] !== undefined) {
         (updates as any)[field] = formData[field];
@@ -265,8 +265,8 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                 </label>
                 {fieldsToUpdate.has('frequency') && (
                   <FrequencySelector
-                    selectedFrequency={formData.frequency || 'daily'}
-                    onFrequencySelect={(frequency) => handleInputChange('frequency', frequency)}
+                    selectedFrequency={formData.frequency || 'Daily'}
+                    onFrequencyChange={(frequency: 'Daily' | 'Weekly' | 'Custom') => handleInputChange('frequency', frequency)}
                   />
                 )}
               </div>

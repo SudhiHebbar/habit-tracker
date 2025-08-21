@@ -21,7 +21,7 @@ export const useHabitValidation = (): UseHabitValidationReturn => {
   const validateField = useCallback((
     field: string, 
     value: any, 
-    data: UpdateHabitRequest | EditHabitRequest
+    _data: UpdateHabitRequest | EditHabitRequest
   ): string | null => {
     switch (field) {
       case 'name':

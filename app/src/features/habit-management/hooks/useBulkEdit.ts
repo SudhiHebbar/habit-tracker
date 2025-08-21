@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Habit, UpdateHabitDto } from '../types/habit.types';
+import type { Habit, UpdateHabitRequest } from '../types/habit.types';
 import { habitApi } from '../services/habitApi';
 
 interface BulkEditState {
@@ -9,7 +9,7 @@ interface BulkEditState {
     total: number;
     completed: number;
     failed: number;
-    current?: string;
+    current?: string | undefined;
   } | null;
 }
 
@@ -43,7 +43,7 @@ export const useBulkEdit = () => {
 
   const bulkEditHabits = useCallback(async (
     habits: Habit[],
-    updates: Partial<UpdateHabitDto>,
+    updates: Partial<UpdateHabitRequest>,
     onProgress?: (completed: number, total: number, current: string) => void
   ): Promise<BulkEditResult> => {
     setState({
@@ -62,17 +62,17 @@ export const useBulkEdit = () => {
           updateProgress(completed, habits.length, failed, habit.name);
           onProgress?.(completed, habits.length, habit.name);
 
-          await habitApi.updateHabit(habit.id, updates);
+          await habitApi.updateHabit(habit.id, updates as UpdateHabitRequest);
           
           results.push({
-            habitId: habit.id,
+            habitId: habit.id.toString(),
             success: true
           });
           completed++;
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           results.push({
-            habitId: habit.id,
+            habitId: habit.id.toString(),
             success: false,
             error: errorMessage
           });
@@ -128,7 +128,7 @@ export const useBulkEdit = () => {
           updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
           onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
 
-          await habitApi.deactivateHabit(Number(habitId), { reason });
+          await habitApi.deactivateHabit(Number(habitId), reason);
           
           results.push({
             habitId,

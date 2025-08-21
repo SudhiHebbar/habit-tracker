@@ -142,7 +142,7 @@ class HabitApiService {
   // Deactivate a habit while preserving history
   async deactivateHabit(id: number, reason?: string): Promise<void> {
     const data: DeactivateHabitRequest = {
-      reason,
+      reason: reason || '',
       preserveCompletions: true
     };
 
