@@ -51,6 +51,11 @@ namespace HabitTracker.Application.Mappings
                         ? src.Completions.Count(c => c.IsCompleted && 
                             c.CompletionDate >= DateTime.UtcNow.AddDays(-30))
                         : 0));
+
+            // Edit response mapping
+            CreateMap<Habit, HabitEditResponseDto>()
+                .ForMember(dest => dest.EditImpact, opt => opt.Ignore())
+                .ForMember(dest => dest.ChangedFields, opt => opt.Ignore());
         }
     }
 }

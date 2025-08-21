@@ -1,7 +1,10 @@
 import type { 
   Habit, 
   CreateHabitRequest, 
-  UpdateHabitRequest, 
+  UpdateHabitRequest,
+  EditHabitRequest,
+  HabitEditResponse,
+  DeactivateHabitRequest,
   HabitOrderUpdate,
   HabitValidationResponse,
   HabitStatsByFrequency,
@@ -120,6 +123,65 @@ class HabitApiService {
     });
     
     return this.handleResponse<Habit>(response);
+  }
+
+  // Edit an existing habit with partial updates
+  async editHabit(id: number, data: EditHabitRequest): Promise<HabitEditResponse> {
+    const response = await fetch(`${this.baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    
+    return this.handleResponse<HabitEditResponse>(response);
+  }
+
+  // Deactivate a habit while preserving history
+  async deactivateHabit(id: number, reason?: string): Promise<void> {
+    const data: DeactivateHabitRequest = {
+      reason,
+      preserveCompletions: true
+    };
+
+    const response = await fetch(`${this.baseUrl}/${id}/deactivate`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    
+    await this.handleResponse<void>(response);
+  }
+
+  // Reactivate a deactivated habit
+  async reactivateHabit(id: number): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/${id}/reactivate`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    
+    await this.handleResponse<void>(response);
+  }
+
+  // Get edit history for a habit
+  async getHabitEditHistory(id: number): Promise<Record<string, any>> {
+    const response = await fetch(`${this.baseUrl}/${id}/edit-history`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    
+    return this.handleResponse<Record<string, any>>(response);
   }
 
   // Delete a habit (soft delete)

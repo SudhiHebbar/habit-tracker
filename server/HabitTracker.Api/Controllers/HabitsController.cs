@@ -9,11 +9,13 @@ namespace HabitTracker.Api.Controllers
     public class HabitsController : ControllerBase
     {
         private readonly IHabitService _habitService;
+        private readonly IHabitEditingService _habitEditingService;
         private readonly ILogger<HabitsController> _logger;
 
-        public HabitsController(IHabitService habitService, ILogger<HabitsController> logger)
+        public HabitsController(IHabitService habitService, IHabitEditingService habitEditingService, ILogger<HabitsController> logger)
         {
             _habitService = habitService;
+            _habitEditingService = habitEditingService;
             _logger = logger;
         }
 
@@ -244,6 +246,169 @@ namespace HabitTracker.Api.Controllers
         }
 
         /// <summary>
+        /// Edit an existing habit with partial updates
+        /// </summary>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<HabitEditResponseDto>> EditHabit(int id, [FromBody] EditHabitDto editDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string? userId = null;
+
+                var habit = await _habitEditingService.EditHabitAsync(id, editDto, userId, cancellationToken);
+                
+                if (habit == null)
+                {
+                    return NotFound($"Habit with ID {id} not found");
+                }
+
+                return Ok(habit);
+            }
+            catch (FluentValidation.ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validation failed for editing habit {HabitId}", id);
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Invalid operation while editing habit {HabitId}", id);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error editing habit {HabitId}", id);
+                return StatusCode(500, "An error occurred while editing the habit");
+            }
+        }
+
+        /// <summary>
+        /// Deactivate a habit while preserving history
+        /// </summary>
+        [HttpPatch("{id}/deactivate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeactivateHabit(int id, [FromBody] DeactivateHabitDto deactivateDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string? userId = null;
+
+                var result = await _habitEditingService.DeactivateHabitAsync(id, deactivateDto, userId, cancellationToken);
+                
+                if (!result)
+                {
+                    return NotFound($"Habit with ID {id} not found");
+                }
+
+                return Ok(new { message = "Habit deactivated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deactivating habit {HabitId}", id);
+                return StatusCode(500, "An error occurred while deactivating the habit");
+            }
+        }
+
+        /// <summary>
+        /// Reactivate a deactivated habit
+        /// </summary>
+        [HttpPatch("{id}/reactivate")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ReactivateHabit(int id, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string? userId = null;
+
+                var result = await _habitEditingService.ReactivateHabitAsync(id, userId, cancellationToken);
+                
+                if (!result)
+                {
+                    return NotFound($"Habit with ID {id} not found");
+                }
+
+                return Ok(new { message = "Habit reactivated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error reactivating habit {HabitId}", id);
+                return StatusCode(500, "An error occurred while reactivating the habit");
+            }
+        }
+
+        /// <summary>
+        /// Get edit history for a habit
+        /// </summary>
+        [HttpGet("{id}/edit-history")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Dictionary<string, object>>> GetHabitEditHistory(int id, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string? userId = null;
+
+                var history = await _habitEditingService.GetHabitEditHistoryAsync(id, userId, cancellationToken);
+                
+                if (!history.Any())
+                {
+                    return NotFound($"Habit with ID {id} not found or no history available");
+                }
+
+                return Ok(history);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting edit history for habit {HabitId}", id);
+                return StatusCode(500, "An error occurred while fetching edit history");
+            }
+        }
+
+        /// <summary>
+        /// Bulk edit habits in a tracker
+        /// </summary>
+        [HttpPost("tracker/{trackerId}/bulk-edit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> BulkEditHabits(int trackerId, [FromBody] List<BulkEditRequest> edits, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string? userId = null;
+
+                var editsList = edits.Select(e => (e.HabitId, e.EditData)).ToList();
+                var result = await _habitEditingService.BulkEditHabitsAsync(trackerId, editsList, userId, cancellationToken);
+                
+                if (!result)
+                {
+                    return BadRequest("Failed to apply bulk edits");
+                }
+
+                return Ok(new { message = "Bulk edits applied successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error applying bulk edits for tracker {TrackerId}", trackerId);
+                return StatusCode(500, "An error occurred while applying bulk edits");
+            }
+        }
+
+        /// <summary>
         /// Update display order for habits in a tracker
         /// </summary>
         [HttpPut("tracker/{trackerId}/order")]
@@ -332,5 +497,11 @@ namespace HabitTracker.Api.Controllers
     {
         public int HabitId { get; set; }
         public int DisplayOrder { get; set; }
+    }
+
+    public class BulkEditRequest
+    {
+        public int HabitId { get; set; }
+        public EditHabitDto EditData { get; set; } = new();
     }
 }

@@ -46,6 +46,44 @@ export interface UpdateHabitRequest {
   isActive: boolean;
 }
 
+export interface EditHabitRequest {
+  name?: string;
+  description?: string;
+  targetFrequency?: HabitFrequency;
+  targetCount?: number;
+  color?: string;
+  icon?: string;
+  displayOrder?: number;
+  isActive?: boolean;
+}
+
+export interface HabitEditResponse {
+  id: number;
+  name: string;
+  description?: string;
+  targetFrequency: HabitFrequency;
+  targetCount: number;
+  color: string;
+  icon?: string;
+  displayOrder: number;
+  isActive: boolean;
+  updatedAt: string;
+  editImpact?: EditImpactInfo;
+  changedFields: string[];
+}
+
+export interface EditImpactInfo {
+  frequencyChanged: boolean;
+  affectedCompletions?: number;
+  streaksNeedRecalculation: boolean;
+  warning?: string;
+}
+
+export interface DeactivateHabitRequest {
+  reason?: string;
+  preserveCompletions?: boolean;
+}
+
 export interface HabitOrderUpdate {
   habitId: number;
   displayOrder: number;
