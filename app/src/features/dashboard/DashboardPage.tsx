@@ -3,18 +3,20 @@ import { useState } from 'react';
 import FadeText from '../../shared/components/FadeText';
 import Button from '../../shared/components/Button';
 import { useAppNavigation } from '../../shared/utils/navigation';
-import { TrackerList, CreateTrackerModal } from '../tracker-management/components';
+import { TrackerList, CreateTrackerModal, EditTrackerModal } from '../tracker-management/components';
 import { useTrackers, useCreateTracker, useUpdateTracker, useDeleteTracker } from '../tracker-management/hooks';
-import type { Tracker, CreateTrackerDto } from '../tracker-management/types/tracker.types';
+import type { Tracker, CreateTrackerDto, UpdateTrackerDto } from '../tracker-management/types/tracker.types';
 import styles from './DashboardPage.module.css';
 
 const DashboardPage = () => {
   const { goToHabits } = useAppNavigation();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedTracker, setSelectedTracker] = useState<Tracker | null>(null);
   
   const { trackers, isLoading, error, refetch } = useTrackers();
   const { createTracker, isCreating: createLoading } = useCreateTracker();
-  const { updateTracker } = useUpdateTracker();
+  const { updateTracker, isUpdating: updateLoading, error: updateError } = useUpdateTracker();
   const { deleteTracker } = useDeleteTracker();
 
   const handleCreateTracker = async (data: CreateTrackerDto) => {
@@ -25,15 +27,16 @@ const DashboardPage = () => {
     }
   };
 
-  const handleEditTracker = async (tracker: Tracker) => {
-    const updated = await updateTracker(tracker.id, {
-      name: tracker.name,
-      description: tracker.description || '',
-      isShared: tracker.isShared,
-      displayOrder: tracker.displayOrder
-    });
-    
+  const handleEditTracker = (tracker: Tracker) => {
+    setSelectedTracker(tracker);
+    setShowEditModal(true);
+  };
+
+  const handleUpdateTracker = async (id: number, data: UpdateTrackerDto) => {
+    const updated = await updateTracker(id, data);
     if (updated) {
+      setShowEditModal(false);
+      setSelectedTracker(null);
       refetch();
     }
   };
@@ -115,6 +118,21 @@ const DashboardPage = () => {
             onSubmit={handleCreateTracker}
             onClose={() => setShowCreateModal(false)}
             isCreating={createLoading}
+          />
+        )}
+
+        {/* Edit Tracker Modal */}
+        {showEditModal && selectedTracker && (
+          <EditTrackerModal
+            isOpen={showEditModal}
+            tracker={selectedTracker}
+            onSubmit={handleUpdateTracker}
+            onClose={() => {
+              setShowEditModal(false);
+              setSelectedTracker(null);
+            }}
+            isUpdating={updateLoading}
+            error={updateError}
           />
         )}
       </div>

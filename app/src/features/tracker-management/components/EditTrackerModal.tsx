@@ -97,10 +97,21 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
   }
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <div 
+      className={styles.modalOverlay} 
+      onClick={onClose}
+      role="presentation"
+      aria-hidden="false"
+    >
+      <div 
+        className={styles.modal} 
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className={styles.modalHeader}>
-          <h2>Edit Tracker</h2>
+          <h2 id="modal-title">Edit Tracker</h2>
           <button 
             className={styles.closeButton} 
             onClick={onClose}
