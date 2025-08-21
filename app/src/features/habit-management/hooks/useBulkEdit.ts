@@ -128,7 +128,7 @@ export const useBulkEdit = () => {
           updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
           onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
 
-          await habitApi.deactivateHabit(habitId, { reason });
+          await habitApi.deactivateHabit(Number(habitId), { reason });
           
           results.push({
             habitId,
@@ -193,7 +193,7 @@ export const useBulkEdit = () => {
           updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
           onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
 
-          await habitApi.reactivateHabit(habitId);
+          await habitApi.reactivateHabit(Number(habitId));
           
           results.push({
             habitId,
