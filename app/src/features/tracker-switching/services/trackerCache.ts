@@ -129,7 +129,7 @@ class TrackerCache {
   preload(trackerIds: number[]): void {
     // This would trigger background loading
     // Implementation would depend on the API service
-    console.log('Preloading trackers:', trackerIds);
+    // TODO: Implement actual preloading logic
   }
 }
 
