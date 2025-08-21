@@ -40,11 +40,10 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     timesPerMonth: null
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showPreview, setShowPreview] = useState(false);
   const [showDeactivateDialog, setShowDeactivateDialog] = useState(false);
 
   const { editHabit, deactivateHabit, loading: editLoading } = useEditHabit();
-  const { validateField, errors: validationErrors, setFieldError, clearErrors } = useHabitValidation();
+  const { clearErrors } = useHabitValidation();
 
   const steps = [
     { title: 'Basic Info', description: 'Name and description' },
@@ -154,11 +153,13 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     const changes: EditHabitRequest = {};
 
     if (formData.name !== habit.name) changes.name = formData.name;
-    if (formData.description !== habit.description) changes.description = formData.description;
+    if (formData.description !== habit.description) {
+      changes.description = formData.description || undefined;
+    }
     if (formData.targetFrequency !== habit.targetFrequency) changes.targetFrequency = formData.targetFrequency;
     if (formData.targetCount !== habit.targetCount) changes.targetCount = formData.targetCount;
     if (formData.color !== habit.color) changes.color = formData.color;
-    if (formData.icon !== habit.icon) changes.icon = formData.icon;
+    if (formData.icon !== habit.icon) changes.icon = formData.icon || undefined;
     if (formData.displayOrder !== habit.displayOrder) changes.displayOrder = formData.displayOrder;
     if (formData.isActive !== habit.isActive) changes.isActive = formData.isActive;
 
@@ -176,8 +177,8 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     }
 
     if (currentStep === steps.length - 1) {
-      // Final review step - show preview
-      setShowPreview(true);
+      // Final review step - directly update the habit
+      await handleConfirmChanges();
       return;
     }
 
@@ -229,7 +230,6 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
   const handleClose = () => {
     setCurrentStep(0);
     setErrors({});
-    setShowPreview(false);
     setShowDeactivateDialog(false);
     clearErrors();
     onClose();

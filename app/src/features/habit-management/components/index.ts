@@ -11,3 +11,8 @@ export { default as HabitCalendarCard } from './HabitCalendarCard';
 export { default as IconSelector } from './IconSelector';
 export { default as HabitDeactivateDialog } from './HabitDeactivateDialog';
 export { default as HabitChangePreview } from './HabitChangePreview';
+
+// New bulk editing components
+export { BulkEditModal } from './BulkEditModal';
+export { BulkDeactivateDialog } from './BulkDeactivateDialog';
+export { BulkOperationProgress } from './BulkOperationProgress';
