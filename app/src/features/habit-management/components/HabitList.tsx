@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import type { Habit, HabitFilter, HabitSortOption } from '../types/habit.types';
 import HabitCard from './HabitCard';
 import HabitCalendarCard from './HabitCalendarCard';
+import { BulkEditModal } from './BulkEditModal';
 import styles from './HabitList.module.css';
 
 interface HabitListProps {
@@ -12,6 +13,7 @@ interface HabitListProps {
   onEditHabit?: (habit: Habit) => void;
   onDeleteHabit?: (habit: Habit) => void;
   onToggleComplete?: (habit: Habit) => void;
+  onBulkEdit?: (habits: Habit[], updates: any) => Promise<void>;
   showStats?: boolean;
   viewMode?: 'grid' | 'list' | 'calendar';
   className?: string;
@@ -25,6 +27,7 @@ export const HabitList: React.FC<HabitListProps> = ({
   onEditHabit,
   onDeleteHabit,
   onToggleComplete,
+  onBulkEdit,
   showStats = true,
   viewMode = 'grid',
   className = ''
@@ -35,6 +38,11 @@ export const HabitList: React.FC<HabitListProps> = ({
     direction: 'asc'
   });
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Bulk selection state
+  const [bulkSelectMode, setBulkSelectMode] = useState(false);
+  const [selectedHabits, setSelectedHabits] = useState<Set<string>>(new Set());
+  const [showBulkEditModal, setShowBulkEditModal] = useState(false);
 
   // Filter and sort habits
   const filteredAndSortedHabits = useMemo(() => {
@@ -130,6 +138,43 @@ export const HabitList: React.FC<HabitListProps> = ({
     setSearchQuery('');
   };
 
+  // Bulk selection handlers
+  const toggleBulkSelectMode = () => {
+    setBulkSelectMode(prev => !prev);
+    setSelectedHabits(new Set());
+  };
+
+  const toggleHabitSelection = (habitId: string) => {
+    setSelectedHabits(prev => {
+      const newSelected = new Set(prev);
+      if (newSelected.has(habitId)) {
+        newSelected.delete(habitId);
+      } else {
+        newSelected.add(habitId);
+      }
+      return newSelected;
+    });
+  };
+
+  const selectAllHabits = () => {
+    const allHabitIds = filteredAndSortedHabits.map(h => h.id);
+    setSelectedHabits(new Set(allHabitIds));
+  };
+
+  const clearSelection = () => {
+    setSelectedHabits(new Set());
+  };
+
+  const handleBulkEdit = async (updates: any) => {
+    const habitsToEdit = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id));
+    if (onBulkEdit) {
+      await onBulkEdit(habitsToEdit, updates);
+    }
+    setSelectedHabits(new Set());
+    setBulkSelectMode(false);
+  };
+
+  const selectedHabitObjects = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id));
   const hasActiveFilters = Object.keys(filter).length > 0 || searchQuery.length > 0;
 
   if (loading) {
@@ -165,42 +210,84 @@ export const HabitList: React.FC<HabitListProps> = ({
           </span>
         </div>
         
-        {onCreateHabit && (
-          <div className={styles.headerActions}>
-            {/* View Mode Toggle */}
-            <div className={styles.viewToggle}>
+        <div className={styles.headerActions}>
+          {/* Bulk Selection Controls */}
+          {habits.length > 0 && (
+            <>
               <button
-                className={`${styles.viewButton} ${viewMode === 'grid' ? styles.active : ''}`}
-                onClick={() => {/* Set view mode to grid */}}
-                title="Grid view"
+                className={`${styles.bulkSelectButton} ${bulkSelectMode ? styles.active : ''}`}
+                onClick={toggleBulkSelectMode}
+                title={bulkSelectMode ? "Exit bulk select" : "Select multiple habits"}
               >
-                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.viewIcon}>
-                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zM9 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V4zM9 10a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1v-2z" clipRule="evenodd" />
+                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
+                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 12a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
                 </svg>
+                {bulkSelectMode ? 'Done' : 'Select'}
               </button>
-              <button
-                className={`${styles.viewButton} ${viewMode === 'calendar' ? styles.active : ''}`}
-                onClick={() => {/* Set view mode to calendar */}}
-                title="Calendar view with weekly completion tracking"
-              >
-                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.viewIcon}>
-                  <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM4 8h12v8H4V8z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-            
-            <button
-              className={styles.createButton}
-              onClick={onCreateHabit}
-              aria-label="Create new habit"
-            >
-              <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
-                <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-              </svg>
-              Add Habit
-            </button>
-          </div>
-        )}
+
+              {bulkSelectMode && (
+                <div className={styles.bulkControls}>
+                  <div className={styles.selectionInfo}>
+                    {selectedHabits.size} of {filteredAndSortedHabits.length} selected
+                  </div>
+                  <button
+                    className={styles.selectAllButton}
+                    onClick={selectedHabits.size === filteredAndSortedHabits.length ? clearSelection : selectAllHabits}
+                  >
+                    {selectedHabits.size === filteredAndSortedHabits.length ? 'Clear All' : 'Select All'}
+                  </button>
+                  {selectedHabits.size > 0 && (
+                    <button
+                      className={styles.bulkEditButton}
+                      onClick={() => setShowBulkEditModal(true)}
+                    >
+                      Edit ({selectedHabits.size})
+                    </button>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+
+          {!bulkSelectMode && (
+            <>
+              {/* View Mode Toggle */}
+              <div className={styles.viewToggle}>
+                <button
+                  className={`${styles.viewButton} ${viewMode === 'grid' ? styles.active : ''}`}
+                  onClick={() => {/* Set view mode to grid */}}
+                  title="Grid view"
+                >
+                  <svg viewBox="0 0 20 20" fill="currentColor" className={styles.viewIcon}>
+                    <path fillRule="evenodd" d="M3 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zM9 4a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V4zM9 10a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1v-2z" clipRule="evenodd" />
+                  </svg>
+                </button>
+                <button
+                  className={`${styles.viewButton} ${viewMode === 'calendar' ? styles.active : ''}`}
+                  onClick={() => {/* Set view mode to calendar */}}
+                  title="Calendar view with weekly completion tracking"
+                >
+                  <svg viewBox="0 0 20 20" fill="currentColor" className={styles.viewIcon}>
+                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM4 8h12v8H4V8z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+
+              {onCreateHabit && (
+                <button
+                  className={styles.createButton}
+                  onClick={onCreateHabit}
+                  aria-label="Create new habit"
+                >
+                  <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
+                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                  </svg>
+                  Add Habit
+                </button>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       {/* Filters and Search */}
@@ -295,31 +382,49 @@ export const HabitList: React.FC<HabitListProps> = ({
           )}
         </div>
       ) : (
-        <div className={`${styles.habitGrid} ${styles[viewMode]}`}>
+        <div className={`${styles.habitGrid} ${styles[viewMode]} ${bulkSelectMode ? styles.selectMode : ''}`}>
           {filteredAndSortedHabits.map((habit) => (
-            viewMode === 'calendar' ? (
-              <HabitCalendarCard
-                key={habit.id}
-                habit={habit}
-                {...(onEditHabit && { onEdit: onEditHabit })}
-                {...(onDeleteHabit && { onDelete: onDeleteHabit })}
-                showStats={showStats}
-                className={styles.habitCardItem}
-              />
-            ) : (
-              <HabitCard
-                key={habit.id}
-                habit={habit}
-                {...(onEditHabit && { onEdit: onEditHabit })}
-                {...(onDeleteHabit && { onDelete: onDeleteHabit })}
-                {...(onToggleComplete && { onToggleComplete: onToggleComplete })}
-                showStats={showStats}
-                className={styles.habitCardItem}
-              />
-            )
+            <div key={habit.id} className={styles.habitCardContainer}>
+              {bulkSelectMode && (
+                <div className={styles.selectionCheckbox}>
+                  <input
+                    type="checkbox"
+                    checked={selectedHabits.has(habit.id)}
+                    onChange={() => toggleHabitSelection(habit.id)}
+                    className={styles.checkbox}
+                  />
+                </div>
+              )}
+              {viewMode === 'calendar' ? (
+                <HabitCalendarCard
+                  habit={habit}
+                  {...(onEditHabit && { onEdit: onEditHabit })}
+                  {...(onDeleteHabit && { onDelete: onDeleteHabit })}
+                  showStats={showStats}
+                  className={styles.habitCardItem}
+                />
+              ) : (
+                <HabitCard
+                  habit={habit}
+                  {...(onEditHabit && { onEdit: onEditHabit })}
+                  {...(onDeleteHabit && { onDelete: onDeleteHabit })}
+                  {...(onToggleComplete && { onToggleComplete: onToggleComplete })}
+                  showStats={showStats}
+                  className={styles.habitCardItem}
+                />
+              )}
+            </div>
           ))}
         </div>
       )}
+
+      {/* Bulk Edit Modal */}
+      <BulkEditModal
+        isOpen={showBulkEditModal}
+        onClose={() => setShowBulkEditModal(false)}
+        selectedHabits={selectedHabitObjects}
+        onBulkEdit={handleBulkEdit}
+      />
     </div>
   );
 };

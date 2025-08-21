@@ -55,11 +55,13 @@ builder.Services.AddScoped<IValidator<CreateTrackerDto>, CreateTrackerValidator>
 builder.Services.AddScoped<IValidator<UpdateTrackerDto>, UpdateTrackerValidator>();
 builder.Services.AddScoped<IValidator<CreateHabitDto>, CreateHabitValidator>();
 builder.Services.AddScoped<IValidator<UpdateHabitDto>, UpdateHabitValidator>();
+builder.Services.AddScoped<IValidator<EditHabitDto>, EditHabitValidator>();
 
 // Configure Application Services
 builder.Services.AddScoped<ITrackerService, TrackerService>();
 builder.Services.AddScoped<ITrackerSwitchingService, TrackerSwitchingService>();
 builder.Services.AddScoped<IHabitService, HabitService>();
+builder.Services.AddScoped<IHabitEditingService, HabitEditingService>();
 builder.Services.AddScoped<IHabitCompletionService, HabitCompletionService>();
 
 // Add Memory Cache for performance optimization

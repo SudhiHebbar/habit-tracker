@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ColorPicker } from './ColorPicker';
 import { IconSelector } from './IconSelector';
 import { FrequencySelector } from './FrequencySelector';
-import type { Habit, UpdateHabitRequest, FrequencyType, CustomFrequency } from '../types/habit.types';
+import { HabitChangePreview } from './HabitChangePreview';
+import { HabitDeactivateDialog } from './HabitDeactivateDialog';
+import { useEditHabit } from '../hooks/useEditHabit';
+import { useHabitValidation } from '../hooks/useHabitValidation';
+import type { Habit, UpdateHabitRequest, EditHabitRequest, FrequencyType, CustomFrequency } from '../types/habit.types';
 import styles from './EditHabitModal.module.css';
 
 interface EditHabitModalProps {
@@ -36,12 +40,17 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     timesPerMonth: null
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showDeactivateDialog, setShowDeactivateDialog] = useState(false);
+
+  const { editHabit, deactivateHabit, loading: editLoading } = useEditHabit();
+  const { clearErrors } = useHabitValidation();
 
   const steps = [
     { title: 'Basic Info', description: 'Name and description' },
     { title: 'Appearance', description: 'Color and icon' },
     { title: 'Frequency', description: 'How often to complete' },
-    { title: 'Settings', description: 'Additional options' }
+    { title: 'Settings', description: 'Additional options' },
+    { title: 'Review', description: 'Review and confirm changes' }
   ];
 
   // Initialize form data when habit changes
@@ -138,22 +147,91 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     }
   };
 
+  const getChangedFields = (): EditHabitRequest => {
+    if (!habit) return {};
+
+    const changes: EditHabitRequest = {};
+
+    if (formData.name !== habit.name) changes.name = formData.name;
+    if (formData.description !== habit.description) {
+      changes.description = formData.description || undefined;
+    }
+    if (formData.targetFrequency !== habit.targetFrequency) changes.targetFrequency = formData.targetFrequency;
+    if (formData.targetCount !== habit.targetCount) changes.targetCount = formData.targetCount;
+    if (formData.color !== habit.color) changes.color = formData.color;
+    if (formData.icon !== habit.icon) changes.icon = formData.icon || undefined;
+    if (formData.displayOrder !== habit.displayOrder) changes.displayOrder = formData.displayOrder;
+    if (formData.isActive !== habit.isActive) changes.isActive = formData.isActive;
+
+    return changes;
+  };
+
+  const hasChanges = () => {
+    const changes = getChangedFields();
+    return Object.keys(changes).length > 0;
+  };
+
   const handleSubmit = async () => {
     if (!validateCurrentStep() || !habit) {
       return;
     }
 
+    if (currentStep === steps.length - 1) {
+      // Final review step - directly update the habit
+      await handleConfirmChanges();
+      return;
+    }
+
     try {
-      await onSubmit(habit.id, formData);
+      const changes = getChangedFields();
+      if (Object.keys(changes).length === 0) {
+        console.log('No changes to save');
+        handleClose();
+        return;
+      }
+
+      await editHabit(habit.id, changes);
+      // Also call the parent's onSubmit if needed for UI updates
+      if (onSubmit) {
+        await onSubmit(habit.id, formData);
+      }
       handleClose();
     } catch (error) {
       console.error('Error updating habit:', error);
     }
   };
 
+  const handleConfirmChanges = async () => {
+    if (!habit) return;
+
+    try {
+      const changes = getChangedFields();
+      await editHabit(habit.id, changes);
+      if (onSubmit) {
+        await onSubmit(habit.id, formData);
+      }
+      handleClose();
+    } catch (error) {
+      console.error('Error updating habit:', error);
+    }
+  };
+
+  const handleDeactivate = async (reason: string) => {
+    if (!habit) return;
+
+    try {
+      await deactivateHabit(habit.id, reason);
+      handleClose();
+    } catch (error) {
+      console.error('Error deactivating habit:', error);
+    }
+  };
+
   const handleClose = () => {
     setCurrentStep(0);
     setErrors({});
+    setShowDeactivateDialog(false);
+    clearErrors();
     onClose();
   };
 
@@ -320,6 +398,46 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
           </div>
         );
 
+      case 4: // Review
+        return (
+          <div className={styles.stepContent}>
+            {hasChanges() ? (
+              <HabitChangePreview
+                original={habit}
+                changes={formData}
+                onConfirm={handleConfirmChanges}
+                onCancel={() => setCurrentStep(0)}
+                isLoading={editLoading || isLoading}
+              />
+            ) : (
+              <div className={styles.noChanges}>
+                <p>No changes detected. The habit will remain unchanged.</p>
+                <button 
+                  className={styles.button}
+                  onClick={handleClose}
+                >
+                  Close
+                </button>
+              </div>
+            )}
+
+            {/* Advanced Actions */}
+            <div className={styles.advancedActions}>
+              <h4 className={styles.sectionTitle}>Advanced Actions</h4>
+              <div className={styles.actionButtons}>
+                <button
+                  className={`${styles.actionButton} ${styles.deactivateButton}`}
+                  onClick={() => setShowDeactivateDialog(true)}
+                  disabled={editLoading || isLoading || !formData.isActive}
+                  title={!formData.isActive ? "Habit is already deactivated" : "Deactivate this habit"}
+                >
+                  Deactivate Habit
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -398,6 +516,15 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
           )}
         </div>
       </div>
+
+      {/* Deactivate Dialog */}
+      <HabitDeactivateDialog
+        isOpen={showDeactivateDialog}
+        habitName={habit.name}
+        onConfirm={handleDeactivate}
+        onCancel={() => setShowDeactivateDialog(false)}
+        isLoading={editLoading}
+      />
     </div>
   );
 };

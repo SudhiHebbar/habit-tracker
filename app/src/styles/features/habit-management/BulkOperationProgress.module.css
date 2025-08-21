@@ -1,0 +1,400 @@
+/* BulkOperationProgress Styles */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.content {
+  flex: 1;
+  padding: 20px 24px;
+  overflow-y: auto;
+}
+
+.overallProgress {
+  margin-bottom: 24px;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progressText {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.progressPercentage {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progressFill.hasErrors {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.currentStep {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+}
+
+.currentStepIndicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: #0369a1;
+  font-weight: 500;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #bae6fd;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stepsList h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.stepsContainer {
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.step.pending {
+  background: #f9fafb;
+}
+
+.step.in_progress {
+  background: #f0f9ff;
+}
+
+.step.completed {
+  background: #f0fdf4;
+}
+
+.step.error {
+  background: #fef2f2;
+}
+
+.stepIcon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.stepContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stepName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.stepStatus {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.step.completed .stepStatus {
+  color: #059669;
+}
+
+.step.error .stepStatus {
+  color: #dc2626;
+}
+
+.step.in_progress .stepStatus {
+  color: #2563eb;
+}
+
+.stepError {
+  margin-top: 4px;
+}
+
+.stepError small {
+  font-size: 0.75rem;
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.summary {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.summarySuccess {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.summarySuccess h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #15803d;
+}
+
+.summarySuccess p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #166534;
+  line-height: 1.4;
+}
+
+.summaryWithErrors {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+}
+
+.summaryWithErrors h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.summaryWithErrors p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #92400e;
+  line-height: 1.4;
+}
+
+.footer {
+  padding: 16px 24px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.processingText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.dots {
+  display: flex;
+  gap: 2px;
+}
+
+.dots span {
+  width: 4px;
+  height: 4px;
+  background-color: #6b7280;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.dots span:nth-child(1) {
+  animation-delay: -0.3s;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: -0.1s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+@keyframes pulse {
+  0%, 80%, 100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelButton:hover {
+  background: #f3f4f6;
+}
+
+.completeActions {
+  display: flex;
+  gap: 12px;
+}
+
+.retryButton {
+  padding: 8px 16px;
+  border: 1px solid #f59e0b;
+  background: white;
+  color: #f59e0b;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.retryButton:hover {
+  background: #f59e0b;
+  color: white;
+}
+
+.closeCompleteButton {
+  padding: 8px 16px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.closeCompleteButton:hover {
+  background: #2563eb;
+}

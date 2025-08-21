@@ -1,0 +1,406 @@
+/* BulkDeactivateDialog Styles */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 20px;
+}
+
+.dialog {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.selectedHabits {
+  margin-bottom: 24px;
+}
+
+.selectedHabits h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.habitGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.habitChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.habitIcon {
+  font-size: 1.1rem;
+}
+
+.habitInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.habitName {
+  font-weight: 500;
+  color: #374151;
+}
+
+.habitFreq {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.reasonSection {
+  margin-bottom: 24px;
+}
+
+.reasonSection h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.reasonHelp {
+  margin: 0 0 16px 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.reasonOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reasonOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.reasonOption:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.reasonOption:has(.radio:checked) {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.radio {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.reasonLabel {
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+}
+
+.customReasonSection {
+  margin-top: 12px;
+}
+
+.customReasonLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.customReasonInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.customReasonInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.infoBox {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.infoIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.infoContent h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0c4a6e;
+}
+
+.infoContent p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #0369a1;
+  line-height: 1.4;
+}
+
+.footer {
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelButton:hover {
+  background: #f3f4f6;
+}
+
+.deactivateButton {
+  padding: 8px 16px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.deactivateButton:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.deactivateButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Confirmation Styles */
+.warning {
+  text-align: left;
+}
+
+.warning p {
+  margin: 0 0 16px 0;
+  color: #374151;
+}
+
+.warning strong {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.habitList {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.habitItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.habitItem:last-child {
+  border-bottom: none;
+}
+
+.consequences {
+  margin: 20px 0;
+  padding: 16px;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 6px;
+}
+
+.consequences h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.consequences ul {
+  margin: 0;
+  padding-left: 16px;
+  list-style-type: disc;
+}
+
+.consequences li {
+  margin-bottom: 4px;
+  color: #92400e;
+  font-size: 0.875rem;
+}
+
+.reasonSummary {
+  margin: 16px 0;
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.reasonSummary strong {
+  color: #1f2937;
+}
+
+.confirmationSection {
+  margin: 20px 0;
+}
+
+.confirmLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.confirmInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.confirmInput:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.confirmButton {
+  padding: 8px 16px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.confirmButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.destructive {
+  background: #dc2626 !important;
+}
+
+.destructive:hover:not(:disabled) {
+  background: #b91c1c !important;
+}
