@@ -442,7 +442,7 @@ describe('EditTrackerModal Component', () => {
       />
     );
 
-    const form = screen.getByRole('form') || screen.getByText('Update Tracker').closest('form');
+    const form = screen.getByText('Update Tracker').closest('form');
     fireEvent.submit(form!, { preventDefault });
 
     expect(preventDefault).toHaveBeenCalled();
@@ -450,9 +450,9 @@ describe('EditTrackerModal Component', () => {
 
   it('handles empty description correctly', () => {
     const trackerWithoutDescription: Tracker = {
-      ...mockTracker,
-      description: undefined
+      ...mockTracker
     };
+    delete trackerWithoutDescription.description;
 
     render(
       <EditTrackerModal
