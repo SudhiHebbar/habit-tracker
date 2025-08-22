@@ -202,3 +202,65 @@ export interface HabitAnalytics {
   mostCompletedHabit?: Habit;
   longestStreakHabit?: Habit;
 }
+
+// Habit deletion types
+export interface DeleteHabitRequest {
+  deleteReason?: string;
+  confirmed: boolean;
+  requestImpactAnalysis?: boolean;
+}
+
+export interface DeleteHabitResponse {
+  message: string;
+  deletedAt: string;
+  canUndo: boolean;
+  undoTimeoutSeconds: number;
+}
+
+export interface RestoreHabitRequest {
+  restoreReason?: string;
+  confirmed: boolean;
+  restoreToActiveState?: boolean;
+}
+
+export interface RestoreHabitResponse {
+  message: string;
+  restoredAt: string;
+}
+
+export interface DeletionImpact {
+  habitId: number;
+  habitName: string;
+  color: string;
+  icon?: string;
+  
+  // Completion impact data
+  totalCompletions: number;
+  completionsLast30Days: number;
+  completionsLast7Days: number;
+  lastCompletionDate?: string;
+  firstCompletionDate?: string;
+  
+  // Streak impact data
+  currentStreak?: number;
+  longestStreak?: number;
+  streakStartDate?: string;
+  
+  // Historical data preservation
+  daysOfHistory: number;
+  willPreserveHistory: boolean;
+  
+  // Habit metadata
+  habitCreatedAt: string;
+  targetFrequency: string;
+  targetCount: number;
+  
+  // Impact warnings
+  impactWarnings: string[];
+  impactSeverity: 'Low' | 'Medium' | 'High';
+}
+
+export interface UndoDeleteResponse {
+  message: string;
+  restoredAt: string;
+}

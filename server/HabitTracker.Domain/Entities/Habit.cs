@@ -14,6 +14,11 @@ namespace HabitTracker.Domain.Entities
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = true;
         public int DisplayOrder { get; set; } = 0;
+        
+        // Soft delete properties
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
+        public string? DeleteReason { get; set; }
 
         public virtual Tracker Tracker { get; set; } = null!;
         public virtual ICollection<HabitCompletion> Completions { get; set; } = new List<HabitCompletion>();

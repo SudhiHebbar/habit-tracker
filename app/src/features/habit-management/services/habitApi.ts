@@ -8,7 +8,13 @@ import type {
   HabitOrderUpdate,
   HabitValidationResponse,
   HabitStatsByFrequency,
-  HabitError 
+  HabitError,
+  DeleteHabitRequest,
+  DeleteHabitResponse,
+  RestoreHabitRequest,
+  RestoreHabitResponse,
+  DeletionImpact,
+  UndoDeleteResponse
 } from '../types/habit.types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5281/api';
@@ -184,22 +190,50 @@ class HabitApiService {
     return this.handleResponse<Record<string, any>>(response);
   }
 
-  // Delete a habit (soft delete)
-  async deleteHabit(id: number): Promise<void> {
-    const response = await fetch(`${this.baseUrl}/${id}`, {
-      method: 'DELETE',
+  // Get deletion impact analysis for a habit
+  async getDeletionImpact(id: number): Promise<DeletionImpact> {
+    const response = await fetch(`${this.baseUrl}/${id}/deletion-impact`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
     });
     
-    await this.handleResponse<void>(response);
+    return this.handleResponse<DeletionImpact>(response);
   }
 
-  // Restore a soft-deleted habit
-  async restoreHabit(id: number): Promise<void> {
+  // Delete a habit with confirmation (soft delete)
+  async deleteHabit(id: number, data: DeleteHabitRequest): Promise<DeleteHabitResponse> {
+    const response = await fetch(`${this.baseUrl}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    
+    return this.handleResponse<DeleteHabitResponse>(response);
+  }
+
+  // Restore a soft-deleted habit with confirmation
+  async restoreHabit(id: number, data: RestoreHabitRequest): Promise<RestoreHabitResponse> {
     const response = await fetch(`${this.baseUrl}/${id}/restore`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+    
+    return this.handleResponse<RestoreHabitResponse>(response);
+  }
+
+  // Undo a recent deletion (within grace period)
+  async undoDelete(id: number): Promise<UndoDeleteResponse> {
+    const response = await fetch(`${this.baseUrl}/${id}/undo-delete`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -207,7 +241,38 @@ class HabitApiService {
       credentials: 'include',
     });
     
-    await this.handleResponse<void>(response);
+    return this.handleResponse<UndoDeleteResponse>(response);
+  }
+
+  // Get deleted habits for a tracker
+  async getDeletedHabits(trackerId: number): Promise<Habit[]> {
+    const response = await fetch(`${this.baseUrl}/tracker/${trackerId}/deleted`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    
+    return this.handleResponse<Habit[]>(response);
+  }
+
+  // Legacy delete method for backward compatibility
+  async legacyDeleteHabit(id: number): Promise<void> {
+    const data: DeleteHabitRequest = {
+      confirmed: true,
+      requestImpactAnalysis: false
+    };
+    await this.deleteHabit(id, data);
+  }
+
+  // Legacy restore method for backward compatibility
+  async legacyRestoreHabit(id: number): Promise<void> {
+    const data: RestoreHabitRequest = {
+      confirmed: true,
+      restoreToActiveState: true
+    };
+    await this.restoreHabit(id, data);
   }
 
   // Update display order for habits in a tracker
@@ -299,7 +364,7 @@ class HabitApiService {
     // For now, delete habits one by one - can be optimized later with a bulk API endpoint
     for (const id of ids) {
       try {
-        await this.deleteHabit(id);
+        await this.legacyDeleteHabit(id);
       } catch (error) {
         console.error(`Failed to delete habit ${id}:`, error);
         // Continue with other habits even if one fails

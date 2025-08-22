@@ -16,3 +16,8 @@ export { default as HabitChangePreview } from './HabitChangePreview';
 export { BulkEditModal } from './BulkEditModal';
 export { BulkDeactivateDialog } from './BulkDeactivateDialog';
 export { BulkOperationProgress } from './BulkOperationProgress';
+
+// Habit deletion components
+export { default as DeleteHabitDialog } from './DeleteHabitDialog';
+export { default as UndoDeleteToast } from './UndoDeleteToast';
+export { default as DeletedHabitsView } from './DeletedHabitsView';

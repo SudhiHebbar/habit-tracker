@@ -10,12 +10,18 @@ namespace HabitTracker.Api.Controllers
     {
         private readonly IHabitService _habitService;
         private readonly IHabitEditingService _habitEditingService;
+        private readonly IHabitDeletionService _habitDeletionService;
         private readonly ILogger<HabitsController> _logger;
 
-        public HabitsController(IHabitService habitService, IHabitEditingService habitEditingService, ILogger<HabitsController> logger)
+        public HabitsController(
+            IHabitService habitService, 
+            IHabitEditingService habitEditingService, 
+            IHabitDeletionService habitDeletionService,
+            ILogger<HabitsController> logger)
         {
             _habitService = habitService;
             _habitEditingService = habitEditingService;
+            _habitDeletionService = habitDeletionService;
             _logger = logger;
         }
 
@@ -190,25 +196,40 @@ namespace HabitTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Delete a habit (soft delete)
+        /// Delete a habit with deletion confirmation (soft delete)
         /// </summary>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteHabit(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> DeleteHabit(int id, [FromBody] DeleteHabitDto deleteDto, CancellationToken cancellationToken = default)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 string? userId = null;
 
-                var result = await _habitService.DeleteHabitAsync(id, userId, cancellationToken);
+                var result = await _habitDeletionService.SoftDeleteHabitAsync(id, deleteDto, userId, cancellationToken);
                 
                 if (!result)
                 {
                     return NotFound($"Habit with ID {id} not found");
                 }
 
-                return NoContent();
+                return Ok(new { 
+                    message = "Habit deleted successfully", 
+                    deletedAt = DateTime.UtcNow,
+                    canUndo = true,
+                    undoTimeoutSeconds = 300 // 5 minutes
+                });
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return NotFound($"Habit with ID {id} not found");
             }
             catch (Exception ex)
             {
@@ -218,30 +239,207 @@ namespace HabitTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Restore a soft-deleted habit
+        /// Restore a soft-deleted habit with confirmation
         /// </summary>
         [HttpPost("{id}/restore")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RestoreHabit(int id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> RestoreHabit(int id, [FromBody] RestoreHabitDto restoreDto, CancellationToken cancellationToken = default)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 string? userId = null;
 
-                var result = await _habitService.RestoreHabitAsync(id, userId, cancellationToken);
+                var result = await _habitDeletionService.RestoreHabitAsync(id, restoreDto, userId, cancellationToken);
                 
                 if (!result)
                 {
-                    return NotFound($"Habit with ID {id} not found");
+                    return NotFound($"Habit with ID {id} not found or not deleted");
                 }
 
-                return Ok(new { message = "Habit restored successfully" });
+                return Ok(new { 
+                    message = "Habit restored successfully",
+                    restoredAt = DateTime.UtcNow
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error restoring habit {HabitId}", id);
                 return StatusCode(500, "An error occurred while restoring the habit");
+            }
+        }
+
+        /// <summary>
+        /// Get deletion impact analysis for a habit
+        /// </summary>
+        [HttpGet("{id}/deletion-impact")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<DeletionImpactDto>> GetDeletionImpact(int id, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string? userId = null;
+
+                var impact = await _habitDeletionService.CalculateDeletionImpactAsync(id, userId, cancellationToken);
+                return Ok(impact);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return NotFound($"Habit with ID {id} not found");
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Invalid operation while calculating deletion impact for habit {HabitId}", id);
+                return NotFound($"Habit with ID {id} not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error calculating deletion impact for habit {HabitId}", id);
+                return StatusCode(500, "An error occurred while calculating deletion impact");
+            }
+        }
+
+        /// <summary>
+        /// Bulk delete multiple habits
+        /// </summary>
+        [HttpPost("bulk-delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> BulkDeleteHabits([FromBody] BulkDeleteDto bulkDeleteDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string? userId = null;
+
+                // Calculate impact if requested
+                BulkDeletionImpactDto? impact = null;
+                if (bulkDeleteDto.RequestImpactAnalysis)
+                {
+                    impact = await _habitDeletionService.CalculateBulkDeletionImpactAsync(bulkDeleteDto.HabitIds, userId, cancellationToken);
+                }
+
+                var result = await _habitDeletionService.BulkSoftDeleteHabitsAsync(bulkDeleteDto, userId, cancellationToken);
+
+                if (!result)
+                {
+                    return BadRequest("Failed to delete habits - some habits may not exist or are inaccessible");
+                }
+
+                return Ok(new
+                {
+                    message = $"Bulk deletion initiated for {bulkDeleteDto.HabitIds.Count} habits",
+                    deletedAt = DateTime.UtcNow,
+                    canUndo = true,
+                    undoTimeoutSeconds = 300,
+                    impact = impact
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error bulk deleting habits");
+                return StatusCode(500, "An error occurred while bulk deleting habits");
+            }
+        }
+
+        /// <summary>
+        /// Get bulk deletion impact analysis
+        /// </summary>
+        [HttpPost("bulk-deletion-impact")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<BulkDeletionImpactDto>> GetBulkDeletionImpact([FromBody] List<int> habitIds, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (habitIds == null || !habitIds.Any())
+                {
+                    return BadRequest("At least one habit ID must be provided");
+                }
+
+                if (habitIds.Count > 50)
+                {
+                    return BadRequest("Cannot analyze more than 50 habits at once");
+                }
+
+                string? userId = null;
+                var impact = await _habitDeletionService.CalculateBulkDeletionImpactAsync(habitIds, userId, cancellationToken);
+                return Ok(impact);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error calculating bulk deletion impact");
+                return StatusCode(500, "An error occurred while calculating bulk deletion impact");
+            }
+        }
+
+        /// <summary>
+        /// Get deleted habits for a tracker
+        /// </summary>
+        [HttpGet("tracker/{trackerId}/deleted")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<HabitResponseDto>>> GetDeletedHabits(int trackerId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string? userId = null;
+                var habits = await _habitDeletionService.GetDeletedHabitsByTrackerAsync(trackerId, userId, cancellationToken);
+                return Ok(habits);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting deleted habits for tracker {TrackerId}", trackerId);
+                return StatusCode(500, "An error occurred while fetching deleted habits");
+            }
+        }
+
+        /// <summary>
+        /// Undo a recent deletion (within 5-minute grace period)
+        /// </summary>
+        [HttpPost("{id}/undo-delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UndoDelete(int id, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                string? userId = null;
+
+                var canUndo = await _habitDeletionService.CanUndoDeletionAsync(id, userId, cancellationToken);
+                if (!canUndo)
+                {
+                    return BadRequest("Cannot undo deletion - habit not found, not deleted, or deletion is outside the undo grace period");
+                }
+
+                var result = await _habitDeletionService.UndoRecentDeletionAsync(id, userId, cancellationToken);
+                
+                if (!result)
+                {
+                    return BadRequest("Failed to undo deletion");
+                }
+
+                return Ok(new { 
+                    message = "Deletion undone successfully",
+                    restoredAt = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error undoing deletion for habit {HabitId}", id);
+                return StatusCode(500, "An error occurred while undoing the deletion");
             }
         }
 

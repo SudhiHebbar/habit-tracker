@@ -463,10 +463,12 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Soft deleting habit {HabitId}", habitId);
                 
-                var habit = await _dbSet.FindAsync([habitId], cancellationToken).ConfigureAwait(false);
+                var habit = await _dbSet.IgnoreQueryFilters().FirstOrDefaultAsync(h => h.Id == habitId, cancellationToken).ConfigureAwait(false);
                 if (habit != null)
                 {
-                    habit.IsActive = false;
+                    habit.IsDeleted = true;
+                    habit.DeletedAt = DateTime.UtcNow;
+                    habit.IsActive = false; // Backward compatibility
                     habit.UpdatedAt = DateTime.UtcNow;
                 }
             }
@@ -483,9 +485,12 @@ namespace HabitTracker.Infrastructure.Repositories
             {
                 _logger.LogDebug("Restoring habit {HabitId}", habitId);
                 
-                var habit = await _dbSet.FindAsync([habitId], cancellationToken).ConfigureAwait(false);
+                var habit = await _dbSet.IgnoreQueryFilters().FirstOrDefaultAsync(h => h.Id == habitId, cancellationToken).ConfigureAwait(false);
                 if (habit != null)
                 {
+                    habit.IsDeleted = false;
+                    habit.DeletedAt = null;
+                    habit.DeleteReason = null;
                     habit.IsActive = true;
                     habit.UpdatedAt = DateTime.UtcNow;
                 }
@@ -510,13 +515,98 @@ namespace HabitTracker.Infrastructure.Repositories
 
                 foreach (var habit in habits)
                 {
-                    habit.IsActive = false;
+                    habit.IsDeleted = true;
+                    habit.DeletedAt = DateTime.UtcNow;
+                    habit.IsActive = false; // Backward compatibility
                     habit.UpdatedAt = DateTime.UtcNow;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error soft deleting all habits for tracker {TrackerId}", trackerId);
+                throw;
+            }
+        }
+
+        // Deleted habits operations
+        public async Task<IEnumerable<Habit>> GetDeletedHabitsByTrackerIdAsync(int trackerId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogDebug("Getting deleted habits for tracker {TrackerId}", trackerId);
+                
+                return await _dbSet
+                    .IgnoreQueryFilters()
+                    .Where(h => h.TrackerId == trackerId && h.IsDeleted)
+                    .AsNoTracking()
+                    .OrderByDescending(h => h.DeletedAt)
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting deleted habits for tracker {TrackerId}", trackerId);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Habit>> GetAllDeletedHabitsForUserAsync(string? userId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogDebug("Getting all deleted habits for user {UserId}", userId ?? "anonymous");
+                
+                return await _dbSet
+                    .IgnoreQueryFilters()
+                    .Include(h => h.Tracker)
+                    .Where(h => h.IsDeleted && (h.Tracker.UserId == userId || h.Tracker.IsShared))
+                    .AsNoTracking()
+                    .OrderByDescending(h => h.DeletedAt)
+                    .ToListAsync(cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all deleted habits for user {UserId}", userId);
+                throw;
+            }
+        }
+
+        public async Task<Habit?> GetDeletedHabitByIdAsync(int habitId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogDebug("Getting deleted habit {HabitId}", habitId);
+                
+                return await _dbSet
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(h => h.Id == habitId && h.IsDeleted, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting deleted habit {HabitId}", habitId);
+                throw;
+            }
+        }
+
+        public async Task<Habit?> GetHabitByIdIncludingDeletedAsync(int habitId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _logger.LogDebug("Getting habit {HabitId} including deleted", habitId);
+                
+                return await _dbSet
+                    .IgnoreQueryFilters()
+                    .Include(h => h.Tracker)
+                    .Include(h => h.Completions.OrderByDescending(c => c.CompletionDate).Take(30))
+                    .Include(h => h.Streak)
+                    .FirstOrDefaultAsync(h => h.Id == habitId, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting habit {HabitId} including deleted", habitId);
                 throw;
             }
         }

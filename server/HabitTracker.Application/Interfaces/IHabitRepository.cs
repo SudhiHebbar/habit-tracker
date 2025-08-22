@@ -47,6 +47,12 @@ namespace HabitTracker.Application.Interfaces
         Task RestoreAsync(int habitId, CancellationToken cancellationToken = default);
         Task SoftDeleteAllByTrackerAsync(int trackerId, CancellationToken cancellationToken = default);
         
+        // Deleted habits operations
+        Task<IEnumerable<Habit>> GetDeletedHabitsByTrackerIdAsync(int trackerId, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Habit>> GetAllDeletedHabitsForUserAsync(string? userId, CancellationToken cancellationToken = default);
+        Task<Habit?> GetDeletedHabitByIdAsync(int habitId, CancellationToken cancellationToken = default);
+        Task<Habit?> GetHabitByIdIncludingDeletedAsync(int habitId, CancellationToken cancellationToken = default);
+        
         // Bulk operations
         Task<IEnumerable<Habit>> CreateHabitsAsync(IEnumerable<Habit> habits, CancellationToken cancellationToken = default);
         Task UpdateHabitsAsync(IEnumerable<Habit> habits, CancellationToken cancellationToken = default);

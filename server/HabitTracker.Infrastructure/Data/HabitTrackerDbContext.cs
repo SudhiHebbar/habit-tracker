@@ -24,6 +24,9 @@ namespace HabitTracker.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new HabitConfiguration());
             modelBuilder.ApplyConfiguration(new HabitCompletionConfiguration());
             modelBuilder.ApplyConfiguration(new StreakConfiguration());
+            
+            // Configure global query filters for soft delete
+            modelBuilder.Entity<Habit>().HasQueryFilter(h => !h.IsDeleted);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

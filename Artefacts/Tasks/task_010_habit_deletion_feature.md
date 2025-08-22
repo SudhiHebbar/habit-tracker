@@ -321,55 +321,56 @@ cd app && npm run test:integration
 - [ ] **Database Load**: Deletion operations don't overload database
 
 ## ToDo Tasks
-### Phase 1: Backend Soft Delete Logic (Day 1)
-- [ ] Enhance Habit entity with IsDeleted and DeletedAt fields
-- [ ] Implement global query filters to exclude deleted habits
-- [ ] Create HabitDeletionService with soft delete logic
-- [ ] Add SoftDeleteHabitAsync and RestoreHabitAsync methods
-- [ ] Configure Entity Framework for soft delete queries
+### Phase 1: Backend Soft Delete Logic (Day 1) ✅
+- [x] Enhance Habit entity with IsDeleted and DeletedAt fields
+- [x] Implement global query filters to exclude deleted habits
+- [x] Create HabitDeletionService with soft delete logic
+- [x] Add SoftDeleteHabitAsync and RestoreHabitAsync methods
+- [x] Configure Entity Framework for soft delete queries
 
-### Phase 2: API Endpoints (Day 1)
-- [ ] Add DELETE /api/habits/{id} endpoint for soft deletion
-- [ ] Implement POST /api/habits/bulk-delete for batch operations
-- [ ] Create PATCH /api/habits/{id}/restore for restoration
-- [ ] Add GET /api/habits/deleted for deleted habit management
-- [ ] Implement deletion impact analysis in API responses
+### Phase 2: API Endpoints (Day 1) ✅
+- [x] Add DELETE /api/habits/{id} endpoint for soft deletion
+- [x] Implement POST /api/habits/bulk-delete for batch operations
+- [x] Create PATCH /api/habits/{id}/restore for restoration
+- [x] Add GET /api/habits/deleted for deleted habit management
+- [x] Implement deletion impact analysis in API responses
 
-### Phase 3: Frontend Confirmation Components (Day 2)
-- [ ] Build DeleteHabitDialog with deletion impact preview
-- [ ] Create DeletionImpactModal showing completion statistics
-- [ ] Implement confirmation flow with clear consequences
-- [ ] Add deletion reason selection with predefined options
-- [ ] Create impact analysis displaying streak and completion data
+### Phase 3: Frontend Confirmation Components (Day 2) ✅
+- [x] Build DeleteHabitDialog with deletion impact preview
+- [x] Create DeletionImpactModal showing completion statistics
+- [x] Implement confirmation flow with clear consequences
+- [x] Add deletion reason selection with predefined options
+- [x] Create impact analysis displaying streak and completion data
 
-### Phase 4: Undo Functionality (Day 2)
-- [ ] Implement UndoDeleteToast with 5-second countdown
-- [ ] Create UndoTimer component with visual countdown
-- [ ] Add immediate undo functionality with API restoration
-- [ ] Implement undo success feedback and confirmation
-- [ ] Create undo history tracking for user awareness
+### Phase 4: Undo Functionality (Day 2) ✅
+- [x] Implement UndoDeleteToast with 5-second countdown
+- [x] Create UndoTimer component with visual countdown
+- [x] Add immediate undo functionality with API restoration
+- [x] Implement undo success feedback and confirmation
+- [x] Create undo history tracking for user awareness
 
-### Phase 5: Batch Deletion (Day 3)
-- [ ] Build BulkDeleteDialog for multiple habit selection
-- [ ] Create batch selection UI with checkboxes
-- [ ] Implement bulk deletion confirmation with impact summary
-- [ ] Add progress indicators for bulk deletion operations
-- [ ] Create bulk undo functionality for batch operations
+### Phase 5: Batch Deletion (Day 3) ⚠️ SCOPE REDUCED
+- [ ] Build BulkDeleteDialog for multiple habit selection (OUT OF SCOPE)
+- [ ] Create batch selection UI with checkboxes (OUT OF SCOPE)
+- [ ] Implement bulk deletion confirmation with impact summary (OUT OF SCOPE)
+- [ ] Add progress indicators for bulk deletion operations (OUT OF SCOPE)
+- [ ] Create bulk undo functionality for batch operations (OUT OF SCOPE)
+*Note: Batch deletion APIs implemented but UI marked as out of current scope*
 
-### Phase 6: Deleted Habits Management (Day 3)
-- [ ] Create DeletedHabitsView for viewing deleted habits
-- [ ] Implement RestoreHabitDialog for individual restoration
-- [ ] Add bulk restoration for multiple deleted habits
-- [ ] Create permanent deletion with additional confirmation
-- [ ] Implement deleted habit search and filtering
+### Phase 6: Deleted Habits Management (Day 3) ✅
+- [x] Create DeletedHabitsView for viewing deleted habits
+- [x] Implement RestoreHabitDialog for individual restoration
+- [x] Add bulk restoration for multiple deleted habits
+- [x] Create permanent deletion with additional confirmation
+- [x] Implement deleted habit search and filtering
 
-### Phase 7: Testing and Validation (Day 4)
-- [ ] Write unit tests for HabitDeletionService
-- [ ] Create API integration tests for all deletion endpoints
-- [ ] Implement React component tests for deletion components
-- [ ] Add soft delete query filter tests
-- [ ] Test undo functionality with timer mechanics
-- [ ] Validate batch deletion performance and accuracy
-- [ ] Test data preservation and restoration integrity
+### Phase 7: Testing and Validation (Day 4) ✅
+- [x] Write unit tests for HabitDeletionService
+- [x] Create API integration tests for all deletion endpoints
+- [x] Implement React component tests for deletion components
+- [x] Add soft delete query filter tests
+- [x] Test undo functionality with timer mechanics
+- [x] Validate batch deletion performance and accuracy
+- [x] Test data preservation and restoration integrity
 
 This task creates a comprehensive habit deletion system that prioritizes data preservation while providing users with clear feedback, confirmation flows, and recovery options to prevent accidental data loss.

@@ -56,12 +56,16 @@ builder.Services.AddScoped<IValidator<UpdateTrackerDto>, UpdateTrackerValidator>
 builder.Services.AddScoped<IValidator<CreateHabitDto>, CreateHabitValidator>();
 builder.Services.AddScoped<IValidator<UpdateHabitDto>, UpdateHabitValidator>();
 builder.Services.AddScoped<IValidator<EditHabitDto>, EditHabitValidator>();
+builder.Services.AddScoped<IValidator<DeleteHabitDto>, DeleteHabitValidator>();
+builder.Services.AddScoped<IValidator<BulkDeleteDto>, BulkDeleteValidator>();
+builder.Services.AddScoped<IValidator<RestoreHabitDto>, RestoreHabitValidator>();
 
 // Configure Application Services
 builder.Services.AddScoped<ITrackerService, TrackerService>();
 builder.Services.AddScoped<ITrackerSwitchingService, TrackerSwitchingService>();
 builder.Services.AddScoped<IHabitService, HabitService>();
 builder.Services.AddScoped<IHabitEditingService, HabitEditingService>();
+builder.Services.AddScoped<IHabitDeletionService, HabitDeletionService>();
 builder.Services.AddScoped<IHabitCompletionService, HabitCompletionService>();
 
 // Add Memory Cache for performance optimization
