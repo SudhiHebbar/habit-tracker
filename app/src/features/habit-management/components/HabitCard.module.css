@@ -394,6 +394,24 @@
   }
 }
 
+/* Inactive habit styles */
+.habitCard.inactive {
+  opacity: 0.6;
+  background-color: var(--color-background-tertiary);
+}
+
+.habitCard.inactive .colorBar {
+  background: linear-gradient(90deg, var(--habit-color), transparent);
+  opacity: 0.5;
+}
+
+.inactiveLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  font-weight: normal;
+  font-style: italic;
+}
+
 /* Completion checkbox integration */
 .completionCheckbox {
   /* Override default completion checkbox styles for card integration */

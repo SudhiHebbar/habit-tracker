@@ -1,8 +1,10 @@
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
-using HabitTracker.Application.DTOs;
+using HabitTracker.Application.DTOs.Habit;
 using HabitTracker.Application.Interfaces;
+using HabitTracker.Application.Options;
 using HabitTracker.Application.Services;
 using HabitTracker.Domain.Entities;
 using HabitTracker.Infrastructure.Repositories;
@@ -16,28 +18,42 @@ public class HabitServiceTests
 {
     private readonly Mock<IHabitRepository> _mockHabitRepository;
     private readonly Mock<ITrackerRepository> _mockTrackerRepository;
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IValidator<CreateHabitDto>> _mockCreateValidator;
     private readonly Mock<IValidator<UpdateHabitDto>> _mockUpdateValidator;
     private readonly Mock<ILogger<HabitService>> _mockLogger;
+    private readonly Mock<IOptions<HabitLimitsOptions>> _mockHabitLimitsOptions;
     private readonly HabitService _habitService;
 
     public HabitServiceTests()
     {
         _mockHabitRepository = new Mock<IHabitRepository>();
         _mockTrackerRepository = new Mock<ITrackerRepository>();
+        _mockUnitOfWork = new Mock<IUnitOfWork>();
         _mockMapper = new Mock<IMapper>();
         _mockCreateValidator = new Mock<IValidator<CreateHabitDto>>();
         _mockUpdateValidator = new Mock<IValidator<UpdateHabitDto>>();
         _mockLogger = new Mock<ILogger<HabitService>>();
+        _mockHabitLimitsOptions = new Mock<IOptions<HabitLimitsOptions>>();
+        
+        // Setup default options
+        _mockHabitLimitsOptions.Setup(x => x.Value).Returns(new HabitLimitsOptions
+        {
+            MaxHabitsPerTracker = 100,
+            MaxTargetCount = 365,
+            MinTargetCount = 1
+        });
 
         _habitService = new HabitService(
             _mockHabitRepository.Object,
             _mockTrackerRepository.Object,
+            _mockUnitOfWork.Object,
             _mockMapper.Object,
             _mockCreateValidator.Object,
             _mockUpdateValidator.Object,
-            _mockLogger.Object
+            _mockLogger.Object,
+            _mockHabitLimitsOptions.Object
         );
     }
 
