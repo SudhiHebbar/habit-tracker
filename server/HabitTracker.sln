@@ -39,8 +39,6 @@ Global
 		{3E09A37B-69CE-46AE-990F-0D37A65E4F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E09A37B-69CE-46AE-990F-0D37A65E4F09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6395C25-6F18-4017-96DB-3DB2531B99CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6395C25-6F18-4017-96DB-3DB2531B99CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6395C25-6F18-4017-96DB-3DB2531B99CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6395C25-6F18-4017-96DB-3DB2531B99CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

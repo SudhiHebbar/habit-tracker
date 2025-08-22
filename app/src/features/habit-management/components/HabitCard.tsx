@@ -62,7 +62,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({
 
   return (
     <div 
-      className={`${styles.habitCard} ${isCompleted ? styles.completed : ''} ${className}`}
+      className={`${styles.habitCard} ${isCompleted ? styles.completed : ''} ${!habit.isActive ? styles.inactive : ''} ${className}`}
       style={{ '--habit-color': habit.color } as React.CSSProperties}
     >
       {/* Header with color bar and actions */}
@@ -124,7 +124,12 @@ export const HabitCard: React.FC<HabitCardProps> = ({
             </div>
           )}
           <div className={styles.titleContent}>
-            <h3 className={styles.habitName}>{habit.name}</h3>
+            <h3 className={styles.habitName}>
+              {habit.name}
+              {!habit.isActive && (
+                <span className={styles.inactiveLabel}> (Inactive)</span>
+              )}
+            </h3>
             {habit.description && (
               <p className={styles.habitDescription}>{habit.description}</p>
             )}

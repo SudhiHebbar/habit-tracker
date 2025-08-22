@@ -38,11 +38,12 @@ export const HabitList: React.FC<HabitListProps> = ({
     direction: 'asc'
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [showInactiveHabits, setShowInactiveHabits] = useState(false);
   
-  // Bulk selection state
-  const [bulkSelectMode, setBulkSelectMode] = useState(false);
-  const [selectedHabits, setSelectedHabits] = useState<Set<string>>(new Set());
-  const [showBulkEditModal, setShowBulkEditModal] = useState(false);
+  // Bulk selection state - DISABLED (feature temporarily removed)
+  const bulkSelectMode = false;
+  const selectedHabits = new Set<string>();
+  const showBulkEditModal = false;
 
   // Filter and sort habits
   const filteredAndSortedHabits = useMemo(() => {
@@ -66,7 +67,12 @@ export const HabitList: React.FC<HabitListProps> = ({
         return false;
       }
 
-      // Active filter
+      // Active filter - Show inactive habits based on toggle
+      if (!showInactiveHabits && !habit.isActive) {
+        return false;
+      }
+      
+      // Additional active filter from filter state
       if (filter.isActive !== undefined && habit.isActive !== filter.isActive) {
         return false;
       }
@@ -136,43 +142,17 @@ export const HabitList: React.FC<HabitListProps> = ({
   const clearFilters = () => {
     setFilter({});
     setSearchQuery('');
+    setShowInactiveHabits(false);
   };
 
-  // Bulk selection handlers
-  const toggleBulkSelectMode = () => {
-    setBulkSelectMode(prev => !prev);
-    setSelectedHabits(new Set());
-  };
+  // Bulk selection handlers - DISABLED (feature temporarily removed)
+  const toggleBulkSelectMode = () => {};
+  const toggleHabitSelection = (habitId: string) => {};
+  const selectAllHabits = () => {};
+  const clearSelection = () => {};
 
-  const toggleHabitSelection = (habitId: string) => {
-    setSelectedHabits(prev => {
-      const newSelected = new Set(prev);
-      if (newSelected.has(habitId)) {
-        newSelected.delete(habitId);
-      } else {
-        newSelected.add(habitId);
-      }
-      return newSelected;
-    });
-  };
-
-  const selectAllHabits = () => {
-    const allHabitIds = filteredAndSortedHabits.map(h => h.id.toString());
-    setSelectedHabits(new Set(allHabitIds));
-  };
-
-  const clearSelection = () => {
-    setSelectedHabits(new Set());
-  };
-
-  const handleBulkEdit = async (updates: any) => {
-    const habitsToEdit = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id.toString()));
-    if (onBulkEdit) {
-      await onBulkEdit(habitsToEdit, updates);
-    }
-    setSelectedHabits(new Set());
-    setBulkSelectMode(false);
-  };
+  // Bulk edit handler - DISABLED (feature temporarily removed)
+  const handleBulkEdit = async (updates: any) => {};
 
   const selectedHabitObjects = filteredAndSortedHabits.filter(h => selectedHabits.has(h.id.toString()));
   const hasActiveFilters = Object.keys(filter).length > 0 || searchQuery.length > 0;
@@ -211,46 +191,6 @@ export const HabitList: React.FC<HabitListProps> = ({
         </div>
         
         <div className={styles.headerActions}>
-          {/* Bulk Selection Controls */}
-          {habits.length > 0 && (
-            <>
-              <button
-                className={`${styles.bulkSelectButton} ${bulkSelectMode ? styles.active : ''}`}
-                onClick={toggleBulkSelectMode}
-                title={bulkSelectMode ? "Exit bulk select" : "Select multiple habits"}
-              >
-                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
-                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 12a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                </svg>
-                {bulkSelectMode ? 'Done' : 'Select'}
-              </button>
-
-              {bulkSelectMode && (
-                <div className={styles.bulkControls}>
-                  <div className={styles.selectionInfo}>
-                    {selectedHabits.size} of {filteredAndSortedHabits.length} selected
-                  </div>
-                  <button
-                    className={styles.selectAllButton}
-                    onClick={selectedHabits.size === filteredAndSortedHabits.length ? clearSelection : selectAllHabits}
-                  >
-                    {selectedHabits.size === filteredAndSortedHabits.length ? 'Clear All' : 'Select All'}
-                  </button>
-                  {selectedHabits.size > 0 && (
-                    <button
-                      className={styles.bulkEditButton}
-                      onClick={() => setShowBulkEditModal(true)}
-                    >
-                      Edit ({selectedHabits.size})
-                    </button>
-                  )}
-                </div>
-              )}
-            </>
-          )}
-
-          {!bulkSelectMode && (
-            <>
               {/* View Mode Toggle */}
               <div className={styles.viewToggle}>
                 <button
@@ -285,8 +225,6 @@ export const HabitList: React.FC<HabitListProps> = ({
                   Add Habit
                 </button>
               )}
-            </>
-          )}
         </div>
       </div>
 
@@ -331,6 +269,16 @@ export const HabitList: React.FC<HabitListProps> = ({
             <option value="frequency">Frequency</option>
             <option value="targetCount">Target</option>
           </select>
+
+          <label className={styles.checkboxLabel} title="Show habits that have been deactivated">
+            <input
+              type="checkbox"
+              checked={showInactiveHabits}
+              onChange={(e) => setShowInactiveHabits(e.target.checked)}
+              className={styles.checkbox}
+            />
+            <span>Show Inactive</span>
+          </label>
 
           {hasActiveFilters && (
             <button
@@ -385,16 +333,6 @@ export const HabitList: React.FC<HabitListProps> = ({
         <div className={`${styles.habitGrid} ${styles[viewMode]} ${bulkSelectMode ? styles.selectMode : ''}`}>
           {filteredAndSortedHabits.map((habit) => (
             <div key={habit.id} className={styles.habitCardContainer}>
-              {bulkSelectMode && (
-                <div className={styles.selectionCheckbox}>
-                  <input
-                    type="checkbox"
-                    checked={selectedHabits.has(habit.id.toString())}
-                    onChange={() => toggleHabitSelection(habit.id.toString())}
-                    className={styles.checkbox}
-                  />
-                </div>
-              )}
               {viewMode === 'calendar' ? (
                 <HabitCalendarCard
                   habit={habit}
@@ -417,14 +355,6 @@ export const HabitList: React.FC<HabitListProps> = ({
           ))}
         </div>
       )}
-
-      {/* Bulk Edit Modal */}
-      <BulkEditModal
-        isOpen={showBulkEditModal}
-        onClose={() => setShowBulkEditModal(false)}
-        selectedHabits={selectedHabitObjects}
-        onBulkEdit={handleBulkEdit}
-      />
     </div>
   );
 };

@@ -50,7 +50,8 @@ namespace HabitTracker.Application.Services
                 return Enumerable.Empty<HabitResponseDto>();
             }
 
-            var habits = await _habitRepository.GetActiveHabitsByTrackerIdAsync(trackerId, cancellationToken);
+            // Return ALL habits (both active and inactive) so UI can filter them
+            var habits = await _habitRepository.GetHabitsByTrackerIdAsync(trackerId, cancellationToken);
             return _mapper.Map<IEnumerable<HabitResponseDto>>(habits);
         }
 
@@ -65,9 +66,9 @@ namespace HabitTracker.Application.Services
             }
 
             var habit = await _habitRepository.GetHabitWithAllRelationsAsync(id, cancellationToken);
-            if (habit == null || !habit.IsActive)
+            if (habit == null)
             {
-                _logger.LogWarning("Habit {HabitId} not found or inactive", id);
+                _logger.LogWarning("Habit {HabitId} not found", id);
                 return null;
             }
 
