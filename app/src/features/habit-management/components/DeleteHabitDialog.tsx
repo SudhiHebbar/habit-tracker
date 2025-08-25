@@ -16,7 +16,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
   habit,
   onClose,
   onDeleted,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [step, setStep] = useState<'confirm' | 'impact' | 'deleting'>('confirm');
   const [deleteReason, setDeleteReason] = useState('');
@@ -28,7 +28,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
     deleteHabitWithConfirmation,
     loading: deleteLoading,
     error,
-    clearError
+    clearError,
   } = useDeleteHabit();
 
   // Reset state when dialog opens/closes
@@ -77,7 +77,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
       const requestData = {
         confirmed: true,
         requestImpactAnalysis: false,
-        ...(deleteReason.trim() && { deleteReason: deleteReason.trim() })
+        ...(deleteReason.trim() && { deleteReason: deleteReason.trim() }),
       };
       const response = await deleteHabitWithConfirmation(habit.id, requestData);
 
@@ -95,7 +95,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
     if (step === 'deleting' || deleteLoading || isLoading) {
       return; // Prevent closing during deletion
     }
-    
+
     setStep('confirm');
     setDeleteReason('');
     setImpact(null);
@@ -117,22 +117,19 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
 
   return (
     <div className={styles.modalOverlay} onClick={handleClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <div className={styles.headerContent}>
-            <div 
-              className={styles.habitIndicator} 
-              style={{ backgroundColor: habit.color }}
-            />
+            <div className={styles.habitIndicator} style={{ backgroundColor: habit.color }} />
             <div>
               <h2>Delete Habit</h2>
               <p className={styles.habitName}>{habit.name}</p>
             </div>
           </div>
-          <button 
-            className={styles.closeButton} 
+          <button
+            className={styles.closeButton}
             onClick={handleClose}
-            aria-label="Close dialog"
+            aria-label='Close dialog'
             disabled={isProcessing}
           >
             ×
@@ -145,28 +142,25 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
               <div className={styles.warningIcon}>⚠️</div>
               <h3>Are you sure you want to delete this habit?</h3>
               <p className={styles.description}>
-                This action will remove the habit from your active list, but all your 
-                completion history will be preserved. You can restore this habit later 
-                if needed.
+                This action will remove the habit from your active list, but all your completion
+                history will be preserved. You can restore this habit later if needed.
               </p>
 
               <div className={styles.formGroup}>
-                <label htmlFor="deleteReason" className={styles.label}>
+                <label htmlFor='deleteReason' className={styles.label}>
                   Reason for deletion (optional)
                 </label>
                 <textarea
-                  id="deleteReason"
+                  id='deleteReason'
                   value={deleteReason}
                   onChange={handleReasonChange}
                   className={styles.textarea}
-                  placeholder="e.g., No longer relevant, replaced with similar habit..."
+                  placeholder='e.g., No longer relevant, replaced with similar habit...'
                   rows={3}
                   maxLength={200}
                   disabled={isProcessing}
                 />
-                <div className={styles.characterCount}>
-                  {deleteReason.length}/200
-                </div>
+                <div className={styles.characterCount}>{deleteReason.length}/200</div>
               </div>
             </div>
           )}
@@ -182,7 +176,9 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
                 <>
                   <div className={styles.impactHeader}>
                     <h3>Deletion Impact</h3>
-                    <div className={`${styles.severityBadge} ${styles[`severity${impact.impactSeverity}`]}`}>
+                    <div
+                      className={`${styles.severityBadge} ${styles[`severity${impact.impactSeverity}`]}`}
+                    >
                       {impact.impactSeverity} Impact
                     </div>
                   </div>
@@ -225,15 +221,21 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
                       <div className={styles.detailGrid}>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Last 7 days:</span>
-                          <span className={styles.detailValue}>{impact.completionsLast7Days} completions</span>
+                          <span className={styles.detailValue}>
+                            {impact.completionsLast7Days} completions
+                          </span>
                         </div>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Last 30 days:</span>
-                          <span className={styles.detailValue}>{impact.completionsLast30Days} completions</span>
+                          <span className={styles.detailValue}>
+                            {impact.completionsLast30Days} completions
+                          </span>
                         </div>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Longest streak:</span>
-                          <span className={styles.detailValue}>{impact.longestStreak || 0} days</span>
+                          <span className={styles.detailValue}>
+                            {impact.longestStreak || 0} days
+                          </span>
                         </div>
                         <div className={styles.detailItem}>
                           <span className={styles.detailLabel}>Created:</span>
@@ -255,7 +257,9 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
 
                   <div className={styles.preservationNote}>
                     <span className={styles.preservationIcon}>💾</span>
-                    <span>Your completion history will be preserved and can be restored later.</span>
+                    <span>
+                      Your completion history will be preserved and can be restored later.
+                    </span>
                   </div>
                 </>
               )}
@@ -282,7 +286,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
           {step === 'confirm' && (
             <>
               <button
-                type="button"
+                type='button'
                 className={styles.cancelButton}
                 onClick={handleClose}
                 disabled={isProcessing}
@@ -290,7 +294,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
                 Cancel
               </button>
               <button
-                type="button"
+                type='button'
                 className={styles.continueButton}
                 onClick={handleConfirmClick}
                 disabled={isProcessing}
@@ -303,7 +307,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
           {step === 'impact' && (
             <>
               <button
-                type="button"
+                type='button'
                 className={styles.cancelButton}
                 onClick={handleClose}
                 disabled={isProcessing}
@@ -311,7 +315,7 @@ export const DeleteHabitDialog: React.FC<DeleteHabitDialogProps> = ({
                 Cancel
               </button>
               <button
-                type="button"
+                type='button'
                 className={styles.deleteButton}
                 onClick={handleDeleteConfirm}
                 disabled={isProcessing || !canDelete}

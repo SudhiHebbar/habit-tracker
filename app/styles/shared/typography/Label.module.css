@@ -1,0 +1,71 @@
+.label {
+  display: inline-block;
+  margin-bottom: 0.25rem;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+}
+
+/* Size variants */
+.size-xs {
+  font-size: 0.75rem;
+}
+
+.size-sm {
+  font-size: 0.875rem;
+}
+
+.size-md {
+  font-size: 1rem;
+}
+
+/* Weight variants */
+.weight-normal {
+  font-weight: 400;
+}
+
+.weight-medium {
+  font-weight: 500;
+}
+
+.weight-semibold {
+  font-weight: 600;
+}
+
+/* Color variants */
+.color-primary {
+  color: var(--color-text-primary, #1f2937);
+}
+
+.color-secondary {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.color-tertiary {
+  color: var(--color-text-tertiary, #9ca3af);
+}
+
+/* Required indicator */
+.required {
+  color: var(--color-error, #EF4444);
+  margin-left: 0.25rem;
+  font-weight: 600;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .color-primary {
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+
+  .color-secondary {
+    color: var(--color-text-secondary-dark, #9ca3af);
+  }
+
+  .color-tertiary {
+    color: var(--color-text-tertiary-dark, #6b7280);
+  }
+
+  .required {
+    color: var(--color-error-dark, #F87171);
+  }
+}

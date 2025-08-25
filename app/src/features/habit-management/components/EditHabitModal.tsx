@@ -6,7 +6,13 @@ import { HabitChangePreview } from './HabitChangePreview';
 import { HabitDeactivateDialog } from './HabitDeactivateDialog';
 import { useEditHabit } from '../hooks/useEditHabit';
 import { useHabitValidation } from '../hooks/useHabitValidation';
-import type { Habit, UpdateHabitRequest, EditHabitRequest, FrequencyType, CustomFrequency } from '../types/habit.types';
+import type {
+  Habit,
+  UpdateHabitRequest,
+  EditHabitRequest,
+  FrequencyType,
+  CustomFrequency,
+} from '../types/habit.types';
 import styles from './EditHabitModal.module.css';
 
 interface EditHabitModalProps {
@@ -22,7 +28,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
   habit,
   onClose,
   onSubmit,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<UpdateHabitRequest>({
@@ -32,12 +38,12 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     targetCount: 1,
     color: '#6366F1',
     displayOrder: 0,
-    isActive: true
+    isActive: true,
   });
   const [customFrequency, setCustomFrequency] = useState<CustomFrequency>({
     timesPerWeek: 3,
     specificDays: [],
-    timesPerMonth: null
+    timesPerMonth: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showDeactivateDialog, setShowDeactivateDialog] = useState(false);
@@ -50,7 +56,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     { title: 'Appearance', description: 'Color and icon' },
     { title: 'Frequency', description: 'How often to complete' },
     { title: 'Settings', description: 'Additional options' },
-    { title: 'Review', description: 'Review and confirm changes' }
+    { title: 'Review', description: 'Review and confirm changes' },
   ];
 
   // Initialize form data when habit changes
@@ -64,7 +70,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
         color: habit.color,
         ...(habit.icon && { icon: habit.icon }),
         displayOrder: habit.displayOrder,
-        isActive: habit.isActive
+        isActive: habit.isActive,
       });
     }
   }, [habit]);
@@ -72,12 +78,15 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
-    
+
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : 
-              name === 'targetCount' || name === 'displayOrder' ? parseInt(value) || 0 : 
-              value
+      [name]:
+        type === 'checkbox'
+          ? checked
+          : name === 'targetCount' || name === 'displayOrder'
+            ? parseInt(value) || 0
+            : value,
     }));
 
     // Clear error for this field
@@ -156,7 +165,8 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
     if (formData.description !== habit.description) {
       changes.description = formData.description || '';
     }
-    if (formData.targetFrequency !== habit.targetFrequency) changes.targetFrequency = formData.targetFrequency;
+    if (formData.targetFrequency !== habit.targetFrequency)
+      changes.targetFrequency = formData.targetFrequency;
     if (formData.targetCount !== habit.targetCount) changes.targetCount = formData.targetCount;
     if (formData.color !== habit.color) changes.color = formData.color;
     if (formData.icon !== habit.icon) changes.icon = formData.icon || '';
@@ -245,36 +255,34 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
         return (
           <div className={styles.stepContent}>
             <div className={styles.formGroup}>
-              <label htmlFor="name" className={styles.label}>
+              <label htmlFor='name' className={styles.label}>
                 Habit Name *
               </label>
               <input
-                type="text"
-                id="name"
-                name="name"
+                type='text'
+                id='name'
+                name='name'
                 value={formData.name}
                 onChange={handleInputChange}
                 className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                placeholder="e.g., Drink 8 glasses of water"
+                placeholder='e.g., Drink 8 glasses of water'
                 disabled={isLoading}
                 autoFocus
               />
-              {errors.name && (
-                <span className={styles.errorMessage}>{errors.name}</span>
-              )}
+              {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="description" className={styles.label}>
+              <label htmlFor='description' className={styles.label}>
                 Description
               </label>
               <textarea
-                id="description"
-                name="description"
+                id='description'
+                name='description'
                 value={formData.description}
                 onChange={handleInputChange}
                 className={`${styles.textarea} ${errors.description ? styles.inputError : ''}`}
-                placeholder="Optional: Add more details about this habit..."
+                placeholder='Optional: Add more details about this habit...'
                 rows={3}
                 disabled={isLoading}
               />
@@ -303,7 +311,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
                 selectedIcon={formData.icon || null}
                 onIconSelect={handleIconSelect}
                 disabled={isLoading}
-                size="medium"
+                size='medium'
               />
             </div>
           </div>
@@ -315,13 +323,13 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
             <div className={styles.formGroup}>
               <label className={styles.label}>Target Count</label>
               <input
-                type="number"
-                name="targetCount"
+                type='number'
+                name='targetCount'
                 value={formData.targetCount}
                 onChange={handleInputChange}
                 className={`${styles.input} ${errors.targetCount ? styles.inputError : ''}`}
-                min="1"
-                max="100"
+                min='1'
+                max='100'
                 disabled={isLoading}
               />
               {errors.targetCount && (
@@ -347,24 +355,22 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
             <div className={styles.formGroup}>
               <label className={styles.label}>Display Order</label>
               <input
-                type="number"
-                name="displayOrder"
+                type='number'
+                name='displayOrder'
                 value={formData.displayOrder}
                 onChange={handleInputChange}
                 className={styles.input}
-                min="0"
+                min='0'
                 disabled={isLoading}
               />
-              <span className={styles.helpText}>
-                Lower numbers appear first in the list
-              </span>
+              <span className={styles.helpText}>Lower numbers appear first in the list</span>
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.checkboxLabel}>
                 <input
-                  type="checkbox"
-                  name="isActive"
+                  type='checkbox'
+                  name='isActive'
                   checked={formData.isActive}
                   onChange={handleInputChange}
                   disabled={isLoading}
@@ -379,10 +385,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
               <div className={styles.previewCard} style={{ borderColor: formData.color }}>
                 <div className={styles.previewHeader}>
                   {formData.icon && (
-                    <div 
-                      className={styles.previewIcon}
-                      style={{ color: formData.color }}
-                    />
+                    <div className={styles.previewIcon} style={{ color: formData.color }} />
                   )}
                   <span className={styles.previewName}>{formData.name || 'Habit Name'}</span>
                 </div>
@@ -412,10 +415,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
             ) : (
               <div className={styles.noChanges}>
                 <p>No changes detected. The habit will remain unchanged.</p>
-                <button 
-                  className={styles.button}
-                  onClick={handleClose}
-                >
+                <button className={styles.button} onClick={handleClose}>
                   Close
                 </button>
               </div>
@@ -429,7 +429,9 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
                   className={`${styles.actionButton} ${styles.deactivateButton}`}
                   onClick={() => setShowDeactivateDialog(true)}
                   disabled={editLoading || isLoading || !formData.isActive}
-                  title={!formData.isActive ? "Habit is already deactivated" : "Deactivate this habit"}
+                  title={
+                    !formData.isActive ? 'Habit is already deactivated' : 'Deactivate this habit'
+                  }
                 >
                   Deactivate Habit
                 </button>
@@ -445,13 +447,13 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
 
   return (
     <div className={styles.modalOverlay} onClick={handleClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Edit Habit</h2>
-          <button 
-            className={styles.closeButton} 
+          <button
+            className={styles.closeButton}
             onClick={handleClose}
-            aria-label="Close modal"
+            aria-label='Close modal'
             disabled={isLoading}
           >
             ×
@@ -461,11 +463,14 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
         {/* Progress Steps */}
         <div className={styles.stepsContainer}>
           {steps.map((step, index) => (
-            <div 
+            <div
               key={step.title}
               className={`${styles.step} ${
-                index === currentStep ? styles.currentStep : 
-                index < currentStep ? styles.completedStep : ''
+                index === currentStep
+                  ? styles.currentStep
+                  : index < currentStep
+                    ? styles.completedStep
+                    : ''
               }`}
             >
               <div className={styles.stepNumber}>{index + 1}</div>
@@ -483,7 +488,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
         {/* Navigation */}
         <div className={styles.navigation}>
           <button
-            type="button"
+            type='button'
             className={styles.backButton}
             onClick={handlePrevious}
             disabled={currentStep === 0 || isLoading}
@@ -497,7 +502,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
 
           {currentStep < steps.length - 1 ? (
             <button
-              type="button"
+              type='button'
               className={styles.nextButton}
               onClick={handleNext}
               disabled={isLoading}
@@ -506,7 +511,7 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
             </button>
           ) : (
             <button
-              type="button"
+              type='button'
               className={styles.submitButton}
               onClick={handleSubmit}
               disabled={isLoading || !formData.name.trim()}

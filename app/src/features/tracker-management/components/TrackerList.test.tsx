@@ -14,7 +14,7 @@ const mockTrackers: Tracker[] = [
     updatedAt: '2024-01-01T00:00:00Z',
     isActive: true,
     displayOrder: 0,
-    habitCount: 5
+    habitCount: 5,
   },
   {
     id: 2,
@@ -26,8 +26,8 @@ const mockTrackers: Tracker[] = [
     updatedAt: '2024-01-02T00:00:00Z',
     isActive: true,
     displayOrder: 1,
-    habitCount: 3
-  }
+    habitCount: 3,
+  },
 ];
 
 describe('TrackerList Component', () => {
@@ -73,7 +73,7 @@ describe('TrackerList Component', () => {
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
-        isLoading={true}
+        isLoading
       />
     );
 
@@ -87,7 +87,7 @@ describe('TrackerList Component', () => {
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
-        error="Failed to load trackers"
+        error='Failed to load trackers'
       />
     );
 

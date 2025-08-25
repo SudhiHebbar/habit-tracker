@@ -15,7 +15,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
   changes,
   onConfirm,
   onCancel,
-  isLoading = false
+  isLoading = false,
 }) => {
   const getChangedFields = () => {
     const changedFields: Array<{
@@ -29,7 +29,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
       changedFields.push({
         field: 'Name',
         original: original.name,
-        new: changes.name
+        new: changes.name,
       });
     }
 
@@ -37,7 +37,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
       changedFields.push({
         field: 'Description',
         original: original.description || 'None',
-        new: changes.description || 'None'
+        new: changes.description || 'None',
       });
     }
 
@@ -46,7 +46,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
         field: 'Frequency',
         original: original.targetFrequency,
         new: changes.targetFrequency,
-        impact: 'Changing frequency may affect streak calculations'
+        impact: 'Changing frequency may affect streak calculations',
       });
     }
 
@@ -55,7 +55,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
         field: 'Target Count',
         original: original.targetCount,
         new: changes.targetCount,
-        impact: 'This will affect future completion requirements'
+        impact: 'This will affect future completion requirements',
       });
     }
 
@@ -63,7 +63,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
       changedFields.push({
         field: 'Color',
         original: original.color,
-        new: changes.color
+        new: changes.color,
       });
     }
 
@@ -71,7 +71,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
       changedFields.push({
         field: 'Icon',
         original: original.icon || 'None',
-        new: changes.icon || 'None'
+        new: changes.icon || 'None',
       });
     }
 
@@ -79,7 +79,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
       changedFields.push({
         field: 'Display Order',
         original: original.displayOrder,
-        new: changes.displayOrder
+        new: changes.displayOrder,
       });
     }
 
@@ -88,7 +88,9 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
         field: 'Status',
         original: original.isActive ? 'Active' : 'Inactive',
         new: changes.isActive ? 'Active' : 'Inactive',
-        impact: changes.isActive ? 'Habit will be visible in your dashboard' : 'Habit will be hidden from your dashboard'
+        impact: changes.isActive
+          ? 'Habit will be visible in your dashboard'
+          : 'Habit will be hidden from your dashboard',
       });
     }
 
@@ -108,7 +110,7 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
   return (
     <div className={styles.previewContainer}>
       <h3 className={styles.title}>Review Changes</h3>
-      
+
       <div className={styles.changesGrid}>
         {changedFields.map((change, index) => (
           <div key={index} className={styles.changeItem}>
@@ -120,31 +122,25 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
                 </span>
               )}
             </div>
-            
+
             <div className={styles.changeValues}>
               <div className={styles.originalValue}>
                 {change.field === 'Color' ? (
                   <div className={styles.colorPreview}>
-                    <div 
-                      className={styles.colorBox} 
-                      style={{ backgroundColor: change.original }}
-                    />
+                    <div className={styles.colorBox} style={{ backgroundColor: change.original }} />
                     <span>{change.original}</span>
                   </div>
                 ) : (
                   <span>{change.original}</span>
                 )}
               </div>
-              
+
               <div className={styles.arrow}>→</div>
-              
+
               <div className={styles.newValue}>
                 {change.field === 'Color' ? (
                   <div className={styles.colorPreview}>
-                    <div 
-                      className={styles.colorBox} 
-                      style={{ backgroundColor: change.new }}
-                    />
+                    <div className={styles.colorBox} style={{ backgroundColor: change.new }} />
                     <span>{change.new}</span>
                   </div>
                 ) : (
@@ -152,36 +148,28 @@ export const HabitChangePreview: React.FC<HabitChangePreviewProps> = ({
                 )}
               </div>
             </div>
-            
-            {change.impact && (
-              <div className={styles.impactMessage}>
-                {change.impact}
-              </div>
-            )}
+
+            {change.impact && <div className={styles.impactMessage}>{change.impact}</div>}
           </div>
         ))}
       </div>
 
       <div className={styles.historyNote}>
-        <svg className={styles.infoIcon} viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+        <svg className={styles.infoIcon} viewBox='0 0 20 20' fill='currentColor'>
+          <path
+            fillRule='evenodd'
+            d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z'
+            clipRule='evenodd'
+          />
         </svg>
         <p>Your completion history will be preserved with these changes.</p>
       </div>
 
       <div className={styles.actions}>
-        <button 
-          className={styles.cancelButton}
-          onClick={onCancel}
-          disabled={isLoading}
-        >
+        <button className={styles.cancelButton} onClick={onCancel} disabled={isLoading}>
           Cancel
         </button>
-        <button 
-          className={styles.confirmButton}
-          onClick={onConfirm}
-          disabled={isLoading}
-        >
+        <button className={styles.confirmButton} onClick={onConfirm} disabled={isLoading}>
           {isLoading ? 'Applying Changes...' : 'Apply Changes'}
         </button>
       </div>

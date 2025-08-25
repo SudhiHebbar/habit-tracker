@@ -13,25 +13,25 @@ export const useCreateHabit = (): UseCreateHabitReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createHabit = useCallback(async (
-    trackerId: number, 
-    data: CreateHabitRequest
-  ): Promise<Habit | null> => {
-    setLoading(true);
-    setError(null);
+  const createHabit = useCallback(
+    async (trackerId: number, data: CreateHabitRequest): Promise<Habit | null> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const habit = await habitApi.createHabit(trackerId, data);
-      return habit;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create habit';
-      setError(errorMessage);
-      console.error('Error creating habit:', err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        const habit = await habitApi.createHabit(trackerId, data);
+        return habit;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to create habit';
+        setError(errorMessage);
+        console.error('Error creating habit:', err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   const clearError = useCallback(() => {
     setError(null);
@@ -41,6 +41,6 @@ export const useCreateHabit = (): UseCreateHabitReturn => {
     createHabit,
     loading,
     error,
-    clearError
+    clearError,
   };
 };

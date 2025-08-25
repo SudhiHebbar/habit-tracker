@@ -69,12 +69,12 @@ export const authService = {
   login: async (credentials: LoginRequest): Promise<AuthResponse> => {
     const response = await api.post<AuthResponse>('/auth/login', credentials);
     const authData = response.data;
-    
+
     if (authData.status === 'success' && authData.data) {
       tokenManager.setTokens(authData.data.token, authData.data.refreshToken);
       tokenManager.setUser(authData.data.user);
     }
-    
+
     return authData;
   },
 
@@ -82,12 +82,12 @@ export const authService = {
   register: async (userData: RegisterRequest): Promise<AuthResponse> => {
     const response = await api.post<AuthResponse>('/auth/register', userData);
     const authData = response.data;
-    
+
     if (authData.status === 'success' && authData.data) {
       tokenManager.setTokens(authData.data.token, authData.data.refreshToken);
       tokenManager.setUser(authData.data.user);
     }
-    
+
     return authData;
   },
 
@@ -110,14 +110,14 @@ export const authService = {
     const response = await api.post<AuthResponse>('/auth/refresh', {
       refreshToken,
     });
-    
+
     const authData = response.data;
-    
+
     if (authData.status === 'success' && authData.data) {
       tokenManager.setTokens(authData.data.token, authData.data.refreshToken);
       tokenManager.setUser(authData.data.user);
     }
-    
+
     return authData;
   },
 
@@ -125,11 +125,11 @@ export const authService = {
   getCurrentUser: async (): Promise<BaseApiResponse<User>> => {
     const response = await api.get<BaseApiResponse<User>>('/auth/me');
     const userData = response.data;
-    
+
     if (userData.status === 'success' && userData.data) {
       tokenManager.setUser(userData.data);
     }
-    
+
     return userData;
   },
 
@@ -137,28 +137,33 @@ export const authService = {
   updateProfile: async (updates: Partial<User>): Promise<BaseApiResponse<User>> => {
     const response = await api.put<BaseApiResponse<User>>('/auth/me', updates);
     const userData = response.data;
-    
+
     if (userData.status === 'success' && userData.data) {
       tokenManager.setUser(userData.data);
     }
-    
+
     return userData;
   },
 
   // Update user preferences
-  updatePreferences: async (preferences: Partial<UserPreferences>): Promise<BaseApiResponse<User>> => {
+  updatePreferences: async (
+    preferences: Partial<UserPreferences>
+  ): Promise<BaseApiResponse<User>> => {
     const response = await api.put<BaseApiResponse<User>>('/auth/preferences', preferences);
     const userData = response.data;
-    
+
     if (userData.status === 'success' && userData.data) {
       tokenManager.setUser(userData.data);
     }
-    
+
     return userData;
   },
 
   // Change password
-  changePassword: async (currentPassword: string, newPassword: string): Promise<BaseApiResponse<null>> => {
+  changePassword: async (
+    currentPassword: string,
+    newPassword: string
+  ): Promise<BaseApiResponse<null>> => {
     const response = await api.post<BaseApiResponse<null>>('/auth/change-password', {
       currentPassword,
       newPassword,

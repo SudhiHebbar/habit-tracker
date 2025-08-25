@@ -96,7 +96,8 @@ export interface CreateHabitEntryRequest {
   note?: string;
 }
 
-export interface UpdateHabitEntryRequest extends Partial<Omit<CreateHabitEntryRequest, 'habitId'>> {}
+export interface UpdateHabitEntryRequest
+  extends Partial<Omit<CreateHabitEntryRequest, 'habitId'>> {}
 
 /**
  * User-related API types
@@ -133,12 +134,13 @@ export interface RegisterRequest {
   lastName?: string;
 }
 
-export interface AuthResponse extends BaseApiResponse<{
-  user: User;
-  token: string;
-  refreshToken: string;
-  expiresAt: string;
-}> {}
+export interface AuthResponse
+  extends BaseApiResponse<{
+    user: User;
+    token: string;
+    refreshToken: string;
+    expiresAt: string;
+  }> {}
 
 /**
  * Statistics and analytics API types

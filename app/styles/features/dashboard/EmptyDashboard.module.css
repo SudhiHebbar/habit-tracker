@@ -1,0 +1,140 @@
+.emptyDashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  min-height: 400px;
+  background: var(--color-surface, #ffffff);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.illustration {
+  margin-bottom: 2rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.illustrationSvg {
+  width: 200px;
+  height: 200px;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.content {
+  max-width: 480px;
+  width: 100%;
+}
+
+.description {
+  margin: 1rem 0 2rem 0;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.buttonIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+/* Tips Section */
+.tips {
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  padding-top: 2rem;
+}
+
+.tipsList {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  text-align: left;
+  padding: 1rem;
+  background: var(--color-background, #f9fafb);
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.tip:hover {
+  background: var(--color-background-hover, #f3f4f6);
+}
+
+.tipIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .emptyDashboard {
+    background: var(--color-surface-dark, #1f2937);
+  }
+
+  .tips {
+    border-top-color: var(--color-border-dark, #374151);
+  }
+
+  .tip {
+    background: var(--color-background-dark, #111827);
+  }
+
+  .tip:hover {
+    background: var(--color-background-hover-dark, #1f2937);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .emptyDashboard {
+    padding: 3rem 1rem;
+  }
+
+  .illustrationSvg {
+    width: 160px;
+    height: 160px;
+  }
+
+  .tips {
+    padding-top: 1.5rem;
+  }
+
+  .tipsList {
+    gap: 0.75rem;
+  }
+
+  .tip {
+    padding: 0.75rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .illustration {
+    animation: none;
+  }
+}

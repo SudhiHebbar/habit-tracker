@@ -23,13 +23,13 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
   steps,
   onClose,
   allowCancel = false,
-  onCancel
+  onCancel,
 }) => {
   const totalSteps = steps.length;
   const completedSteps = steps.filter(step => step.status === 'completed').length;
   const errorSteps = steps.filter(step => step.status === 'error').length;
   const inProgressStep = steps.find(step => step.status === 'in_progress');
-  
+
   const progressPercentage = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
   const isComplete = completedSteps === totalSteps;
   const hasErrors = errorSteps > 0;
@@ -39,7 +39,7 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
       edit: 'Editing Habits',
       deactivate: 'Deactivating Habits',
       activate: 'Activating Habits',
-      delete: 'Deleting Habits'
+      delete: 'Deleting Habits',
     };
     return operationNames[operation];
   };
@@ -78,7 +78,9 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
         <div className={styles.header}>
           <h2 className={styles.title}>{getOperationTitle()}</h2>
           {isComplete && onClose && (
-            <button className={styles.closeButton} onClick={onClose}>×</button>
+            <button className={styles.closeButton} onClick={onClose}>
+              ×
+            </button>
           )}
         </div>
 
@@ -89,12 +91,10 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
               <span className={styles.progressText}>
                 Progress: {completedSteps}/{totalSteps} habits
               </span>
-              <span className={styles.progressPercentage}>
-                {Math.round(progressPercentage)}%
-              </span>
+              <span className={styles.progressPercentage}>{Math.round(progressPercentage)}%</span>
             </div>
             <div className={styles.progressBar}>
-              <div 
+              <div
                 className={`${styles.progressFill} ${hasErrors ? styles.hasErrors : ''}`}
                 style={{ width: `${progressPercentage}%` }}
               />
@@ -115,19 +115,12 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
           <div className={styles.stepsList}>
             <h4>Details:</h4>
             <div className={styles.stepsContainer}>
-              {steps.map((step) => (
-                <div 
-                  key={step.id} 
-                  className={`${styles.step} ${styles[step.status]}`}
-                >
-                  <div className={styles.stepIcon}>
-                    {getStepIcon(step.status)}
-                  </div>
+              {steps.map(step => (
+                <div key={step.id} className={`${styles.step} ${styles[step.status]}`}>
+                  <div className={styles.stepIcon}>{getStepIcon(step.status)}</div>
                   <div className={styles.stepContent}>
                     <span className={styles.stepName}>{step.name}</span>
-                    <span className={styles.stepStatus}>
-                      {getStepStatusText(step.status)}
-                    </span>
+                    <span className={styles.stepStatus}>{getStepStatusText(step.status)}</span>
                   </div>
                   {step.error && (
                     <div className={styles.stepError}>
@@ -146,7 +139,7 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
                 <div className={styles.summaryWithErrors}>
                   <h4>⚠️ Completed with errors</h4>
                   <p>
-                    {completedSteps} habits processed successfully, 
+                    {completedSteps} habits processed successfully,
                     {errorSteps} failed.
                   </p>
                 </div>
@@ -154,7 +147,8 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
                 <div className={styles.summarySuccess}>
                   <h4>✅ All operations completed successfully!</h4>
                   <p>
-                    All {totalSteps} habits have been {operation === 'edit' ? 'updated' : operation + 'd'} successfully.
+                    All {totalSteps} habits have been{' '}
+                    {operation === 'edit' ? 'updated' : operation + 'd'} successfully.
                   </p>
                 </div>
               )}
@@ -166,18 +160,15 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
           {!isComplete ? (
             <>
               {allowCancel && onCancel && (
-                <button
-                  className={styles.cancelButton}
-                  onClick={onCancel}
-                >
+                <button className={styles.cancelButton} onClick={onCancel}>
                   Cancel
                 </button>
               )}
               <div className={styles.processingText}>
                 <div className={styles.dots}>
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                  <span />
+                  <span />
+                  <span />
                 </div>
                 Processing...
               </div>
@@ -187,16 +178,15 @@ export const BulkOperationProgress: React.FC<BulkOperationProgressProps> = ({
               {hasErrors && (
                 <button
                   className={styles.retryButton}
-                  onClick={() => {/* Retry failed operations */}}
+                  onClick={() => {
+                    /* Retry failed operations */
+                  }}
                 >
                   Retry Failed
                 </button>
               )}
               {onClose && (
-                <button
-                  className={styles.closeCompleteButton}
-                  onClick={onClose}
-                >
+                <button className={styles.closeCompleteButton} onClick={onClose}>
                   Close
                 </button>
               )}

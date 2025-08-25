@@ -12,11 +12,11 @@ class TrackerCache {
     const entry: TrackerCacheEntry = {
       data,
       timestamp: now,
-      expiresAt: now + CACHE_EXPIRY_MS
+      expiresAt: now + CACHE_EXPIRY_MS,
     };
 
     this.memoryCache.set(trackerId, entry);
-    
+
     // Store in localStorage for persistence
     try {
       localStorage.setItem(`${CACHE_KEY_PREFIX}${trackerId}`, JSON.stringify(entry));
@@ -29,10 +29,10 @@ class TrackerCache {
 
   get(trackerId: number): TrackerWithStats | null {
     const now = Date.now();
-    
+
     // Check memory cache first
     let entry = this.memoryCache.get(trackerId);
-    
+
     // If not in memory, check localStorage
     if (!entry) {
       try {
@@ -69,7 +69,7 @@ class TrackerCache {
 
   clear(): void {
     this.memoryCache.clear();
-    
+
     // Clear from localStorage
     try {
       const keys = Object.keys(localStorage);
@@ -109,8 +109,9 @@ class TrackerCache {
     }
 
     // Remove oldest entries
-    const sortedEntries = Array.from(this.memoryCache.entries())
-      .sort((a, b) => a[1].timestamp - b[1].timestamp);
+    const sortedEntries = Array.from(this.memoryCache.entries()).sort(
+      (a, b) => a[1].timestamp - b[1].timestamp
+    );
 
     while (this.memoryCache.size > MAX_CACHE_SIZE) {
       const [trackerId] = sortedEntries.shift()!;

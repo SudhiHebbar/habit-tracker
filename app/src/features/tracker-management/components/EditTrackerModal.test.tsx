@@ -13,7 +13,7 @@ const mockTracker: Tracker = {
   updatedAt: '2024-01-01T00:00:00Z',
   isActive: true,
   displayOrder: 0,
-  habitCount: 5
+  habitCount: 5,
 };
 
 describe('EditTrackerModal Component', () => {
@@ -27,7 +27,7 @@ describe('EditTrackerModal Component', () => {
   it('renders modal when open is true and tracker is provided', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -54,12 +54,7 @@ describe('EditTrackerModal Component', () => {
 
   it('does not render modal when tracker is null', () => {
     render(
-      <EditTrackerModal
-        isOpen={true}
-        tracker={null}
-        onClose={mockOnClose}
-        onSubmit={mockOnSubmit}
-      />
+      <EditTrackerModal isOpen tracker={null} onClose={mockOnClose} onSubmit={mockOnSubmit} />
     );
 
     expect(screen.queryByText('Edit Tracker')).not.toBeInTheDocument();
@@ -68,7 +63,7 @@ describe('EditTrackerModal Component', () => {
   it('populates form with tracker data when tracker changes', () => {
     const { rerender } = render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -83,16 +78,11 @@ describe('EditTrackerModal Component', () => {
       id: 2,
       name: 'Study Tracker',
       description: 'Track study habits',
-      isShared: true
+      isShared: true,
     };
 
     rerender(
-      <EditTrackerModal
-        isOpen={true}
-        tracker={newTracker}
-        onClose={mockOnClose}
-        onSubmit={mockOnSubmit}
-      />
+      <EditTrackerModal isOpen tracker={newTracker} onClose={mockOnClose} onSubmit={mockOnSubmit} />
     );
 
     expect(screen.getByDisplayValue('Study Tracker')).toBeInTheDocument();
@@ -103,7 +93,7 @@ describe('EditTrackerModal Component', () => {
   it('calls onClose when close button is clicked', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -119,7 +109,7 @@ describe('EditTrackerModal Component', () => {
   it('calls onClose when cancel button is clicked', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -135,7 +125,7 @@ describe('EditTrackerModal Component', () => {
   it('calls onClose when backdrop is clicked', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -151,7 +141,7 @@ describe('EditTrackerModal Component', () => {
   it('does not close when modal content is clicked', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -169,7 +159,7 @@ describe('EditTrackerModal Component', () => {
 
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -191,7 +181,7 @@ describe('EditTrackerModal Component', () => {
         name: 'Updated Fitness Tracker',
         description: 'Updated description',
         isShared: true,
-        displayOrder: 0
+        displayOrder: 0,
       });
     });
   });
@@ -201,7 +191,7 @@ describe('EditTrackerModal Component', () => {
 
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -221,7 +211,7 @@ describe('EditTrackerModal Component', () => {
 
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -242,11 +232,11 @@ describe('EditTrackerModal Component', () => {
   it('shows loading state during update', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
-        isUpdating={true}
+        isUpdating
       />
     );
 
@@ -263,11 +253,11 @@ describe('EditTrackerModal Component', () => {
   it('displays error message when error prop is provided', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
-        error="Failed to update tracker"
+        error='Failed to update tracker'
       />
     );
 
@@ -277,7 +267,7 @@ describe('EditTrackerModal Component', () => {
   it('validates required name field', async () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -300,7 +290,7 @@ describe('EditTrackerModal Component', () => {
   it('validates name length constraints', async () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -312,7 +302,7 @@ describe('EditTrackerModal Component', () => {
 
     // Test name too long
     fireEvent.change(nameInput, {
-      target: { value: 'A'.repeat(101) } // Over 100 characters
+      target: { value: 'A'.repeat(101) }, // Over 100 characters
     });
     fireEvent.click(submitButton);
 
@@ -326,7 +316,7 @@ describe('EditTrackerModal Component', () => {
   it('validates name format', async () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -341,7 +331,9 @@ describe('EditTrackerModal Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/can only contain letters, numbers, spaces, hyphens, and underscores/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/can only contain letters, numbers, spaces, hyphens, and underscores/i)
+      ).toBeInTheDocument();
     });
 
     expect(mockOnSubmit).not.toHaveBeenCalled();
@@ -350,7 +342,7 @@ describe('EditTrackerModal Component', () => {
   it('validates description length constraints', async () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -361,7 +353,7 @@ describe('EditTrackerModal Component', () => {
     const submitButton = screen.getByText('Update Tracker');
 
     fireEvent.change(descriptionInput, {
-      target: { value: 'A'.repeat(501) } // Over 500 characters
+      target: { value: 'A'.repeat(501) }, // Over 500 characters
     });
     fireEvent.click(submitButton);
 
@@ -375,7 +367,7 @@ describe('EditTrackerModal Component', () => {
   it('clears validation errors when input changes', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -400,7 +392,7 @@ describe('EditTrackerModal Component', () => {
   it('focuses on name input when modal opens', () => {
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -416,7 +408,7 @@ describe('EditTrackerModal Component', () => {
 
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={sharedTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -435,7 +427,7 @@ describe('EditTrackerModal Component', () => {
 
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={mockTracker}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
@@ -450,13 +442,13 @@ describe('EditTrackerModal Component', () => {
 
   it('handles empty description correctly', () => {
     const trackerWithoutDescription: Tracker = {
-      ...mockTracker
+      ...mockTracker,
     };
     delete trackerWithoutDescription.description;
 
     render(
       <EditTrackerModal
-        isOpen={true}
+        isOpen
         tracker={trackerWithoutDescription}
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}

@@ -14,7 +14,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [formData, setFormData] = useState<CreateHabitRequest>({
     name: '',
@@ -22,16 +22,18 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
     targetFrequency: 'Daily',
     targetCount: 1,
     color: '#6366F1',
-    displayOrder: 0
+    displayOrder: 0,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'targetCount' || name === 'displayOrder' ? parseInt(value) || 0 : value
+      [name]: name === 'targetCount' || name === 'displayOrder' ? parseInt(value) || 0 : value,
     }));
 
     // Clear error for this field
@@ -71,7 +73,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -85,7 +87,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
         targetFrequency: 'Daily',
         targetCount: 1,
         color: '#6366F1',
-        displayOrder: 0
+        displayOrder: 0,
       });
       setErrors({});
       onClose();
@@ -102,7 +104,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
       targetFrequency: 'Daily',
       targetCount: 1,
       color: '#6366F1',
-      displayOrder: 0
+      displayOrder: 0,
     });
     setErrors({});
     onClose();
@@ -114,13 +116,13 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
 
   return (
     <div className={styles.modalOverlay} onClick={handleClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.modalHeader}>
           <h2>Create New Habit</h2>
-          <button 
-            className={styles.closeButton} 
+          <button
+            className={styles.closeButton}
             onClick={handleClose}
-            aria-label="Close modal"
+            aria-label='Close modal'
             disabled={isLoading}
           >
             ×
@@ -130,37 +132,35 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
         <form onSubmit={handleSubmit} className={styles.form}>
           {/* Habit Name */}
           <div className={styles.formGroup}>
-            <label htmlFor="name" className={styles.label}>
+            <label htmlFor='name' className={styles.label}>
               Habit Name *
             </label>
             <input
-              type="text"
-              id="name"
-              name="name"
+              type='text'
+              id='name'
+              name='name'
               value={formData.name}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-              placeholder="e.g., Drink 8 glasses of water"
+              placeholder='e.g., Drink 8 glasses of water'
               disabled={isLoading}
               autoFocus
             />
-            {errors.name && (
-              <span className={styles.errorMessage}>{errors.name}</span>
-            )}
+            {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
           </div>
 
           {/* Description */}
           <div className={styles.formGroup}>
-            <label htmlFor="description" className={styles.label}>
+            <label htmlFor='description' className={styles.label}>
               Description
             </label>
             <textarea
-              id="description"
-              name="description"
+              id='description'
+              name='description'
               value={formData.description}
               onChange={handleInputChange}
               className={`${styles.textarea} ${errors.description ? styles.inputError : ''}`}
-              placeholder="Optional: Add more details about this habit..."
+              placeholder='Optional: Add more details about this habit...'
               rows={3}
               disabled={isLoading}
             />
@@ -171,37 +171,37 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
 
           {/* Frequency */}
           <div className={styles.formGroup}>
-            <label htmlFor="targetFrequency" className={styles.label}>
+            <label htmlFor='targetFrequency' className={styles.label}>
               Frequency
             </label>
             <select
-              id="targetFrequency"
-              name="targetFrequency"
+              id='targetFrequency'
+              name='targetFrequency'
               value={formData.targetFrequency}
               onChange={handleInputChange}
               className={styles.select}
               disabled={isLoading}
             >
-              <option value="Daily">Daily</option>
-              <option value="Weekly">Weekly</option>
-              <option value="Custom">Custom</option>
+              <option value='Daily'>Daily</option>
+              <option value='Weekly'>Weekly</option>
+              <option value='Custom'>Custom</option>
             </select>
           </div>
 
           {/* Target Count */}
           <div className={styles.formGroup}>
-            <label htmlFor="targetCount" className={styles.label}>
+            <label htmlFor='targetCount' className={styles.label}>
               Target Count
             </label>
             <input
-              type="number"
-              id="targetCount"
-              name="targetCount"
+              type='number'
+              id='targetCount'
+              name='targetCount'
               value={formData.targetCount}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.targetCount ? styles.inputError : ''}`}
-              min="1"
-              max="100"
+              min='1'
+              max='100'
               disabled={isLoading}
             />
             {errors.targetCount && (
@@ -211,9 +211,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
 
           {/* Color Picker */}
           <div className={styles.formGroup}>
-            <label className={styles.label}>
-              Color
-            </label>
+            <label className={styles.label}>Color</label>
             <ColorPicker
               selectedColor={formData.color}
               onColorSelect={handleColorSelect}
@@ -224,7 +222,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
           {/* Form Actions */}
           <div className={styles.formActions}>
             <button
-              type="button"
+              type='button'
               className={styles.cancelButton}
               onClick={handleClose}
               disabled={isLoading}
@@ -232,7 +230,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
               Cancel
             </button>
             <button
-              type="submit"
+              type='submit'
               className={styles.submitButton}
               disabled={isLoading || !formData.name.trim()}
             >

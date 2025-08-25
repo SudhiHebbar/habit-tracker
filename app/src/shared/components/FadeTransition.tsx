@@ -12,7 +12,7 @@ export const FadeTransition: React.FC<FadeTransitionProps> = ({
   children,
   show,
   duration = 300,
-  className = ''
+  className = '',
 }) => {
   const [shouldRender, setShouldRender] = useState(show);
   const [isVisible, setIsVisible] = useState(show);

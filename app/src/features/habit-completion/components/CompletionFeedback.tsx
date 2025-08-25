@@ -20,7 +20,7 @@ export const CompletionFeedback: React.FC<CompletionFeedbackProps> = ({
   autoHide = true,
   autoHideDelay = 3000,
   onHide,
-  className
+  className,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isAnimating, setIsAnimating] = useState(true);
@@ -60,23 +60,23 @@ export const CompletionFeedback: React.FC<CompletionFeedbackProps> = ({
     switch (type) {
       case 'success':
         return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M20 6L9 17l-5-5" />
+          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+            <path d='M20 6L9 17l-5-5' />
           </svg>
         );
       case 'error':
         return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M15 9l-6 6" />
-            <path d="M9 9l6 6" />
+          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+            <circle cx='12' cy='12' r='10' />
+            <path d='M15 9l-6 6' />
+            <path d='M9 9l6 6' />
           </svg>
         );
       case 'offline':
         return (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M23 9l-7 7-4.5-4.5-5 5-3.5-3.5" />
-            <path d="M17 14h6v6" />
+          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+            <path d='M23 9l-7 7-4.5-4.5-5 5-3.5-3.5' />
+            <path d='M17 14h6v6' />
           </svg>
         );
       default:
@@ -87,22 +87,18 @@ export const CompletionFeedback: React.FC<CompletionFeedbackProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div 
+    <div
       className={`${styles.feedback} ${styles[type]} ${className || ''}`}
       data-animating={isAnimating}
     >
       <div className={styles.content}>
-        <div className={styles.icon}>
-          {getIcon()}
-        </div>
-        
+        <div className={styles.icon}>{getIcon()}</div>
+
         <div className={styles.text}>
           <div className={styles.message}>{message}</div>
-          {habitName && (
-            <div className={styles.habitName}>{habitName}</div>
-          )}
+          {habitName && <div className={styles.habitName}>{habitName}</div>}
         </div>
-        
+
         {streak && streak > 0 && (
           <div className={styles.streak}>
             <span className={styles.streakIcon}>🔥</span>
@@ -110,7 +106,7 @@ export const CompletionFeedback: React.FC<CompletionFeedbackProps> = ({
           </div>
         )}
       </div>
-      
+
       {type === 'success' && (
         <div className={styles.particles}>
           {Array.from({ length: 8 }).map((_, i) => (
@@ -118,15 +114,11 @@ export const CompletionFeedback: React.FC<CompletionFeedbackProps> = ({
           ))}
         </div>
       )}
-      
-      <button 
-        className={styles.closeButton} 
-        onClick={handleHide}
-        aria-label="Close notification"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M18 6L6 18" />
-          <path d="M6 6l12 12" />
+
+      <button className={styles.closeButton} onClick={handleHide} aria-label='Close notification'>
+        <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+          <path d='M18 6L6 18' />
+          <path d='M6 6l12 12' />
         </svg>
       </button>
     </div>

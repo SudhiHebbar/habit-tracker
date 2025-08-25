@@ -43,7 +43,7 @@ describe('ErrorBoundary Component', () => {
   it('renders default error UI when there is an error', () => {
     render(
       <ErrorBoundary>
-        <ThrowError shouldThrow={true} />
+        <ThrowError shouldThrow />
       </ErrorBoundary>
     );
 
@@ -56,7 +56,7 @@ describe('ErrorBoundary Component', () => {
   it('renders custom fallback component when provided', () => {
     render(
       <ErrorBoundary fallback={CustomFallback}>
-        <ThrowError shouldThrow={true} />
+        <ThrowError shouldThrow />
       </ErrorBoundary>
     );
 
@@ -67,10 +67,10 @@ describe('ErrorBoundary Component', () => {
 
   it('calls onError callback when error occurs', () => {
     const onError = vi.fn();
-    
+
     render(
       <ErrorBoundary onError={onError}>
-        <ThrowError shouldThrow={true} />
+        <ThrowError shouldThrow />
       </ErrorBoundary>
     );
 
@@ -85,7 +85,7 @@ describe('ErrorBoundary Component', () => {
   it('calls resetError when reset button is clicked', () => {
     render(
       <ErrorBoundary>
-        <ThrowError shouldThrow={true} />
+        <ThrowError shouldThrow />
       </ErrorBoundary>
     );
 
@@ -95,7 +95,7 @@ describe('ErrorBoundary Component', () => {
     // Reset button should exist
     const resetButton = screen.getByRole('button', { name: /try again/i });
     expect(resetButton).toBeInTheDocument();
-    
+
     // Clicking should not throw error
     expect(() => fireEvent.click(resetButton)).not.toThrow();
   });
@@ -105,14 +105,14 @@ describe('ErrorBoundary Component', () => {
     vi.stubGlobal('import', {
       meta: {
         env: {
-          DEV: true
-        }
-      }
+          DEV: true,
+        },
+      },
     });
 
     render(
       <ErrorBoundary>
-        <ThrowError shouldThrow={true} />
+        <ThrowError shouldThrow />
       </ErrorBoundary>
     );
 

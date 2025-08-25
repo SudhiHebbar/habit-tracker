@@ -15,31 +15,34 @@ export const useHabits = (trackerId: number | null): UseHabitsReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchHabits = useCallback(async (showLoading = true) => {
-    if (!trackerId) {
-      setHabits([]);
-      setError(null);
-      return;
-    }
-
-    if (showLoading) {
-      setLoading(true);
-    }
-    setError(null);
-
-    try {
-      const fetchedHabits = await habitApi.getHabitsByTracker(trackerId);
-      setHabits(fetchedHabits);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch habits';
-      setError(errorMessage);
-      console.error('Error fetching habits:', err);
-    } finally {
-      if (showLoading) {
-        setLoading(false);
+  const fetchHabits = useCallback(
+    async (showLoading = true) => {
+      if (!trackerId) {
+        setHabits([]);
+        setError(null);
+        return;
       }
-    }
-  }, [trackerId]);
+
+      if (showLoading) {
+        setLoading(true);
+      }
+      setError(null);
+
+      try {
+        const fetchedHabits = await habitApi.getHabitsByTracker(trackerId);
+        setHabits(fetchedHabits);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch habits';
+        setError(errorMessage);
+        console.error('Error fetching habits:', err);
+      } finally {
+        if (showLoading) {
+          setLoading(false);
+        }
+      }
+    },
+    [trackerId]
+  );
 
   const refetch = useCallback(() => fetchHabits(true), [fetchHabits]);
   const refresh = useCallback(() => fetchHabits(false), [fetchHabits]);
@@ -53,6 +56,6 @@ export const useHabits = (trackerId: number | null): UseHabitsReturn => {
     loading,
     error,
     refetch,
-    refresh
+    refresh,
   };
 };

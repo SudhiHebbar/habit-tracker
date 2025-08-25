@@ -1,6 +1,6 @@
-import type { 
-  Habit, 
-  CreateHabitRequest, 
+import type {
+  Habit,
+  CreateHabitRequest,
   UpdateHabitRequest,
   EditHabitRequest,
   HabitEditResponse,
@@ -14,7 +14,7 @@ import type {
   RestoreHabitRequest,
   RestoreHabitResponse,
   DeletionImpact,
-  UndoDeleteResponse
+  UndoDeleteResponse,
 } from '../types/habit.types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5281/api';
@@ -25,26 +25,26 @@ class HabitApiService {
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
       let errorMessage = `HTTP error! status: ${response.status}`;
-      
+
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorData.title || errorMessage;
       } catch {
         // If JSON parsing fails, use the default error message
       }
-      
+
       const error: HabitError = {
         type: this.getErrorType(response.status),
         message: errorMessage,
       };
-      
+
       throw new Error(error.message);
     }
-    
+
     if (response.status === 204) {
       return {} as T;
     }
-    
+
     return response.json();
   }
 
@@ -73,7 +73,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Habit[]>(response);
   }
 
@@ -86,7 +86,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Habit[]>(response);
   }
 
@@ -99,7 +99,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Habit>(response);
   }
 
@@ -113,7 +113,7 @@ class HabitApiService {
       body: JSON.stringify(data),
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Habit>(response);
   }
 
@@ -127,7 +127,7 @@ class HabitApiService {
       body: JSON.stringify(data),
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Habit>(response);
   }
 
@@ -141,7 +141,7 @@ class HabitApiService {
       body: JSON.stringify(data),
       credentials: 'include',
     });
-    
+
     return this.handleResponse<HabitEditResponse>(response);
   }
 
@@ -149,7 +149,7 @@ class HabitApiService {
   async deactivateHabit(id: number, reason?: string): Promise<void> {
     const data: DeactivateHabitRequest = {
       reason: reason || '',
-      preserveCompletions: true
+      preserveCompletions: true,
     };
 
     const response = await fetch(`${this.baseUrl}/${id}/deactivate`, {
@@ -160,7 +160,7 @@ class HabitApiService {
       body: JSON.stringify(data),
       credentials: 'include',
     });
-    
+
     await this.handleResponse<void>(response);
   }
 
@@ -173,7 +173,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     await this.handleResponse<void>(response);
   }
 
@@ -186,7 +186,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Record<string, any>>(response);
   }
 
@@ -199,7 +199,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<DeletionImpact>(response);
   }
 
@@ -213,7 +213,7 @@ class HabitApiService {
       body: JSON.stringify(data),
       credentials: 'include',
     });
-    
+
     return this.handleResponse<DeleteHabitResponse>(response);
   }
 
@@ -227,7 +227,7 @@ class HabitApiService {
       body: JSON.stringify(data),
       credentials: 'include',
     });
-    
+
     return this.handleResponse<RestoreHabitResponse>(response);
   }
 
@@ -240,7 +240,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<UndoDeleteResponse>(response);
   }
 
@@ -253,7 +253,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<Habit[]>(response);
   }
 
@@ -261,7 +261,7 @@ class HabitApiService {
   async legacyDeleteHabit(id: number): Promise<void> {
     const data: DeleteHabitRequest = {
       confirmed: true,
-      requestImpactAnalysis: false
+      requestImpactAnalysis: false,
     };
     await this.deleteHabit(id, data);
   }
@@ -270,7 +270,7 @@ class HabitApiService {
   async legacyRestoreHabit(id: number): Promise<void> {
     const data: RestoreHabitRequest = {
       confirmed: true,
-      restoreToActiveState: true
+      restoreToActiveState: true,
     };
     await this.restoreHabit(id, data);
   }
@@ -285,7 +285,7 @@ class HabitApiService {
       body: JSON.stringify(habitOrders),
       credentials: 'include',
     });
-    
+
     await this.handleResponse<void>(response);
   }
 
@@ -298,14 +298,14 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<HabitStatsByFrequency>(response);
   }
 
   // Validate if a habit name is unique in a tracker
   async validateHabitName(
-    trackerId: number, 
-    name: string, 
+    trackerId: number,
+    name: string,
     excludeHabitId?: number
   ): Promise<HabitValidationResponse> {
     const url = new URL(`${this.baseUrl}/tracker/${trackerId}/validate-name`);
@@ -321,7 +321,7 @@ class HabitApiService {
       },
       credentials: 'include',
     });
-    
+
     return this.handleResponse<HabitValidationResponse>(response);
   }
 
@@ -329,7 +329,7 @@ class HabitApiService {
   async createMultipleHabits(trackerId: number, habits: CreateHabitRequest[]): Promise<Habit[]> {
     // For now, create habits one by one - can be optimized later with a bulk API endpoint
     const createdHabits: Habit[] = [];
-    
+
     for (const habitData of habits) {
       try {
         const habit = await this.createHabit(trackerId, habitData);
@@ -339,14 +339,16 @@ class HabitApiService {
         // Continue with other habits even if one fails
       }
     }
-    
+
     return createdHabits;
   }
 
-  async updateMultipleHabits(updates: Array<{ id: number; data: UpdateHabitRequest }>): Promise<Habit[]> {
+  async updateMultipleHabits(
+    updates: Array<{ id: number; data: UpdateHabitRequest }>
+  ): Promise<Habit[]> {
     // For now, update habits one by one - can be optimized later with a bulk API endpoint
     const updatedHabits: Habit[] = [];
-    
+
     for (const { id, data } of updates) {
       try {
         const habit = await this.updateHabit(id, data);
@@ -356,7 +358,7 @@ class HabitApiService {
         // Continue with other habits even if one fails
       }
     }
-    
+
     return updatedHabits;
   }
 

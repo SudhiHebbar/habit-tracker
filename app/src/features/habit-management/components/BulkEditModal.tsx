@@ -30,7 +30,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
   selectedHabits,
   onBulkEdit,
   onBulkDeactivate,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [formData, setFormData] = useState<BulkEditFormData>({});
   const [fieldsToUpdate, setFieldsToUpdate] = useState<Set<keyof BulkEditFormData>>(new Set());
@@ -73,7 +73,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
     const steps = selectedHabits.map(habit => ({
       id: habit.id,
       name: habit.name,
-      status: 'pending' as const
+      status: 'pending' as const,
     }));
     setProgressSteps(steps);
     setShowProgress(true);
@@ -85,11 +85,13 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
       setProgressSteps(prev => prev.map(step => ({ ...step, status: 'completed' as const })));
     } catch (error) {
       // Mark steps as error
-      setProgressSteps(prev => prev.map(step => ({ 
-        ...step, 
-        status: 'error' as const, 
-        error: 'Failed to update habit' 
-      })));
+      setProgressSteps(prev =>
+        prev.map(step => ({
+          ...step,
+          status: 'error' as const,
+          error: 'Failed to update habit',
+        }))
+      );
     }
   };
 
@@ -115,7 +117,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
           <div className={styles.header}>
             <h2>Confirm Bulk Edit</h2>
           </div>
-          
+
           <div className={styles.content}>
             <div className={styles.confirmationInfo}>
               <p>You are about to update {selectedHabits.length} habits:</p>
@@ -127,22 +129,22 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                   </li>
                 ))}
               </ul>
-              
+
               <div className={styles.changesPreview}>
                 <h4>Changes to apply:</h4>
                 <ul>
-                  {fieldsToUpdate.has('name') && (
-                    <li>Name: "{formData.name}"</li>
-                  )}
+                  {fieldsToUpdate.has('name') && <li>Name: "{formData.name}"</li>}
                   {fieldsToUpdate.has('color') && (
-                    <li>Color: <span style={{ backgroundColor: formData.color }} className={styles.colorPreview}></span></li>
+                    <li>
+                      Color:{' '}
+                      <span
+                        style={{ backgroundColor: formData.color }}
+                        className={styles.colorPreview}
+                      />
+                    </li>
                   )}
-                  {fieldsToUpdate.has('icon') && (
-                    <li>Icon: {formData.icon}</li>
-                  )}
-                  {fieldsToUpdate.has('frequency') && (
-                    <li>Frequency: {formData.frequency}</li>
-                  )}
+                  {fieldsToUpdate.has('icon') && <li>Icon: {formData.icon}</li>}
+                  {fieldsToUpdate.has('frequency') && <li>Frequency: {formData.frequency}</li>}
                   {fieldsToUpdate.has('isActive') && (
                     <li>Status: {formData.isActive ? 'Active' : 'Inactive'}</li>
                   )}
@@ -153,7 +155,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
 
           <div className={styles.footer}>
             <button
-              type="button"
+              type='button'
               className={styles.cancelButton}
               onClick={() => setShowConfirmation(false)}
               disabled={isLoading}
@@ -161,7 +163,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
               Cancel
             </button>
             <button
-              type="button"
+              type='button'
               className={styles.confirmButton}
               onClick={handleConfirm}
               disabled={isLoading}
@@ -179,7 +181,9 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
       <div className={styles.modal}>
         <div className={styles.header}>
           <h2>Bulk Edit Habits ({selectedHabits.length} selected)</h2>
-          <button className={styles.closeButton} onClick={handleCancel}>×</button>
+          <button className={styles.closeButton} onClick={handleCancel}>
+            ×
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -198,11 +202,11 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
 
             <div className={styles.fieldsSection}>
               <h4>Fields to Update:</h4>
-              
+
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldToggle}>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     checked={fieldsToUpdate.has('name')}
                     onChange={() => handleFieldToggle('name')}
                   />
@@ -210,10 +214,10 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                 </label>
                 {fieldsToUpdate.has('name') && (
                   <input
-                    type="text"
+                    type='text'
                     value={formData.name || ''}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    placeholder="New habit name"
+                    onChange={e => handleInputChange('name', e.target.value)}
+                    placeholder='New habit name'
                     className={styles.input}
                     required
                   />
@@ -223,7 +227,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldToggle}>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     checked={fieldsToUpdate.has('color')}
                     onChange={() => handleFieldToggle('color')}
                   />
@@ -232,7 +236,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                 {fieldsToUpdate.has('color') && (
                   <ColorPicker
                     selectedColor={formData.color || '#3b82f6'}
-                    onColorSelect={(color) => handleInputChange('color', color)}
+                    onColorSelect={color => handleInputChange('color', color)}
                   />
                 )}
               </div>
@@ -240,7 +244,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldToggle}>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     checked={fieldsToUpdate.has('icon')}
                     onChange={() => handleFieldToggle('icon')}
                   />
@@ -249,7 +253,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                 {fieldsToUpdate.has('icon') && (
                   <IconSelector
                     selectedIcon={formData.icon || '📝'}
-                    onIconSelect={(icon) => handleInputChange('icon', icon)}
+                    onIconSelect={icon => handleInputChange('icon', icon)}
                   />
                 )}
               </div>
@@ -257,7 +261,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldToggle}>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     checked={fieldsToUpdate.has('frequency')}
                     onChange={() => handleFieldToggle('frequency')}
                   />
@@ -266,7 +270,9 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                 {fieldsToUpdate.has('frequency') && (
                   <FrequencySelector
                     selectedFrequency={formData.frequency || 'Daily'}
-                    onFrequencyChange={(frequency: 'Daily' | 'Weekly' | 'Custom') => handleInputChange('frequency', frequency)}
+                    onFrequencyChange={(frequency: 'Daily' | 'Weekly' | 'Custom') =>
+                      handleInputChange('frequency', frequency)
+                    }
                   />
                 )}
               </div>
@@ -274,7 +280,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
               <div className={styles.fieldGroup}>
                 <label className={styles.fieldToggle}>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     checked={fieldsToUpdate.has('isActive')}
                     onChange={() => handleFieldToggle('isActive')}
                   />
@@ -283,11 +289,11 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
                 {fieldsToUpdate.has('isActive') && (
                   <select
                     value={formData.isActive ? 'active' : 'inactive'}
-                    onChange={(e) => handleInputChange('isActive', e.target.value === 'active')}
+                    onChange={e => handleInputChange('isActive', e.target.value === 'active')}
                     className={styles.select}
                   >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value='active'>Active</option>
+                    <option value='inactive'>Inactive</option>
                   </select>
                 )}
               </div>
@@ -298,7 +304,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
             <div className={styles.leftActions}>
               {onBulkDeactivate && (
                 <button
-                  type="button"
+                  type='button'
                   className={styles.deactivateButton}
                   onClick={() => setShowDeactivateDialog(true)}
                 >
@@ -307,15 +313,11 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
               )}
             </div>
             <div className={styles.rightActions}>
-              <button
-                type="button"
-                className={styles.cancelButton}
-                onClick={handleCancel}
-              >
+              <button type='button' className={styles.cancelButton} onClick={handleCancel}>
                 Cancel
               </button>
               <button
-                type="submit"
+                type='submit'
                 className={styles.submitButton}
                 disabled={fieldsToUpdate.size === 0}
               >
@@ -336,7 +338,7 @@ export const BulkEditModal: React.FC<BulkEditModalProps> = ({
         {/* Progress Dialog */}
         <BulkOperationProgress
           isOpen={showProgress}
-          operation="edit"
+          operation='edit'
           steps={progressSteps}
           onClose={() => {
             setShowProgress(false);
