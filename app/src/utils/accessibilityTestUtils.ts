@@ -179,11 +179,15 @@ export class AccessibilityTestRunner {
     const images = document.querySelectorAll('img');
     const buttons = document.querySelectorAll('button:not([aria-label]):not([title])');
     const icons = document.querySelectorAll('[class*="icon"]:not([aria-label]):not([title])');
-    
+
     const issues = [];
-    
+
     images.forEach((img, index) => {
-      if (!img.alt && !img.getAttribute('aria-label') && !img.getAttribute('role') !== 'presentation') {
+      if (
+        !img.alt &&
+        !img.getAttribute('aria-label') &&
+        !img.getAttribute('role') !== 'presentation'
+      ) {
         issues.push(`Image ${index + 1} missing alt text`);
       }
     });
@@ -198,7 +202,10 @@ export class AccessibilityTestRunner {
       criterion: '1.1.1 Non-text Content',
       level: 'A',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'All non-text content has appropriate alternatives' : issues.join(', '),
+      details:
+        issues.length === 0
+          ? 'All non-text content has appropriate alternatives'
+          : issues.join(', '),
       elements: issues,
     };
   }
@@ -207,9 +214,9 @@ export class AccessibilityTestRunner {
     const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
     const forms = document.querySelectorAll('form');
     const tables = document.querySelectorAll('table');
-    
+
     const issues = [];
-    
+
     // Check heading hierarchy
     let previousLevel = 0;
     headings.forEach((heading, index) => {
@@ -226,7 +233,11 @@ export class AccessibilityTestRunner {
     // Check form labels
     const inputs = document.querySelectorAll('input, select, textarea');
     inputs.forEach((input, index) => {
-      if (!input.getAttribute('aria-label') && !input.getAttribute('aria-labelledby') && !document.querySelector(`label[for="${input.id}"]`)) {
+      if (
+        !input.getAttribute('aria-label') &&
+        !input.getAttribute('aria-labelledby') &&
+        !document.querySelector(`label[for="${input.id}"]`)
+      ) {
         issues.push(`Form control ${index + 1} missing label`);
       }
     });
@@ -235,7 +246,10 @@ export class AccessibilityTestRunner {
       criterion: '1.3.1 Info and Relationships',
       level: 'A',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'Information and relationships are properly marked up' : issues.join(', '),
+      details:
+        issues.length === 0
+          ? 'Information and relationships are properly marked up'
+          : issues.join(', '),
       elements: issues,
     };
   }
@@ -245,10 +259,10 @@ export class AccessibilityTestRunner {
     const focusableElements = document.querySelectorAll(
       'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
-    
+
     const issues = [];
     let hasNegativeTabIndex = false;
-    
+
     focusableElements.forEach((element, index) => {
       const tabIndex = element.getAttribute('tabindex');
       if (tabIndex && parseInt(tabIndex) > 0) {
@@ -270,15 +284,18 @@ export class AccessibilityTestRunner {
 
   private async testUseOfColor(): Promise<AccessibilityTestResult> {
     // Check if color is the only way to convey information
-    const colorOnlyElements = document.querySelectorAll('[class*="success"], [class*="error"], [class*="warning"]');
+    const colorOnlyElements = document.querySelectorAll(
+      '[class*="success"], [class*="error"], [class*="warning"]'
+    );
     const issues = [];
-    
+
     colorOnlyElements.forEach((element, index) => {
       const hasIcon = element.querySelector('[class*="icon"]') || element.querySelector('svg');
-      const hasText = element.textContent?.includes('success') || 
-                     element.textContent?.includes('error') || 
-                     element.textContent?.includes('warning');
-      
+      const hasText =
+        element.textContent?.includes('success') ||
+        element.textContent?.includes('error') ||
+        element.textContent?.includes('warning');
+
       if (!hasIcon && !hasText) {
         issues.push(`Element ${index + 1} relies only on color to convey meaning`);
       }
@@ -288,7 +305,8 @@ export class AccessibilityTestRunner {
       criterion: '1.4.1 Use of Color',
       level: 'A',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'Color is not the only way to convey information' : issues.join(', '),
+      details:
+        issues.length === 0 ? 'Color is not the only way to convey information' : issues.join(', '),
       elements: issues,
     };
   }
@@ -297,14 +315,14 @@ export class AccessibilityTestRunner {
     // This would require actual contrast calculation - simplified implementation
     const textElements = document.querySelectorAll('p, span, a, button, h1, h2, h3, h4, h5, h6');
     const issues = [];
-    
+
     // In a real implementation, you would calculate the actual contrast ratio
     // For now, we'll check for common issues
     textElements.forEach((element, index) => {
       const computedStyle = window.getComputedStyle(element as Element);
       const color = computedStyle.color;
       const backgroundColor = computedStyle.backgroundColor;
-      
+
       // Check for light gray text on white background (common low contrast issue)
       if (color === 'rgb(169, 169, 169)' && backgroundColor === 'rgb(255, 255, 255)') {
         issues.push(`Element ${index + 1} may have insufficient contrast`);
@@ -315,7 +333,8 @@ export class AccessibilityTestRunner {
       criterion: '1.4.3 Contrast (Minimum)',
       level: 'AA',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'Text has sufficient contrast ratio (4.5:1)' : issues.join(', '),
+      details:
+        issues.length === 0 ? 'Text has sufficient contrast ratio (4.5:1)' : issues.join(', '),
       elements: issues,
     };
   }
@@ -324,7 +343,7 @@ export class AccessibilityTestRunner {
     // Test if text can be resized up to 200% without loss of functionality
     const originalFontSizes = new Map();
     const textElements = document.querySelectorAll('p, span, a, button, h1, h2, h3, h4, h5, h6');
-    
+
     // Store original font sizes
     textElements.forEach((element, index) => {
       const computedStyle = window.getComputedStyle(element as Element);
@@ -335,7 +354,8 @@ export class AccessibilityTestRunner {
     const issues = [];
     textElements.forEach((element, index) => {
       const fontSize = originalFontSizes.get(index);
-      if (fontSize < 12) { // Minimum readable size
+      if (fontSize < 12) {
+        // Minimum readable size
         issues.push(`Element ${index + 1} has very small font size (${fontSize}px)`);
       }
     });
@@ -344,7 +364,10 @@ export class AccessibilityTestRunner {
       criterion: '1.4.4 Resize Text',
       level: 'AA',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'Text can be resized without loss of functionality' : issues.join(', '),
+      details:
+        issues.length === 0
+          ? 'Text can be resized without loss of functionality'
+          : issues.join(', '),
       elements: issues,
     };
   }
@@ -353,7 +376,7 @@ export class AccessibilityTestRunner {
     // Test content reflows at 320px viewport width
     const viewport = window.innerWidth;
     const issues = [];
-    
+
     if (viewport > 320) {
       // Check for horizontal scrollbars at narrow widths
       const hasHorizontalScroll = document.documentElement.scrollWidth > 320;
@@ -366,7 +389,10 @@ export class AccessibilityTestRunner {
       criterion: '1.4.10 Reflow',
       level: 'AA',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'Content reflows without horizontal scrolling at 320px' : issues.join(', '),
+      details:
+        issues.length === 0
+          ? 'Content reflows without horizontal scrolling at 320px'
+          : issues.join(', '),
       elements: issues,
     };
   }
@@ -375,14 +401,14 @@ export class AccessibilityTestRunner {
     // Test UI components and graphical objects have sufficient contrast
     const interactiveElements = document.querySelectorAll('button, input, select, textarea, a');
     const issues = [];
-    
+
     // This would require actual contrast calculation for borders, focus indicators, etc.
     // Simplified implementation
     interactiveElements.forEach((element, index) => {
       const computedStyle = window.getComputedStyle(element as Element);
       const borderColor = computedStyle.borderColor;
       const backgroundColor = computedStyle.backgroundColor;
-      
+
       if (borderColor === 'rgba(0, 0, 0, 0)' && backgroundColor === 'rgba(0, 0, 0, 0)') {
         issues.push(`Interactive element ${index + 1} may not have visible boundaries`);
       }
@@ -392,7 +418,8 @@ export class AccessibilityTestRunner {
       criterion: '1.4.11 Non-text Contrast',
       level: 'AA',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'UI components have sufficient contrast (3:1)' : issues.join(', '),
+      details:
+        issues.length === 0 ? 'UI components have sufficient contrast (3:1)' : issues.join(', '),
       elements: issues,
     };
   }
@@ -402,7 +429,7 @@ export class AccessibilityTestRunner {
       'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
     const issues = [];
-    
+
     focusableElements.forEach((element, index) => {
       // Check if element is reachable by keyboard
       const tabIndex = element.getAttribute('tabindex');
@@ -415,7 +442,8 @@ export class AccessibilityTestRunner {
       criterion: '2.1.1 Keyboard',
       level: 'A',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'All functionality is available via keyboard' : issues.join(', '),
+      details:
+        issues.length === 0 ? 'All functionality is available via keyboard' : issues.join(', '),
       elements: issues,
     };
   }
@@ -425,7 +453,7 @@ export class AccessibilityTestRunner {
     // Simplified check for known trap patterns
     const modals = document.querySelectorAll('[role="dialog"], .modal');
     const issues = [];
-    
+
     modals.forEach((modal, index) => {
       const focusableInModal = modal.querySelectorAll(
         'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
@@ -448,12 +476,14 @@ export class AccessibilityTestRunner {
     const skipLinks = document.querySelectorAll('a[href^="#"]');
     const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
     const issues = [];
-    
+
     // Check for skip navigation links
     let hasSkipLink = false;
     skipLinks.forEach(link => {
-      if (link.textContent?.toLowerCase().includes('skip') || 
-          link.textContent?.toLowerCase().includes('main')) {
+      if (
+        link.textContent?.toLowerCase().includes('skip') ||
+        link.textContent?.toLowerCase().includes('main')
+      ) {
         hasSkipLink = true;
       }
     });
@@ -474,7 +504,7 @@ export class AccessibilityTestRunner {
   private async testPageTitled(): Promise<AccessibilityTestResult> {
     const title = document.title;
     const issues = [];
-    
+
     if (!title || title.trim().length === 0) {
       issues.push('Page has no title');
     } else if (title.length < 3) {
@@ -495,7 +525,7 @@ export class AccessibilityTestRunner {
       'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
     const issues = [];
-    
+
     // Check for positive tabindex values (should be avoided)
     focusableElements.forEach((element, index) => {
       const tabIndex = element.getAttribute('tabindex');
@@ -516,12 +546,12 @@ export class AccessibilityTestRunner {
   private async testLinkPurpose(): Promise<AccessibilityTestResult> {
     const links = document.querySelectorAll('a');
     const issues = [];
-    
+
     links.forEach((link, index) => {
       const text = link.textContent?.trim();
       const ariaLabel = link.getAttribute('aria-label');
       const title = link.getAttribute('title');
-      
+
       if (!text && !ariaLabel && !title) {
         issues.push(`Link ${index + 1} has no accessible text`);
       } else if (text && (text === 'click here' || text === 'read more' || text === 'here')) {
@@ -542,7 +572,7 @@ export class AccessibilityTestRunner {
     const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
     const labels = document.querySelectorAll('label');
     const issues = [];
-    
+
     headings.forEach((heading, index) => {
       if (!heading.textContent?.trim()) {
         issues.push(`Heading ${index + 1} is empty`);
@@ -569,18 +599,18 @@ export class AccessibilityTestRunner {
       'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
     );
     const issues = [];
-    
+
     // Check for focus indicators (this would require actual focus testing)
     focusableElements.forEach((element, index) => {
       const computedStyle = window.getComputedStyle(element as Element);
       const outline = computedStyle.outline;
       const outlineStyle = computedStyle.outlineStyle;
-      
+
       if (outline === 'none' && outlineStyle === 'none') {
         // Check if there's an alternative focus indicator
         const boxShadow = computedStyle.boxShadow;
         const border = computedStyle.border;
-        
+
         if (!boxShadow.includes('focus') && !border.includes('focus')) {
           issues.push(`Element ${index + 1} may not have visible focus indicator`);
         }
@@ -591,7 +621,10 @@ export class AccessibilityTestRunner {
       criterion: '2.4.7 Focus Visible',
       level: 'AA',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'Focus is clearly visible for all interactive elements' : issues.join(', '),
+      details:
+        issues.length === 0
+          ? 'Focus is clearly visible for all interactive elements'
+          : issues.join(', '),
       elements: issues,
     };
   }
@@ -618,11 +651,11 @@ export class AccessibilityTestRunner {
   private async testLabelInName(): Promise<AccessibilityTestResult> {
     const buttons = document.querySelectorAll('button[aria-label]');
     const issues: string[] = [];
-    
+
     buttons.forEach((button, index) => {
       const visibleText = button.textContent?.trim();
       const ariaLabel = button.getAttribute('aria-label');
-      
+
       if (visibleText && ariaLabel && !ariaLabel.includes(visibleText)) {
         issues.push(`Button ${index + 1} aria-label doesn't include visible text`);
       }
@@ -650,7 +683,7 @@ export class AccessibilityTestRunner {
     const htmlElement = document.documentElement;
     const lang = htmlElement.getAttribute('lang');
     const issues = [];
-    
+
     if (!lang) {
       issues.push('Page language not specified');
     } else if (lang.length < 2) {
@@ -687,7 +720,7 @@ export class AccessibilityTestRunner {
   private async testConsistentNavigation(): Promise<AccessibilityTestResult> {
     const navigation = document.querySelector('nav');
     const issues = [];
-    
+
     if (!navigation) {
       issues.push('No navigation element found');
     }
@@ -713,12 +746,13 @@ export class AccessibilityTestRunner {
   private async testErrorIdentification(): Promise<AccessibilityTestResult> {
     const errorElements = document.querySelectorAll('[class*="error"], [aria-invalid="true"]');
     const issues = [];
-    
+
     errorElements.forEach((element, index) => {
-      const hasErrorText = element.textContent?.toLowerCase().includes('error') ||
-                          element.getAttribute('aria-describedby') ||
-                          element.getAttribute('aria-label');
-      
+      const hasErrorText =
+        element.textContent?.toLowerCase().includes('error') ||
+        element.getAttribute('aria-describedby') ||
+        element.getAttribute('aria-label');
+
       if (!hasErrorText) {
         issues.push(`Error element ${index + 1} doesn't clearly identify the error`);
       }
@@ -736,13 +770,14 @@ export class AccessibilityTestRunner {
   private async testLabelsOrInstructions(): Promise<AccessibilityTestResult> {
     const inputs = document.querySelectorAll('input:not([type="hidden"]), select, textarea');
     const issues = [];
-    
+
     inputs.forEach((input, index) => {
-      const hasLabel = input.getAttribute('aria-label') ||
-                     input.getAttribute('aria-labelledby') ||
-                     document.querySelector(`label[for="${input.id}"]`) ||
-                     input.getAttribute('placeholder');
-      
+      const hasLabel =
+        input.getAttribute('aria-label') ||
+        input.getAttribute('aria-labelledby') ||
+        document.querySelector(`label[for="${input.id}"]`) ||
+        input.getAttribute('placeholder');
+
       if (!hasLabel) {
         issues.push(`Input ${index + 1} has no label or instructions`);
       }
@@ -752,7 +787,8 @@ export class AccessibilityTestRunner {
       criterion: '3.3.2 Labels or Instructions',
       level: 'A',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'All form controls have labels or instructions' : issues.join(', '),
+      details:
+        issues.length === 0 ? 'All form controls have labels or instructions' : issues.join(', '),
       elements: issues,
     };
   }
@@ -760,7 +796,7 @@ export class AccessibilityTestRunner {
   private async testParsing(): Promise<AccessibilityTestResult> {
     // Check for basic HTML validity issues
     const issues = [];
-    
+
     // Check for duplicate IDs
     const elementsWithId = document.querySelectorAll('[id]');
     const ids = new Set();
@@ -784,13 +820,14 @@ export class AccessibilityTestRunner {
   private async testNameRoleValue(): Promise<AccessibilityTestResult> {
     const customElements = document.querySelectorAll('[role]');
     const issues = [];
-    
+
     customElements.forEach((element, index) => {
       const role = element.getAttribute('role');
-      const name = element.getAttribute('aria-label') || 
-                  element.getAttribute('aria-labelledby') ||
-                  element.textContent?.trim();
-      
+      const name =
+        element.getAttribute('aria-label') ||
+        element.getAttribute('aria-labelledby') ||
+        element.textContent?.trim();
+
       if ((role === 'button' || role === 'link') && !name) {
         issues.push(`Element ${index + 1} with role="${role}" has no accessible name`);
       }
@@ -800,7 +837,10 @@ export class AccessibilityTestRunner {
       criterion: '4.1.2 Name, Role, Value',
       level: 'A',
       passed: issues.length === 0,
-      details: issues.length === 0 ? 'All custom elements have proper name, role, and value' : issues.join(', '),
+      details:
+        issues.length === 0
+          ? 'All custom elements have proper name, role, and value'
+          : issues.join(', '),
       elements: issues,
     };
   }
@@ -808,13 +848,15 @@ export class AccessibilityTestRunner {
   private async testStatusMessages(): Promise<AccessibilityTestResult> {
     const liveRegions = document.querySelectorAll('[aria-live], [role="status"], [role="alert"]');
     const issues = [];
-    
+
     // Check if status messages use appropriate ARIA
-    const statusElements = document.querySelectorAll('[class*="status"], [class*="message"], [class*="alert"]');
+    const statusElements = document.querySelectorAll(
+      '[class*="status"], [class*="message"], [class*="alert"]'
+    );
     statusElements.forEach((element, index) => {
       const hasAriaLive = element.getAttribute('aria-live');
       const hasRole = element.getAttribute('role');
-      
+
       if (!hasAriaLive && !hasRole) {
         issues.push(`Status message ${index + 1} should use aria-live or appropriate role`);
       }
@@ -865,7 +907,7 @@ export class AccessibilityTestRunner {
         const level = test.level === 'AA' ? ' (AA)' : '';
         report += `${status} **${test.criterion}${level}**\n`;
         report += `   ${test.details}\n`;
-        
+
         if (!test.passed && test.elements && test.elements.length > 0) {
           report += `   Issues: ${test.elements.slice(0, 3).join(', ')}${test.elements.length > 3 ? '...' : ''}\n`;
         }
@@ -898,7 +940,7 @@ export class AccessibilityTestRunner {
       failedTests.forEach(test => {
         report += `### ${test.criterion}\n`;
         report += `**Issue:** ${test.details}\n`;
-        
+
         // Provide specific recommendations based on the criterion
         if (test.criterion.includes('Non-text Content')) {
           report += `**Fix:** Add alt text to images, aria-label to icon buttons, and proper labels to form controls.\n`;
@@ -911,7 +953,7 @@ export class AccessibilityTestRunner {
         } else if (test.criterion.includes('Labels')) {
           report += `**Fix:** Add descriptive labels to form controls and headings.\n`;
         }
-        
+
         report += `\n`;
       });
     }

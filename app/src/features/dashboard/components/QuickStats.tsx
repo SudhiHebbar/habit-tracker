@@ -39,7 +39,7 @@ export const QuickStats: React.FC<QuickStatsProps> = ({
 
   return (
     <div className={styles.quickStats}>
-      {stats.map((stat) => (
+      {stats.map(stat => (
         <div key={stat.label} className={`${styles.statCard} ${styles[stat.color]}`}>
           <div className={styles.statIcon}>{stat.icon}</div>
           <div className={styles.statContent}>

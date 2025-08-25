@@ -9,6 +9,7 @@ interface DashboardHeaderProps {
   trackers: Tracker[];
   currentTracker?: Tracker | null | undefined;
   onTrackerChange: (trackerId: number) => void;
+  onCreateTracker?: () => void;
   loading?: boolean;
 }
 
@@ -16,6 +17,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   trackers,
   currentTracker,
   onTrackerChange,
+  onCreateTracker,
   loading = false,
 }) => {
   return (
@@ -33,14 +35,13 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         </div>
 
         <div className={styles.trackerSection}>
-          {trackers.length > 0 && (
-            <TrackerSelector
-              trackers={trackers}
-              selectedTracker={currentTracker || null}
-              onSelect={tracker => onTrackerChange(tracker.id)}
-              isLoading={loading}
-            />
-          )}
+          <TrackerSelector
+            trackers={trackers}
+            selectedTracker={currentTracker || null}
+            onSelect={tracker => onTrackerChange(tracker.id)}
+            onCreate={onCreateTracker}
+            isLoading={loading}
+          />
         </div>
 
         {/* User info placeholder for future implementation */}

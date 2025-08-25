@@ -143,17 +143,17 @@ export class FunctionalTestRunner {
     try {
       // Setup test environment
       await this.setupTestEnvironment();
-      
+
       // Set view to grid mode
       await this.setViewMode('grid');
-      
+
       // Wait for rendering
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       // Check if grid layout is displayed
       const gridContainer = document.querySelector('[class*="habitGrid"], [class*="grid"]');
       const habitCards = document.querySelectorAll('[class*="habitCard"]');
-      
+
       // Verify grid properties
       const isGridDisplay = this.verifyGridLayout(gridContainer as HTMLElement);
       const hasHabitCards = habitCards.length > 0;
@@ -193,14 +193,14 @@ export class FunctionalTestRunner {
     try {
       // Set view to list mode
       await this.setViewMode('list');
-      
+
       // Wait for rendering
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       // Check if list layout is displayed
       const listContainer = document.querySelector('[class*="habitList"], [class*="list"]');
       const habitItems = document.querySelectorAll('[class*="listItem"], [class*="habitCard"]');
-      
+
       // Verify list properties
       const isListDisplay = this.verifyListLayout(listContainer as HTMLElement);
       const hasHabitItems = habitItems.length > 0;
@@ -240,8 +240,12 @@ export class FunctionalTestRunner {
     try {
       // Find view toggle buttons
       const viewToggle = document.querySelector('[class*="viewToggle"]');
-      const gridButton = viewToggle?.querySelector('[data-view="grid"], button:first-child') as HTMLButtonElement;
-      const listButton = viewToggle?.querySelector('[data-view="list"], button:last-child') as HTMLButtonElement;
+      const gridButton = viewToggle?.querySelector(
+        '[data-view="grid"], button:first-child'
+      ) as HTMLButtonElement;
+      const listButton = viewToggle?.querySelector(
+        '[data-view="list"], button:last-child'
+      ) as HTMLButtonElement;
 
       if (!gridButton || !listButton) {
         return {
@@ -255,12 +259,16 @@ export class FunctionalTestRunner {
       // Test clicking grid button
       await this.simulateClick(gridButton);
       await new Promise(resolve => setTimeout(resolve, 100));
-      const gridActive = gridButton.classList.contains('active') || gridButton.getAttribute('aria-pressed') === 'true';
+      const gridActive =
+        gridButton.classList.contains('active') ||
+        gridButton.getAttribute('aria-pressed') === 'true';
 
       // Test clicking list button
       await this.simulateClick(listButton);
       await new Promise(resolve => setTimeout(resolve, 100));
-      const listActive = listButton.classList.contains('active') || listButton.getAttribute('aria-pressed') === 'true';
+      const listActive =
+        listButton.classList.contains('active') ||
+        listButton.getAttribute('aria-pressed') === 'true';
 
       // Test that only one is active at a time
       const exclusiveSelection = !gridActive || !listActive;
@@ -299,11 +307,11 @@ export class FunctionalTestRunner {
     try {
       // Set view mode and verify persistence
       await this.setViewMode('list');
-      
+
       // Simulate page reload by checking localStorage
       const storedPreferences = localStorage.getItem('dashboard-preferences');
       let preferencesPersisted = false;
-      
+
       if (storedPreferences) {
         const preferences = JSON.parse(storedPreferences);
         preferencesPersisted = preferences.viewMode === 'list';
@@ -313,7 +321,7 @@ export class FunctionalTestRunner {
       await this.setViewMode('grid');
       const updatedPreferences = localStorage.getItem('dashboard-preferences');
       let updatedPersistance = false;
-      
+
       if (updatedPreferences) {
         const preferences = JSON.parse(updatedPreferences);
         updatedPersistance = preferences.viewMode === 'grid';
@@ -400,8 +408,10 @@ export class FunctionalTestRunner {
       await this.setupTestEnvironment();
 
       // Find search input
-      const searchInput = document.querySelector('input[type="search"], input[placeholder*="search" i]') as HTMLInputElement;
-      
+      const searchInput = document.querySelector(
+        'input[type="search"], input[placeholder*="search" i]'
+      ) as HTMLInputElement;
+
       if (!searchInput) {
         return {
           testName: 'Search Filtering',
@@ -414,9 +424,9 @@ export class FunctionalTestRunner {
       // Test search functionality
       await this.simulateInput(searchInput, 'Exercise');
       await new Promise(resolve => setTimeout(resolve, 200));
-      
+
       const filteredHabits = this.getVisibleHabits();
-      const containsExercise = filteredHabits.some(habit => 
+      const containsExercise = filteredHabits.some(habit =>
         habit.textContent?.toLowerCase().includes('exercise')
       );
 
@@ -458,8 +468,10 @@ export class FunctionalTestRunner {
 
     try {
       // Find frequency filter
-      const frequencySelect = document.querySelector('select[name*="frequency"], [data-filter="frequency"]') as HTMLSelectElement;
-      
+      const frequencySelect = document.querySelector(
+        'select[name*="frequency"], [data-filter="frequency"]'
+      ) as HTMLSelectElement;
+
       if (!frequencySelect) {
         return {
           testName: 'Frequency Filtering',
@@ -472,14 +484,14 @@ export class FunctionalTestRunner {
       // Test filtering by daily frequency
       await this.simulateSelect(frequencySelect, 'Daily');
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const dailyHabits = this.getVisibleHabits();
       const onlyDailyHabits = this.verifyFrequencyFilter(dailyHabits, 'Daily');
 
       // Test filtering by weekly frequency
       await this.simulateSelect(frequencySelect, 'Weekly');
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const weeklyHabits = this.getVisibleHabits();
       const onlyWeeklyHabits = this.verifyFrequencyFilter(weeklyHabits, 'Weekly');
 
@@ -516,8 +528,10 @@ export class FunctionalTestRunner {
 
     try {
       // Find status filter (active/inactive habits)
-      const statusToggle = document.querySelector('input[type="checkbox"][name*="inactive"], [data-filter="status"]') as HTMLInputElement;
-      
+      const statusToggle = document.querySelector(
+        'input[type="checkbox"][name*="inactive"], [data-filter="status"]'
+      ) as HTMLInputElement;
+
       if (!statusToggle) {
         return {
           testName: 'Status Filtering',
@@ -534,7 +548,7 @@ export class FunctionalTestRunner {
       // Toggle to show inactive habits
       await this.simulateClick(statusToggle);
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const allHabits = this.getVisibleHabits();
       const includesInactive = allHabits.length > initialHabits.length;
 
@@ -571,8 +585,10 @@ export class FunctionalTestRunner {
 
     try {
       // Find sort control
-      const sortSelect = document.querySelector('select[name*="sort"], [data-sort]') as HTMLSelectElement;
-      
+      const sortSelect = document.querySelector(
+        'select[name*="sort"], [data-sort]'
+      ) as HTMLSelectElement;
+
       if (!sortSelect) {
         return {
           testName: 'Sorting Functionality',
@@ -585,14 +601,14 @@ export class FunctionalTestRunner {
       // Test alphabetical sorting
       await this.simulateSelect(sortSelect, 'name');
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const alphabeticalOrder = this.getVisibleHabits();
       const isAlphabetical = this.verifySortOrder(alphabeticalOrder, 'name');
 
-      // Test creation date sorting  
+      // Test creation date sorting
       await this.simulateSelect(sortSelect, 'created');
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       const creationOrder = this.getVisibleHabits();
       const isCreationOrder = this.verifySortOrder(creationOrder, 'created');
 
@@ -630,8 +646,10 @@ export class FunctionalTestRunner {
     try {
       // Test combining search with other filters
       const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
-      const frequencySelect = document.querySelector('select[name*="frequency"]') as HTMLSelectElement;
-      
+      const frequencySelect = document.querySelector(
+        'select[name*="frequency"]'
+      ) as HTMLSelectElement;
+
       if (!searchInput) {
         return {
           testName: 'Filter Combination',
@@ -650,19 +668,19 @@ export class FunctionalTestRunner {
       if (frequencySelect) {
         await this.simulateSelect(frequencySelect, 'Daily');
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         visibleHabits = this.getVisibleHabits();
         const combinedResults = visibleHabits.length;
-        
+
         // Combined filters should show same or fewer results
         const combinationWorks = combinedResults <= searchResults;
-        
+
         const executionTime = performance.now() - startTime;
 
         return {
           testName: 'Filter Combination',
           passed: combinationWorks,
-          details: combinationWorks 
+          details: combinationWorks
             ? `Filter combination works: ${searchResults} → ${combinedResults} results`
             : `Filter combination failed: unexpected result count`,
           executionTime,
@@ -692,7 +710,7 @@ export class FunctionalTestRunner {
     try {
       // Apply filters
       const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
-      
+
       if (searchInput) {
         await this.simulateInput(searchInput, 'Exercise');
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -701,14 +719,14 @@ export class FunctionalTestRunner {
       // Check if filters persist in URL or localStorage
       const urlParams = new URLSearchParams(window.location.search);
       const localStorageState = localStorage.getItem('dashboard-filters');
-      
+
       let filtersPersisted = false;
-      
+
       // Check URL persistence
       if (urlParams.has('search') && urlParams.get('search') === 'Exercise') {
         filtersPersisted = true;
       }
-      
+
       // Check localStorage persistence
       if (!filtersPersisted && localStorageState) {
         try {
@@ -724,7 +742,7 @@ export class FunctionalTestRunner {
       return {
         testName: 'Filter Persistence',
         passed: filtersPersisted,
-        details: filtersPersisted 
+        details: filtersPersisted
           ? 'Filters are properly persisted'
           : 'Filters are not persisted (may be intentional)',
         executionTime,
@@ -746,31 +764,31 @@ export class FunctionalTestRunner {
     try {
       // Test with known data to verify accuracy
       await this.setupTestEnvironment();
-      
+
       // Search for "Exercise" - should return 1 habit
       const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
       if (searchInput) {
         await this.simulateInput(searchInput, 'Exercise');
         await new Promise(resolve => setTimeout(resolve, 100));
-        
+
         const results = this.getVisibleHabits();
-        const hasCorrectResult = results.length === 1 && 
-                               results[0].textContent?.includes('Morning Exercise');
-        
+        const hasCorrectResult =
+          results.length === 1 && results[0].textContent?.includes('Morning Exercise');
+
         if (hasCorrectResult) {
           // Test no results case
           await this.simulateInput(searchInput, 'NonExistentHabit');
           await new Promise(resolve => setTimeout(resolve, 100));
-          
+
           const noResults = this.getVisibleHabits();
           const correctlyShowsEmpty = noResults.length === 0;
-          
+
           const executionTime = performance.now() - startTime;
 
           return {
             testName: 'Filter Results Accuracy',
             passed: correctlyShowsEmpty,
-            details: correctlyShowsEmpty 
+            details: correctlyShowsEmpty
               ? 'Filter results are accurate for both matching and non-matching queries'
               : 'Filter results accuracy issues detected',
             executionTime,
@@ -803,8 +821,10 @@ export class FunctionalTestRunner {
 
   private async setViewMode(mode: 'grid' | 'list'): Promise<void> {
     const viewToggle = document.querySelector('[class*="viewToggle"]');
-    const button = viewToggle?.querySelector(`[data-view="${mode}"], button:${mode === 'grid' ? 'first' : 'last'}-child`) as HTMLButtonElement;
-    
+    const button = viewToggle?.querySelector(
+      `[data-view="${mode}"], button:${mode === 'grid' ? 'first' : 'last'}-child`
+    ) as HTMLButtonElement;
+
     if (button) {
       await this.simulateClick(button);
     }
@@ -837,39 +857,43 @@ export class FunctionalTestRunner {
 
   private verifyGridLayout(container: HTMLElement): boolean {
     if (!container) return false;
-    
+
     const computedStyle = window.getComputedStyle(container);
-    return computedStyle.display === 'grid' || 
-           computedStyle.display === 'flex' && computedStyle.flexWrap === 'wrap' ||
-           container.classList.toString().includes('grid');
+    return (
+      computedStyle.display === 'grid' ||
+      (computedStyle.display === 'flex' && computedStyle.flexWrap === 'wrap') ||
+      container.classList.toString().includes('grid')
+    );
   }
 
   private verifyListLayout(container: HTMLElement): boolean {
     if (!container) return false;
-    
+
     const computedStyle = window.getComputedStyle(container);
-    return computedStyle.display === 'flex' && computedStyle.flexDirection === 'column' ||
-           container.classList.toString().includes('list');
+    return (
+      (computedStyle.display === 'flex' && computedStyle.flexDirection === 'column') ||
+      container.classList.toString().includes('list')
+    );
   }
 
   private verifyGridArrangement(elements: NodeListOf<Element>): boolean {
     if (elements.length < 2) return true;
-    
+
     // Check if elements are arranged in multiple columns
     const firstElement = elements[0].getBoundingClientRect();
     const secondElement = elements[1].getBoundingClientRect();
-    
+
     // If second element is to the right of first, it's likely a grid
     return secondElement.left > firstElement.right - 10; // Allow for small margins
   }
 
   private verifyListArrangement(elements: NodeListOf<Element>): boolean {
     if (elements.length < 2) return true;
-    
+
     // Check if elements are stacked vertically
     const firstElement = elements[0].getBoundingClientRect();
     const secondElement = elements[1].getBoundingClientRect();
-    
+
     // If second element is below first, it's likely a list
     return secondElement.top > firstElement.bottom - 10; // Allow for small margins
   }
@@ -893,15 +917,15 @@ export class FunctionalTestRunner {
   }
 
   private verifyFrequencyFilter(habits: Element[], frequency: string): boolean {
-    return habits.every(habit => 
-      habit.textContent?.toLowerCase().includes(frequency.toLowerCase()) ?? false
+    return habits.every(
+      habit => habit.textContent?.toLowerCase().includes(frequency.toLowerCase()) ?? false
     );
   }
 
   private verifyStatusFilter(habits: Element[], activeOnly: boolean): boolean {
     if (activeOnly) {
-      return habits.every(habit => 
-        !(habit.textContent?.toLowerCase().includes('inactive') ?? false)
+      return habits.every(
+        habit => !(habit.textContent?.toLowerCase().includes('inactive') ?? false)
       );
     }
     return true; // All habits visible
@@ -909,11 +933,11 @@ export class FunctionalTestRunner {
 
   private verifySortOrder(habits: Element[], sortBy: string): boolean {
     if (habits.length < 2) return true;
-    
-    const habitTexts = habits.map(habit => 
-      habit.querySelector('[class*="habitName"], h3, h4')?.textContent?.trim() ?? ''
+
+    const habitTexts = habits.map(
+      habit => habit.querySelector('[class*="habitName"], h3, h4')?.textContent?.trim() ?? ''
     );
-    
+
     if (sortBy === 'name') {
       // Check alphabetical order
       for (let i = 0; i < habitTexts.length - 1; i++) {
@@ -922,11 +946,14 @@ export class FunctionalTestRunner {
         }
       }
     }
-    
+
     return true; // Other sort orders would require more complex verification
   }
 
-  generateFunctionalTestReport(viewToggleSuite: ViewToggleTestSuite, filterSuite: FilterTestSuite): string {
+  generateFunctionalTestReport(
+    viewToggleSuite: ViewToggleTestSuite,
+    filterSuite: FilterTestSuite
+  ): string {
     let report = `# Functional Test Report - View Toggle and Filter Functionality\n\n`;
 
     // Summary
@@ -1001,7 +1028,7 @@ export class FunctionalTestRunner {
       failedTests.forEach(test => {
         report += `### ${test.testName}\n`;
         report += `**Issue:** ${test.details}\n`;
-        
+
         // Provide specific recommendations
         if (test.testName.includes('Grid View')) {
           report += `**Fix:** Ensure grid layout uses CSS Grid or Flexbox with proper responsive columns.\n`;
@@ -1014,7 +1041,7 @@ export class FunctionalTestRunner {
         } else if (test.testName.includes('Filter')) {
           report += `**Fix:** Implement or improve filter logic with proper state management.\n`;
         }
-        
+
         report += `\n`;
       });
     }

@@ -354,9 +354,7 @@ export const HabitList: React.FC<HabitListProps> = ({
           )}
         </div>
       ) : (
-        <div
-          className={`${styles.habitGrid} ${styles[viewMode]}`}
-        >
+        <div className={`${styles.habitGrid} ${styles[viewMode]}`}>
           {filteredAndSortedHabits.map(habit => (
             <div key={habit.id} className={styles.habitCardContainer}>
               {viewMode === 'calendar' ? (

@@ -9,10 +9,13 @@ import { VirtualizedHabitGrid } from './VirtualizedHabitGrid';
 import { ViewToggle } from './ViewToggle';
 import { EmptyDashboard } from './EmptyDashboard';
 import { FilterSortControls } from './FilterSortControls';
+import { CreateTrackerModal } from '../../tracker-management/components/CreateTrackerModal';
 import { useTrackers } from '../../tracker-management/hooks/useTrackers';
 import { useHabits } from '../../habit-management/hooks/useHabits';
 import { useDashboardPreferences } from '../../../shared/hooks/useLocalStorage';
+import { trackerApi } from '../../tracker-management/services/trackerApi';
 import type { Habit } from '../../habit-management/types/habit.types';
+import type { CreateTrackerDto } from '../../tracker-management/types/tracker.types';
 import styles from '../../../../styles/features/dashboard/Dashboard.module.css';
 
 export type ViewMode = 'grid' | 'list';
@@ -25,7 +28,7 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
   // Persistent preferences
   const [preferences, setPreferences] = useDashboardPreferences();
-  
+
   // State management
   const [selectedTrackerId, setSelectedTrackerId] = useState<number | null>(
     initialTrackerId || null
@@ -36,8 +39,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
   const [sortBy, setSortBy] = useState<'name' | 'frequency' | 'completion'>('name');
   const [filterFrequency, setFilterFrequency] = useState<string>('');
 
+  // Tracker creation modal state
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
   // Data fetching
-  const { trackers, isLoading: trackersLoading } = useTrackers();
+  const { trackers, isLoading: trackersLoading, refetch: refetchTrackers } = useTrackers();
   const { habits, loading: habitsLoading, refetch: refetchHabits } = useHabits(selectedTrackerId);
 
   // Set initial tracker
@@ -135,6 +143,36 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
     await refetchHabits();
   };
 
+  // Handle tracker creation
+  const handleCreateTracker = () => {
+    setIsCreateModalOpen(true);
+    setCreateError(null);
+  };
+
+  const handleCreateTrackerSubmit = async (data: CreateTrackerDto) => {
+    setIsCreating(true);
+    setCreateError(null);
+
+    try {
+      const newTracker = await trackerApi.createTracker(data);
+      await refetchTrackers();
+      setSelectedTrackerId(newTracker.id);
+      setIsCreateModalOpen(false);
+    } catch (error) {
+      setCreateError(error instanceof Error ? error.message : 'Failed to create tracker');
+      throw error; // Re-throw to prevent modal from closing
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleCloseCreateModal = () => {
+    if (!isCreating) {
+      setIsCreateModalOpen(false);
+      setCreateError(null);
+    }
+  };
+
   // Check if dashboard is empty
   const isDashboardEmpty = !trackersLoading && (!currentTracker || filteredHabits.length === 0);
 
@@ -158,6 +196,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
         trackers={trackers}
         currentTracker={currentTracker}
         onTrackerChange={handleTrackerChange}
+        onCreateTracker={handleCreateTracker}
         loading={trackersLoading}
       />
 
@@ -210,9 +249,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
             {isDashboardEmpty ? (
               <EmptyDashboard
                 hasTrackers={trackers.length > 0}
-                onCreateTracker={() => {
-                  /* Handle create tracker */
-                }}
+                onCreateTracker={handleCreateTracker}
                 onCreateHabit={() => {
                   /* Handle create habit */
                 }}
@@ -236,6 +273,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
           </div>
         </div>
       </Container>
+
+      {/* Create Tracker Modal */}
+      <CreateTrackerModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+        onSubmit={handleCreateTrackerSubmit}
+        isCreating={isCreating}
+        error={createError}
+      />
     </div>
   );
 };

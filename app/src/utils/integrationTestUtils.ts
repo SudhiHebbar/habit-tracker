@@ -19,17 +19,16 @@ export interface CompletionTrackingTestSuite {
 }
 
 export class IntegrationTestRunner {
-  
   async runCompletionTrackingTests(): Promise<CompletionTrackingTestSuite> {
     console.log('Starting habit completion tracking integration tests...');
-    
+
     const habitCreation = await this.testHabitCreation();
     const completionToggle = await this.testCompletionToggle();
     const streakCalculation = await this.testStreakCalculation();
     const statisticsUpdate = await this.testStatisticsUpdate();
     const realTimeSync = await this.testRealTimeSync();
     const dataConsistency = await this.testDataConsistency();
-    
+
     const allTests = [
       habitCreation,
       completionToggle,
@@ -38,9 +37,9 @@ export class IntegrationTestRunner {
       realTimeSync,
       dataConsistency,
     ];
-    
+
     const overall = allTests.every(test => test.passed);
-    
+
     const suite: CompletionTrackingTestSuite = {
       habitCreation,
       completionToggle,
@@ -50,14 +49,14 @@ export class IntegrationTestRunner {
       dataConsistency,
       overall,
     };
-    
+
     console.log('Integration tests completed:', suite);
     return suite;
   }
-  
+
   private async testHabitCreation(): Promise<IntegrationTestResult> {
     const startTime = performance.now();
-    
+
     try {
       // Test creating a habit and verifying it appears in dashboard
       const testHabit = {
@@ -71,14 +70,14 @@ export class IntegrationTestRunner {
         isActive: true,
         createdAt: new Date().toISOString(),
       };
-      
+
       // Simulate habit creation process
       const created = await this.simulateHabitCreation(testHabit);
       const appearsInDashboard = await this.verifyHabitInDashboard(testHabit.id);
       const hasCorrectProperties = await this.verifyHabitProperties(testHabit.id, testHabit);
-      
+
       const executionTime = performance.now() - startTime;
-      
+
       if (created && appearsInDashboard && hasCorrectProperties) {
         return {
           testName: 'Habit Creation',
@@ -104,26 +103,26 @@ export class IntegrationTestRunner {
       };
     }
   }
-  
+
   private async testCompletionToggle(): Promise<IntegrationTestResult> {
     const startTime = performance.now();
-    
+
     try {
       const habitId = 999;
       const today = new Date().toISOString().split('T')[0];
-      
+
       // Test toggling completion status
       const initialState = await this.getCompletionState(habitId, today);
       const toggled = await this.simulateCompletionToggle(habitId, today);
       const newState = await this.getCompletionState(habitId, today);
       const toggledAgain = await this.simulateCompletionToggle(habitId, today);
       const finalState = await this.getCompletionState(habitId, today);
-      
+
       const executionTime = performance.now() - startTime;
-      
+
       // Verify toggle behavior
       const correctToggle = newState !== initialState && finalState === initialState;
-      
+
       if (toggled && toggledAgain && correctToggle) {
         return {
           testName: 'Completion Toggle',
@@ -149,17 +148,17 @@ export class IntegrationTestRunner {
       };
     }
   }
-  
+
   private async testStreakCalculation(): Promise<IntegrationTestResult> {
     const startTime = performance.now();
-    
+
     try {
       const habitId = 999;
-      
+
       // Create a sequence of completions to test streak calculation
       const completions = [];
       const today = new Date();
-      
+
       // Add completions for the last 5 days
       for (let i = 0; i < 5; i++) {
         const date = new Date(today);
@@ -170,16 +169,16 @@ export class IntegrationTestRunner {
           completed: true,
         });
       }
-      
+
       // Simulate adding these completions
       await this.simulateCompletionBatch(completions);
-      
+
       // Verify streak calculation
       const streak = await this.getHabitStreak(habitId);
       const expectedStreak = 5;
-      
+
       const executionTime = performance.now() - startTime;
-      
+
       if (streak === expectedStreak) {
         return {
           testName: 'Streak Calculation',
@@ -205,29 +204,29 @@ export class IntegrationTestRunner {
       };
     }
   }
-  
+
   private async testStatisticsUpdate(): Promise<IntegrationTestResult> {
     const startTime = performance.now();
-    
+
     try {
       const habitId = 999;
-      
+
       // Get initial statistics
       const initialStats = await this.getHabitStatistics(habitId);
-      
+
       // Complete the habit
       const today = new Date().toISOString().split('T')[0];
       await this.simulateCompletionToggle(habitId, today);
-      
+
       // Get updated statistics
       const updatedStats = await this.getHabitStatistics(habitId);
-      
+
       const executionTime = performance.now() - startTime;
-      
+
       // Verify statistics were updated
       const statsUpdated = updatedStats.totalCompletions > initialStats.totalCompletions;
       const completionRateUpdated = updatedStats.completionRate >= initialStats.completionRate;
-      
+
       if (statsUpdated && completionRateUpdated) {
         return {
           testName: 'Statistics Update',
@@ -253,26 +252,26 @@ export class IntegrationTestRunner {
       };
     }
   }
-  
+
   private async testRealTimeSync(): Promise<IntegrationTestResult> {
     const startTime = performance.now();
-    
+
     try {
       const habitId = 999;
       const today = new Date().toISOString().split('T')[0];
-      
+
       // Simulate completion in one component
       await this.simulateCompletionToggle(habitId, today);
-      
+
       // Wait for propagation
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
       // Check if other components reflect the change
       const dashboardUpdated = await this.verifyDashboardSync(habitId, today);
       const statsUpdated = await this.verifyStatsSync(habitId);
-      
+
       const executionTime = performance.now() - startTime;
-      
+
       if (dashboardUpdated && statsUpdated) {
         return {
           testName: 'Real-time Sync',
@@ -298,13 +297,13 @@ export class IntegrationTestRunner {
       };
     }
   }
-  
+
   private async testDataConsistency(): Promise<IntegrationTestResult> {
     const startTime = performance.now();
-    
+
     try {
       const habitId = 999;
-      
+
       // Perform multiple operations and verify data consistency
       const operations = [
         () => this.simulateCompletionToggle(habitId, '2024-01-01'),
@@ -312,21 +311,21 @@ export class IntegrationTestRunner {
         () => this.simulateCompletionToggle(habitId, '2024-01-03'),
         () => this.simulateCompletionToggle(habitId, '2024-01-01'), // Toggle first day again
       ];
-      
+
       // Execute operations
       await Promise.all(operations.map(op => op()));
-      
+
       // Verify data consistency
       const completions = await this.getHabitCompletions(habitId);
       const statistics = await this.getHabitStatistics(habitId);
       const streak = await this.getHabitStreak(habitId);
-      
+
       // Check consistency
       const completionCountMatches = completions.length === statistics.totalCompletions;
       const streakConsistent = streak >= 0 && streak <= completions.length;
-      
+
       const executionTime = performance.now() - startTime;
-      
+
       if (completionCountMatches && streakConsistent) {
         return {
           testName: 'Data Consistency',
@@ -352,52 +351,52 @@ export class IntegrationTestRunner {
       };
     }
   }
-  
+
   // Mock implementations for testing (these would interface with real APIs in production)
   private async simulateHabitCreation(_habit: any): Promise<boolean> {
     // Simulate API call to create habit
     await new Promise(resolve => setTimeout(resolve, 100));
     return true;
   }
-  
+
   private async verifyHabitInDashboard(habitId: number): Promise<boolean> {
     // Check if habit appears in dashboard
     const habitCards = document.querySelectorAll('[class*="habitCard"]');
-    return Array.from(habitCards).some(card => 
-      card.getAttribute('data-habit-id') === habitId.toString()
+    return Array.from(habitCards).some(
+      card => card.getAttribute('data-habit-id') === habitId.toString()
     );
   }
-  
+
   private async verifyHabitProperties(habitId: number, expectedHabit: any): Promise<boolean> {
     // Verify habit has correct properties
     const habitElement = document.querySelector(`[data-habit-id="${habitId}"]`);
     if (!habitElement) return false;
-    
+
     const nameElement = habitElement.querySelector('[class*="habitName"]');
     return nameElement?.textContent?.includes(expectedHabit.name) ?? false;
   }
-  
+
   private async simulateCompletionToggle(_habitId: number, _date: string): Promise<boolean> {
     // Simulate clicking completion checkbox
     await new Promise(resolve => setTimeout(resolve, 50));
     return true;
   }
-  
+
   private async getCompletionState(_habitId: number, _date: string): Promise<boolean> {
     // Get current completion state for a habit on a specific date
     return Math.random() > 0.5; // Mock implementation
   }
-  
+
   private async simulateCompletionBatch(_completions: any[]): Promise<void> {
     // Simulate batch completion updates
     await new Promise(resolve => setTimeout(resolve, 200));
   }
-  
+
   private async getHabitStreak(_habitId: number): Promise<number> {
     // Get current streak for a habit
     return Math.floor(Math.random() * 10); // Mock implementation
   }
-  
+
   private async getHabitStatistics(_habitId: number): Promise<any> {
     // Get habit statistics
     return {
@@ -407,7 +406,7 @@ export class IntegrationTestRunner {
       longestStreak: Math.floor(Math.random() * 100),
     };
   }
-  
+
   private async getHabitCompletions(habitId: number): Promise<any[]> {
     // Get all completions for a habit
     return Array.from({ length: Math.floor(Math.random() * 20) }, (_, i) => ({
@@ -417,22 +416,22 @@ export class IntegrationTestRunner {
       completed: true,
     }));
   }
-  
+
   private async verifyDashboardSync(habitId: number, _date: string): Promise<boolean> {
     // Verify dashboard reflects completion state
     const checkbox = document.querySelector(`[data-habit-id="${habitId}"] input[type="checkbox"]`);
     return checkbox ? (checkbox as HTMLInputElement).checked : false;
   }
-  
+
   private async verifyStatsSync(habitId: number): Promise<boolean> {
     // Verify statistics display is updated
     const statsElement = document.querySelector(`[data-habit-id="${habitId}"] [class*="stats"]`);
     return !!statsElement;
   }
-  
+
   generateIntegrationTestReport(suite: CompletionTrackingTestSuite): string {
     let report = `# Habit Completion Tracking Integration Test Report\n\n`;
-    
+
     // Summary
     const tests = [
       suite.habitCreation,
@@ -442,35 +441,35 @@ export class IntegrationTestRunner {
       suite.realTimeSync,
       suite.dataConsistency,
     ];
-    
+
     const passedTests = tests.filter(test => test.passed).length;
     const totalTests = tests.length;
     const passRate = (passedTests / totalTests) * 100;
-    
+
     report += `## Summary\n`;
     report += `- Overall Result: ${suite.overall ? '✅ PASS' : '❌ FAIL'}\n`;
     report += `- Tests Passed: ${passedTests}/${totalTests} (${passRate.toFixed(1)}%)\n`;
     report += `- Total Execution Time: ${tests.reduce((sum, test) => sum + test.executionTime, 0).toFixed(2)}ms\n\n`;
-    
+
     // Detailed results
     report += `## Detailed Results\n\n`;
-    
+
     tests.forEach(test => {
       report += `### ${test.testName}\n`;
       report += `**Result:** ${test.passed ? '✅ PASS' : '❌ FAIL'}\n`;
       report += `**Execution Time:** ${test.executionTime.toFixed(2)}ms\n`;
       report += `**Details:** ${test.details}\n`;
-      
+
       if (test.error) {
         report += `**Error:** ${test.error.message}\n`;
       }
-      
+
       report += `\n`;
     });
-    
+
     // Recommendations
     report += `## Recommendations\n\n`;
-    
+
     if (suite.overall) {
       report += `✅ All integration tests passed! The habit completion tracking system works correctly across all components.\n\n`;
       report += `The following functionality has been verified:\n`;
@@ -482,7 +481,7 @@ export class IntegrationTestRunner {
       report += `- Data remains consistent across operations\n`;
     } else {
       report += `❌ Some integration tests failed. The following issues should be addressed:\n\n`;
-      
+
       const failedTests = tests.filter(test => !test.passed);
       failedTests.forEach(test => {
         report += `**${test.testName}:** ${test.details}\n`;
@@ -490,14 +489,14 @@ export class IntegrationTestRunner {
           report += `  - Error: ${test.error.message}\n`;
         }
       });
-      
+
       report += `\nRecommended actions:\n`;
       report += `- Review completion tracking API integration\n`;
       report += `- Verify real-time data synchronization\n`;
       report += `- Check streak calculation logic\n`;
       report += `- Ensure proper error handling in completion flows\n`;
     }
-    
+
     return report;
   }
 }

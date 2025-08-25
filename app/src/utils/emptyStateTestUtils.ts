@@ -100,19 +100,30 @@ export class EmptyStateTestRunner {
     try {
       // Simulate no trackers scenario
       await this.simulateEmptyTrackersState();
-      
+
       // Look for empty state elements
-      const emptyStateContainer = document.querySelector('[class*="empty"], [class*="EmptyDashboard"]');
-      const noTrackersMessage = this.findTextContent(['no trackers', 'get started', 'create your first tracker']);
-      const createTrackerCTA = document.querySelector('button[class*="create"], a[href*="tracker"]');
-      
+      const emptyStateContainer = document.querySelector(
+        '[class*="empty"], [class*="EmptyDashboard"]'
+      );
+      const noTrackersMessage = this.findTextContent([
+        'no trackers',
+        'get started',
+        'create your first tracker',
+      ]);
+      const createTrackerCTA = document.querySelector(
+        'button[class*="create"], a[href*="tracker"]'
+      );
+
       // Check for illustration or icon
-      const hasIllustration = document.querySelector('[class*="illustration"], [class*="icon"], svg, img[class*="empty"]');
-      
+      const hasIllustration = document.querySelector(
+        '[class*="illustration"], [class*="icon"], svg, img[class*="empty"]'
+      );
+
       // Verify accessibility
       const hasProperHeading = document.querySelector('h1, h2, h3, h4, h5, h6');
-      const hasAriaLabels = emptyStateContainer?.getAttribute('aria-label') || 
-                           emptyStateContainer?.getAttribute('role');
+      const hasAriaLabels =
+        emptyStateContainer?.getAttribute('aria-label') ||
+        emptyStateContainer?.getAttribute('role');
 
       const executionTime = performance.now() - startTime;
 
@@ -156,14 +167,24 @@ export class EmptyStateTestRunner {
     try {
       // Simulate tracker with no habits
       await this.simulateEmptyHabitsState();
-      
+
       // Look for empty state elements specific to no habits
-      const emptyHabitsMessage = this.findTextContent(['no habits', 'add your first habit', 'start tracking']);
-      const createHabitCTA = document.querySelector('button[class*="habit"], button[class*="add"], a[href*="habit"]');
-      
+      const emptyHabitsMessage = this.findTextContent([
+        'no habits',
+        'add your first habit',
+        'start tracking',
+      ]);
+      const createHabitCTA = document.querySelector(
+        'button[class*="habit"], button[class*="add"], a[href*="habit"]'
+      );
+
       // Check for motivational content
-      const motivationalContent = this.findTextContent(['build habits', 'reach your goals', 'get started']);
-      
+      const motivationalContent = this.findTextContent([
+        'build habits',
+        'reach your goals',
+        'get started',
+      ]);
+
       // Check for onboarding hints
       const onboardingHints = this.findTextContent(['tip:', 'suggestion:', 'try creating']);
 
@@ -206,10 +227,16 @@ export class EmptyStateTestRunner {
     try {
       // Simulate search with no results
       await this.simulateEmptySearchResults();
-      
+
       // Look for no results message
-      const noResultsMessage = this.findTextContent(['no results', 'no habits found', 'try different search']);
-      const clearSearchButton = document.querySelector('button[class*="clear"], button[aria-label*="clear"]');
+      const noResultsMessage = this.findTextContent([
+        'no results',
+        'no habits found',
+        'try different search',
+      ]);
+      const clearSearchButton = document.querySelector(
+        'button[class*="clear"], button[aria-label*="clear"]'
+      );
       const searchSuggestions = this.findTextContent(['try:', 'suggestions:', 'search tips']);
 
       const executionTime = performance.now() - startTime;
@@ -250,10 +277,16 @@ export class EmptyStateTestRunner {
     try {
       // Simulate filters with no matching results
       await this.simulateEmptyFilterResults();
-      
+
       // Look for no filter results message
-      const noFilterMessage = this.findTextContent(['no habits match', 'adjust filters', 'clear filters']);
-      const clearFiltersButton = document.querySelector('button[class*="clear"], button[class*="reset"]');
+      const noFilterMessage = this.findTextContent([
+        'no habits match',
+        'adjust filters',
+        'clear filters',
+      ]);
+      const clearFiltersButton = document.querySelector(
+        'button[class*="clear"], button[class*="reset"]'
+      );
 
       const executionTime = performance.now() - startTime;
 
@@ -292,12 +325,14 @@ export class EmptyStateTestRunner {
     try {
       // Simulate loading state
       await this.simulateLoadingState();
-      
+
       // Look for loading indicators
-      const loadingSpinner = document.querySelector('[class*="loading"], [class*="spinner"], .loading');
+      const loadingSpinner = document.querySelector(
+        '[class*="loading"], [class*="spinner"], .loading'
+      );
       const skeletonElements = document.querySelectorAll('[class*="skeleton"]');
       const loadingMessage = this.findTextContent(['loading', 'please wait', 'fetching']);
-      
+
       // Check for accessibility
       const hasAriaLive = document.querySelector('[aria-live], [role="status"]');
       const hasLoadingText = this.findTextContent(['loading habits', 'loading data']);
@@ -340,14 +375,22 @@ export class EmptyStateTestRunner {
     try {
       // Simulate error state
       await this.simulateErrorState();
-      
+
       // Look for error indicators
-      const errorMessage = this.findTextContent(['error', 'something went wrong', 'failed to load']);
+      const errorMessage = this.findTextContent([
+        'error',
+        'something went wrong',
+        'failed to load',
+      ]);
       const retryButton = document.querySelector('button[class*="retry"], button[class*="reload"]');
-      
+
       // Check for user-friendly messaging
-      const userFriendlyMessage = this.findTextContent(['try again', 'refresh the page', 'check connection']);
-      
+      const userFriendlyMessage = this.findTextContent([
+        'try again',
+        'refresh the page',
+        'check connection',
+      ]);
+
       // Check for accessibility
       const hasErrorRole = document.querySelector('[role="alert"], [aria-live="assertive"]');
 
@@ -391,12 +434,16 @@ export class EmptyStateTestRunner {
     try {
       // Simulate first visit (clean state)
       await this.simulateFirstVisit();
-      
+
       // Look for welcome messaging
       const welcomeMessage = this.findTextContent(['welcome', 'get started', 'habit tracker']);
-      const introContent = this.findTextContent(['track your habits', 'build better habits', 'reach your goals']);
+      const introContent = this.findTextContent([
+        'track your habits',
+        'build better habits',
+        'reach your goals',
+      ]);
       const primaryCTA = document.querySelector('button[class*="primary"], button[class*="cta"]');
-      
+
       // Check for onboarding hints
       const onboardingHints = this.findTextContent(['step 1', 'first', 'begin']);
       const progressIndicator = document.querySelector('[class*="progress"], [class*="step"]');
@@ -439,8 +486,10 @@ export class EmptyStateTestRunner {
 
     try {
       // Test the create tracker flow
-      const createTrackerButton = document.querySelector('button[class*="create"][class*="tracker"], button[aria-label*="create tracker"]');
-      
+      const createTrackerButton = document.querySelector(
+        'button[class*="create"][class*="tracker"], button[aria-label*="create tracker"]'
+      );
+
       if (!createTrackerButton) {
         return {
           testName: 'Create First Tracker',
@@ -452,12 +501,12 @@ export class EmptyStateTestRunner {
 
       // Simulate clicking create tracker
       await this.simulateClick(createTrackerButton as HTMLElement);
-      
+
       // Look for modal or form
       const modal = document.querySelector('[role="dialog"], .modal, [class*="modal"]');
       const form = document.querySelector('form[class*="tracker"], form[class*="create"]');
       const nameInput = document.querySelector('input[name*="name"], input[placeholder*="name"]');
-      
+
       // Check for form validation and guidance
       const helpText = this.findTextContent(['enter a name', 'tracker name', 'choose a name']);
       const submitButton = document.querySelector('button[type="submit"], button[class*="create"]');
@@ -500,8 +549,10 @@ export class EmptyStateTestRunner {
 
     try {
       // Test the create habit flow
-      const createHabitButton = document.querySelector('button[class*="create"][class*="habit"], button[aria-label*="create habit"], button[aria-label*="add habit"]');
-      
+      const createHabitButton = document.querySelector(
+        'button[class*="create"][class*="habit"], button[aria-label*="create habit"], button[aria-label*="add habit"]'
+      );
+
       if (!createHabitButton) {
         return {
           testName: 'Create First Habit',
@@ -513,22 +564,28 @@ export class EmptyStateTestRunner {
 
       // Simulate clicking create habit
       await this.simulateClick(createHabitButton as HTMLElement);
-      
+
       // Look for habit creation interface
       const modal = document.querySelector('[role="dialog"], .modal, [class*="modal"]');
       const form = document.querySelector('form[class*="habit"], form[class*="create"]');
-      
+
       // Check for required fields
-      const nameInput = document.querySelector('input[name*="name"], input[placeholder*="habit name"]');
-      const frequencySelect = document.querySelector('select[name*="frequency"], [class*="frequency"]');
-      
+      const nameInput = document.querySelector(
+        'input[name*="name"], input[placeholder*="habit name"]'
+      );
+      const frequencySelect = document.querySelector(
+        'select[name*="frequency"], [class*="frequency"]'
+      );
+
       // Check for optional enhancements
       const iconSelector = document.querySelector('[class*="icon"], [class*="emoji"]');
       const colorPicker = document.querySelector('input[type="color"], [class*="color"]');
-      
+
       // Check for form completion
       const submitButton = document.querySelector('button[type="submit"], button[class*="create"]');
-      const previewArea = document.querySelector('[class*="preview"], [class*="card"][class*="preview"]');
+      const previewArea = document.querySelector(
+        '[class*="preview"], [class*="card"][class*="preview"]'
+      );
 
       const executionTime = performance.now() - startTime;
 
@@ -572,12 +629,14 @@ export class EmptyStateTestRunner {
       const progressBar = document.querySelector('[class*="progress"], progress');
       const stepIndicator = document.querySelector('[class*="step"], [class*="wizard"]');
       const breadcrumbs = document.querySelector('[class*="breadcrumb"], nav[class*="step"]');
-      
+
       // Check for next/previous navigation
-      const nextButton = document.querySelector('button[class*="next"], button[aria-label*="next"]');
+      const nextButton = document.querySelector(
+        'button[class*="next"], button[aria-label*="next"]'
+      );
       const prevButton = document.querySelector('button[class*="prev"], button[class*="back"]');
       const skipOption = document.querySelector('button[class*="skip"], a[class*="skip"]');
-      
+
       // Check for contextual help
       const helpContent = this.findTextContent(['tip:', 'help:', 'learn more']);
       const tooltips = document.querySelectorAll('[title], [aria-describedby]');
@@ -596,7 +655,11 @@ export class EmptyStateTestRunner {
         return {
           testName: 'Onboarding Progression',
           passed: true,
-          details: `Onboarding provides ${hasProgressTracking ? 'progress tracking, ' : ''}${hasNavigation ? 'navigation, ' : ''}${hasFlexibility ? 'skip options, ' : ''}${providesHelp ? 'contextual help' : ''}`.replace(/, $/, ''),
+          details:
+            `Onboarding provides ${hasProgressTracking ? 'progress tracking, ' : ''}${hasNavigation ? 'navigation, ' : ''}${hasFlexibility ? 'skip options, ' : ''}${providesHelp ? 'contextual help' : ''}`.replace(
+              /, $/,
+              ''
+            ),
           executionTime,
         };
       } else {
@@ -623,21 +686,35 @@ export class EmptyStateTestRunner {
 
     try {
       // Look for help elements
-      const helpButton = document.querySelector('button[class*="help"], button[aria-label*="help"]');
-      const helpIcon = document.querySelector('[class*="help"], [title*="help"], [aria-label*="help"]');
+      const helpButton = document.querySelector(
+        'button[class*="help"], button[aria-label*="help"]'
+      );
+      const helpIcon = document.querySelector(
+        '[class*="help"], [title*="help"], [aria-label*="help"]'
+      );
       const tooltips = document.querySelectorAll('[title], [data-tooltip]');
-      
+
       // Check for guidance content
       const tips = this.findTextContent(['tip:', 'pro tip:', 'hint:']);
       const examples = this.findTextContent(['example:', 'e.g.', 'try:', 'sample:']);
-      const explanations = this.findTextContent(['this will help', 'this allows you', 'use this to']);
-      
+      const explanations = this.findTextContent([
+        'this will help',
+        'this allows you',
+        'use this to',
+      ]);
+
       // Check for documentation links
-      const learnMoreLinks = document.querySelectorAll('a[href*="help"], a[href*="docs"], a[class*="learn"]');
-      
+      const learnMoreLinks = document.querySelectorAll(
+        'a[href*="help"], a[href*="docs"], a[class*="learn"]'
+      );
+
       // Check for contextual guidance
-      const placeholderTexts = document.querySelectorAll('input[placeholder], textarea[placeholder]');
-      const fieldDescriptions = document.querySelectorAll('[aria-describedby], [class*="description"]');
+      const placeholderTexts = document.querySelectorAll(
+        'input[placeholder], textarea[placeholder]'
+      );
+      const fieldDescriptions = document.querySelectorAll(
+        '[aria-describedby], [class*="description"]'
+      );
 
       const executionTime = performance.now() - startTime;
 
@@ -647,13 +724,23 @@ export class EmptyStateTestRunner {
       const hasDocumentation = learnMoreLinks.length > 0;
       const hasContextualHelp = placeholderTexts.length > 0 || fieldDescriptions.length > 0;
 
-      const helpScore = [hasHelpAccess, hasInteractiveHelp, hasGuidanceContent, hasDocumentation, hasContextualHelp].filter(Boolean).length;
+      const helpScore = [
+        hasHelpAccess,
+        hasInteractiveHelp,
+        hasGuidanceContent,
+        hasDocumentation,
+        hasContextualHelp,
+      ].filter(Boolean).length;
 
       if (helpScore >= 2) {
         return {
           testName: 'Help and Guidance',
           passed: true,
-          details: `Help system provides ${helpScore}/5 features: ${hasHelpAccess ? 'help access, ' : ''}${hasInteractiveHelp ? 'tooltips, ' : ''}${hasGuidanceContent ? 'guidance content, ' : ''}${hasDocumentation ? 'documentation, ' : ''}${hasContextualHelp ? 'contextual help' : ''}`.replace(/, $/, ''),
+          details:
+            `Help system provides ${helpScore}/5 features: ${hasHelpAccess ? 'help access, ' : ''}${hasInteractiveHelp ? 'tooltips, ' : ''}${hasGuidanceContent ? 'guidance content, ' : ''}${hasDocumentation ? 'documentation, ' : ''}${hasContextualHelp ? 'contextual help' : ''}`.replace(
+              /, $/,
+              ''
+            ),
           executionTime,
         };
       } else {
@@ -681,21 +768,31 @@ export class EmptyStateTestRunner {
     try {
       // Simulate completing onboarding flow
       await this.simulateOnboardingCompletion();
-      
+
       // Look for completion indicators
-      const completionMessage = this.findTextContent(['congratulations', 'all set', 'you\'re ready', 'completed']);
+      const completionMessage = this.findTextContent([
+        'congratulations',
+        'all set',
+        "you're ready",
+        'completed',
+      ]);
       const successFeedback = this.findTextContent(['great job', 'well done', 'perfect']);
-      
+
       // Check for next steps
       const nextStepsContent = this.findTextContent(['next steps', 'now you can', 'start by']);
-      const dashboardButton = document.querySelector('button[class*="dashboard"], a[href*="dashboard"]');
-      
+      const dashboardButton = document.querySelector(
+        'button[class*="dashboard"], a[href*="dashboard"]'
+      );
+
       // Check for onboarding completion persistence
-      const onboardingComplete = localStorage.getItem('onboarding-complete') || 
-                                localStorage.getItem('first-visit') === 'false';
-      
+      const onboardingComplete =
+        localStorage.getItem('onboarding-complete') ||
+        localStorage.getItem('first-visit') === 'false';
+
       // Check that onboarding doesn't show again
-      const noOnboardingElements = !document.querySelector('[class*="onboarding"], [class*="welcome"][class*="modal"]');
+      const noOnboardingElements = !document.querySelector(
+        '[class*="onboarding"], [class*="welcome"][class*="modal"]'
+      );
 
       const executionTime = performance.now() - startTime;
 
@@ -756,7 +853,9 @@ export class EmptyStateTestRunner {
 
   private async simulateEmptyFilterResults(): Promise<void> {
     // Apply filters that would result in no matches
-    const frequencyFilter = document.querySelector('select[name*="frequency"]') as HTMLSelectElement;
+    const frequencyFilter = document.querySelector(
+      'select[name*="frequency"]'
+    ) as HTMLSelectElement;
     if (frequencyFilter) {
       frequencyFilter.value = 'NonExistentFrequency';
       frequencyFilter.dispatchEvent(new Event('change', { bubbles: true }));
@@ -797,21 +896,24 @@ export class EmptyStateTestRunner {
 
   private findTextContent(searchTerms: string[]): Element | null {
     const allElements = document.querySelectorAll('*');
-    
+
     for (const element of Array.from(allElements)) {
       const text = element.textContent?.toLowerCase() || '';
-      
+
       for (const term of searchTerms) {
         if (text.includes(term.toLowerCase())) {
           return element;
         }
       }
     }
-    
+
     return null;
   }
 
-  generateEmptyStateReport(emptyStateSuite: EmptyStateTestSuite, onboardingSuite: OnboardingTestSuite): string {
+  generateEmptyStateReport(
+    emptyStateSuite: EmptyStateTestSuite,
+    onboardingSuite: OnboardingTestSuite
+  ): string {
     let report = `# Empty States and Onboarding Flow Test Report\n\n`;
 
     // Summary
@@ -886,7 +988,7 @@ export class EmptyStateTestRunner {
       failedTests.forEach(test => {
         report += `### ${test.testName}\n`;
         report += `**Issue:** ${test.details}\n`;
-        
+
         // Provide specific recommendations
         if (test.testName.includes('No Trackers')) {
           report += `**Fix:** Add empty state with illustration, clear message, and prominent "Create Tracker" button.\n`;
@@ -911,7 +1013,7 @@ export class EmptyStateTestRunner {
         } else if (test.testName.includes('Completion')) {
           report += `**Fix:** Celebrate completion with positive feedback and clear next steps.\n`;
         }
-        
+
         report += `\n`;
       });
 

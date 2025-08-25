@@ -28,33 +28,36 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
     // Simulate API delay for demonstration
     await new Promise(resolve => setTimeout(resolve, 500));
     // Mock completion data for now - would use real API in production
-    const completions: HabitCompletion[] = Array.from({ length: Math.floor(Math.random() * days) }, (_, i) => ({
-      id: i + 1,
-      habitId,
-      completionDate: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      isCompleted: true,
-      currentStreak: 0,
-      longestStreak: 0,
-      updatedAt: new Date().toISOString(),
-    }));
+    const completions: HabitCompletion[] = Array.from(
+      { length: Math.floor(Math.random() * days) },
+      (_, i) => ({
+        id: i + 1,
+        habitId,
+        completionDate: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        isCompleted: true,
+        currentStreak: 0,
+        longestStreak: 0,
+        updatedAt: new Date().toISOString(),
+      })
+    );
 
     // Calculate stats
     const totalCompletions = completions.length;
     const completionRate = (totalCompletions / days) * 100;
-    
+
     // Calculate current streak
     let streak = 0;
-    const sortedCompletions = [...completions].sort((a, b) => 
-      new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime()
+    const sortedCompletions = [...completions].sort(
+      (a, b) => new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime()
     );
-    
+
     const today = new Date().toISOString().split('T')[0];
-    let currentDate = new Date(today);
-    
+    const currentDate = new Date(today);
+
     for (const completion of sortedCompletions) {
       const completionDate = completion.completionDate;
       const expectedDate = currentDate.toISOString().split('T')[0];
-      
+
       if (completionDate === expectedDate) {
         streak++;
         currentDate.setDate(currentDate.getDate() - 1);
@@ -71,13 +74,7 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
     };
   };
 
-  const {
-    elementRef,
-    data,
-    loading,
-    error,
-    hasBeenInView,
-  } = useLazyData<CompletionHistoryData>({
+  const { elementRef, data, loading, error, hasBeenInView } = useLazyData<CompletionHistoryData>({
     fetchData: fetchHistoryData,
     dependencies: [habitId, days],
     threshold: 0.2,
@@ -100,9 +97,7 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
 
   const renderError = () => (
     <div className={styles.error}>
-      <p className={styles.errorMessage}>
-        Failed to load completion history for {habitName}
-      </p>
+      <p className={styles.errorMessage}>Failed to load completion history for {habitName}</p>
       <button className={styles.retryButton} onClick={() => window.location.reload()}>
         Retry
       </button>
@@ -111,18 +106,18 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
 
   const renderHistory = (historyData: CompletionHistoryData) => {
     const { completions, streak, totalCompletions, completionRate } = historyData;
-    
+
     // Create calendar grid for last 30 days
     const calendarDays = [];
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days + 1);
-    
+
     for (let i = 0; i < days; i++) {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
       const dateString = date.toISOString().split('T')[0];
       const isCompleted = completions.some(c => c.completionDate === dateString);
-      
+
       calendarDays.push({
         date: dateString,
         isCompleted,
@@ -150,11 +145,11 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
             <span className={styles.statLabel}>Success Rate</span>
           </div>
         </div>
-        
+
         <div className={styles.calendar}>
           <h4 className={styles.calendarTitle}>Last {days} Days</h4>
           <div className={styles.calendarGrid}>
-            {calendarDays.map((day) => (
+            {calendarDays.map(day => (
               <div
                 key={day.date}
                 className={`${styles.calendarDay} ${
@@ -180,7 +175,7 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
           </span>
         </div>
       )}
-      
+
       {hasBeenInView && (
         <>
           {loading && renderLoadingSkeleton()}

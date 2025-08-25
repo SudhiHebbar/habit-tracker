@@ -26,7 +26,7 @@ export function VirtualScrollList<T>({
   const { visibleItems, totalHeight, offsetY } = useMemo(() => {
     const itemCount = items.length;
     const visibleCount = Math.ceil(containerHeight / itemHeight);
-    
+
     const startIndex = Math.floor(scrollTop / itemHeight);
     const endIndex = Math.min(startIndex + visibleCount + overscan * 2, itemCount);
     const visibleStartIndex = Math.max(0, startIndex - overscan);
@@ -58,10 +58,11 @@ export function VirtualScrollList<T>({
 
       if (key === 'ArrowDown' || key === 'ArrowUp') {
         e.preventDefault();
-        const newIndex = key === 'ArrowDown' 
-          ? Math.min(currentIndex + 1, items.length - 1)
-          : Math.max(currentIndex - 1, 0);
-        
+        const newIndex =
+          key === 'ArrowDown'
+            ? Math.min(currentIndex + 1, items.length - 1)
+            : Math.max(currentIndex - 1, 0);
+
         const newScrollTop = Math.max(0, newIndex * itemHeight - containerHeight / 2);
         element.scrollTo({ top: newScrollTop, behavior: 'smooth' });
       } else if (key === 'Home') {
@@ -92,13 +93,10 @@ export function VirtualScrollList<T>({
       style={{ height: containerHeight }}
       onScroll={handleScroll}
       tabIndex={0}
-      role="grid"
-      aria-label="Virtual scrollable list"
+      role='grid'
+      aria-label='Virtual scrollable list'
     >
-      <div
-        className={styles.virtualScrollContent}
-        style={{ height: totalHeight }}
-      >
+      <div className={styles.virtualScrollContent} style={{ height: totalHeight }}>
         <div
           className={styles.virtualScrollViewport}
           style={{
@@ -110,7 +108,7 @@ export function VirtualScrollList<T>({
               key={index}
               className={styles.virtualScrollItem}
               style={{ height: itemHeight }}
-              role="gridcell"
+              role='gridcell'
             >
               {renderItem(item, index)}
             </div>

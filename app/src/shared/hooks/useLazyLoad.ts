@@ -27,7 +27,7 @@ export function useLazyLoad<T extends HTMLElement = HTMLDivElement>(
       ([entry]) => {
         const inView = entry.isIntersecting;
         setIsInView(inView);
-        
+
         if (inView && !hasBeenInView) {
           setHasBeenInView(true);
         }
@@ -81,7 +81,7 @@ export function useLazyData<T, E extends HTMLElement = HTMLDivElement>({
 
   const fetchDataCallback = useCallback(async () => {
     if (!enabled || hasFetched.current) return;
-    
+
     setLoading(true);
     setError(null);
     hasFetched.current = true;

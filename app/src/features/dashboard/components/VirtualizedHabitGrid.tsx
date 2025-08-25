@@ -49,11 +49,11 @@ export const VirtualizedHabitGrid: React.FC<VirtualizedHabitGridProps> = ({
   // Render a row of habit cards
   const renderHabitRow = (row: Habit[], rowIndex: number) => {
     const completionDate = getCompletionDate();
-    
+
     return (
       <div key={rowIndex} className={styles.habitRow}>
-        <Grid columns="auto" gap="medium" responsive>
-          {row.map((habit) => (
+        <Grid columns='auto' gap='medium' responsive>
+          {row.map(habit => (
             <div key={habit.id} className={styles.gridItem}>
               <HabitCard
                 habit={habit}
@@ -110,8 +110,8 @@ export const VirtualizedHabitGrid: React.FC<VirtualizedHabitGridProps> = ({
   // For smaller lists, render normally without virtualization
   return (
     <div className={styles.habitGrid}>
-      <Grid columns="auto" gap="medium" responsive>
-        {habits.map((habit) => {
+      <Grid columns='auto' gap='medium' responsive>
+        {habits.map(habit => {
           const completionDate = getCompletionDate();
           return (
             <div key={habit.id} className={styles.gridItem}>
