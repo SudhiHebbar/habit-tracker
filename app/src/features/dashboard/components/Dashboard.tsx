@@ -4,13 +4,14 @@ import { DashboardHeader } from './DashboardHeader';
 import { TodayHeader } from './TodayHeader';
 import { ProgressOverview } from './ProgressOverview';
 import { QuickStats } from './QuickStats';
-import { HabitGrid } from './HabitGrid';
 import { HabitList } from './HabitList';
+import { VirtualizedHabitGrid } from './VirtualizedHabitGrid';
 import { ViewToggle } from './ViewToggle';
 import { EmptyDashboard } from './EmptyDashboard';
 import { FilterSortControls } from './FilterSortControls';
 import { useTrackers } from '../../tracker-management/hooks/useTrackers';
 import { useHabits } from '../../habit-management/hooks/useHabits';
+import { useDashboardPreferences } from '../../../shared/hooks/useLocalStorage';
 import type { Habit } from '../../habit-management/types/habit.types';
 import styles from '../../../../styles/features/dashboard/Dashboard.module.css';
 
@@ -22,12 +23,15 @@ interface DashboardProps {
 }
 
 export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
+  // Persistent preferences
+  const [preferences, setPreferences] = useDashboardPreferences();
+  
   // State management
   const [selectedTrackerId, setSelectedTrackerId] = useState<number | null>(
     initialTrackerId || null
   );
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [timeRange, setTimeRange] = useState<TimeRange>('daily');
+  const [viewMode, setViewMode] = useState<ViewMode>(preferences.viewMode);
+  const [timeRange, setTimeRange] = useState<TimeRange>(preferences.timeRange);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'name' | 'frequency' | 'completion'>('name');
   const [filterFrequency, setFilterFrequency] = useState<string>('');
@@ -113,6 +117,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
     setFilterFrequency('');
   };
 
+  // Handle view mode changes with persistence
+  const handleViewModeChange = (newViewMode: ViewMode) => {
+    setViewMode(newViewMode);
+    setPreferences(prev => ({ ...prev, viewMode: newViewMode }));
+  };
+
+  // Handle time range changes with persistence
+  const handleTimeRangeChange = (newTimeRange: TimeRange) => {
+    setTimeRange(newTimeRange);
+    setPreferences(prev => ({ ...prev, timeRange: newTimeRange }));
+  };
+
   // Handle habit completion
   const handleHabitComplete = async (_habit: Habit) => {
     // This would trigger the completion API
@@ -150,10 +166,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
         <div className={styles.content}>
           {/* Today's Date and Quick Actions */}
           <div className={styles.topSection}>
-            <TodayHeader timeRange={timeRange} onTimeRangeChange={setTimeRange} />
+            <TodayHeader timeRange={timeRange} onTimeRangeChange={handleTimeRangeChange} />
             <ViewToggle
               viewMode={viewMode}
-              onViewModeChange={setViewMode}
+              onViewModeChange={handleViewModeChange}
               disabled={window.innerWidth < 768}
             />
           </div>
@@ -202,11 +218,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
                 }}
               />
             ) : viewMode === 'grid' ? (
-              <HabitGrid
+              <VirtualizedHabitGrid
                 habits={filteredHabits}
                 onHabitComplete={handleHabitComplete}
                 loading={habitsLoading}
                 timeRange={timeRange}
+                containerHeight={600}
               />
             ) : (
               <HabitList

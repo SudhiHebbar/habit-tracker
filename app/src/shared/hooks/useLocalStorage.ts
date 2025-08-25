@@ -93,3 +93,30 @@ export function useLocalStorage<T>(
 
   return [storedValue, setValue, removeValue];
 }
+
+export const DASHBOARD_PREFERENCES_KEY = 'dashboard-preferences';
+
+export interface DashboardPreferences {
+  viewMode: 'grid' | 'list';
+  timeRange: 'daily' | 'weekly';
+  sortBy: 'name' | 'created' | 'completion';
+  sortDirection: 'asc' | 'desc';
+  showInactive: boolean;
+  gridColumns?: number;
+}
+
+export const defaultDashboardPreferences: DashboardPreferences = {
+  viewMode: 'grid',
+  timeRange: 'daily',
+  sortBy: 'name',
+  sortDirection: 'asc',
+  showInactive: false,
+  gridColumns: 3,
+};
+
+export function useDashboardPreferences() {
+  return useLocalStorage<DashboardPreferences>(
+    DASHBOARD_PREFERENCES_KEY,
+    defaultDashboardPreferences
+  );
+}

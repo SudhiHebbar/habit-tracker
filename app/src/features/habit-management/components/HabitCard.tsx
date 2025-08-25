@@ -1,6 +1,7 @@
 import React from 'react';
 import { CompletionCheckbox } from '../../habit-completion/components/CompletionCheckbox';
 import { useCompletion } from '../../habit-completion/hooks/useCompletion';
+import { LazyHabitHistory } from '../../dashboard/components/LazyHabitHistory';
 import type { Habit } from '../types/habit.types';
 import styles from './HabitCard.module.css';
 
@@ -11,6 +12,7 @@ interface HabitCardProps {
   onToggleComplete?: (habit: Habit) => void;
   isCompleted?: boolean;
   showStats?: boolean;
+  showHistory?: boolean;
   completionDate?: string; // Date for which to track completion (YYYY-MM-DD)
   className?: string;
 }
@@ -22,6 +24,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({
   onToggleComplete,
   isCompleted = false,
   showStats = true,
+  showHistory = false,
   completionDate,
   className = '',
 }) => {
@@ -169,10 +172,22 @@ export const HabitCard: React.FC<HabitCardProps> = ({
         )}
 
         {/* Last completion */}
-        {habit.lastCompletedDate && (
+        {habit.lastCompletedDate && !showHistory && (
           <div className={styles.lastCompletion}>
             <span className={styles.lastCompletionLabel}>Last completed:</span>
             <span className={styles.lastCompletionDate}>{formatDate(habit.lastCompletedDate)}</span>
+          </div>
+        )}
+
+        {/* Lazy-loaded completion history */}
+        {showHistory && (
+          <div className={styles.historySection}>
+            <LazyHabitHistory
+              habitId={habit.id}
+              habitName={habit.name}
+              days={30}
+              className={styles.habitHistory}
+            />
           </div>
         )}
       </div>
