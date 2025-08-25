@@ -30,6 +30,12 @@ npm test
 # Run tests once
 npm run test:run
 
+# Run tests with UI
+npm run test:ui
+
+# Run tests with coverage
+npm run test:coverage
+
 # Build for production
 npm run build
 
@@ -37,6 +43,7 @@ npm run build
 npm run lint           # Check ESLint rules
 npm run lint:fix       # Fix auto-fixable issues
 npm run format         # Format with Prettier
+npm run format:check   # Check formatting without fixing
 npm run type-check     # TypeScript type checking
 ```
 
@@ -127,9 +134,12 @@ Entities:
 ## Testing Strategy
 
 ### Frontend Testing
-- Component tests with React Testing Library
+- Component tests with React Testing Library and Vitest
 - Run `npm test` for watch mode during development
-- Use `npm run test:coverage` for coverage reports
+- Run `npm run test:run` for single test execution
+- Run `npm run test:coverage` for coverage reports
+- Run `npm run test:ui` for Vitest UI interface
+- E2E tests with Cypress: `cypress/e2e/` directory
 
 ### Backend Testing
 - Unit tests for controllers and services
@@ -170,11 +180,27 @@ Copy `app/.env.example` to `app/.env.local` and configure:
 - `VITE_SENTRY_DSN`: Sentry error tracking DSN
 - `VITE_ANALYTICS_ID`: Analytics service ID
 
+## Development Workflow
+
+### Running Both Frontend and Backend
+1. **Backend first**: `cd server && dotnet run --project HabitTracker.Api`
+2. **Frontend second**: `cd app && npm run dev`
+3. **Access**: Frontend at http://localhost:5173, Backend at http://localhost:5281
+
+### Single Test Execution
+- **Frontend specific test**: `cd app && npm run test:run -- --reporter=verbose [test-file-pattern]`
+- **Backend specific test**: `cd server && dotnet test --filter "FullyQualifiedName~[TestClassName]"`
+- **Single backend test method**: `cd server && dotnet test --filter "Method~[MethodName]"`
+
 ## Important Notes
 
 - Frontend uses Vite for fast development and hot module replacement
-- Backend uses Serilog for structured logging
-- CORS is pre-configured for local development
+- Backend uses Serilog for structured logging  
+- CORS is pre-configured for local development (ports 3000 and 5173)
 - Database migrations are managed through EF Core
 - Authentication is planned but not yet implemented
-- React Bits components are available for UI development
+- CSS Modules are configured with scoped naming: `[name]__[local]___[hash:base64:5]`
+- Import aliases configured: @/, @features/, @shared/, @styles/
+- Cypress E2E tests available for workflow testing
+- React Testing Library with Vitest for unit/component testing
+- FluentAssertions used for .NET test assertions
