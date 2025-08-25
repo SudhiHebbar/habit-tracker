@@ -1,8 +1,8 @@
-# Create Task based on the bug report.
+# Create Task based on the bug report or URL.
 
-## User Story File: $ARGUMENTS (Mandatory)
+## Bug report File | URL: $ARGUMENTS (Mandatory)
 
-As a Senior Software Engineer expert in Full Stack development read through the bug report,  design document (Artefacts/design.md) and current codebase to generate a task for the reported bug to implement fix with thorough research. Ensure context is passed to the AI agent to enable self-validation and iterative refinement. Read the feature file first to understand what needs to be created, how the examples provided help, and any other considerations.
+As a Senior Software Engineer expert in Full Stack development read through the bug report or shared URL,  design document (Artefacts/design.md) and current codebase to generate a task for the reported bug to implement fix with thorough research. Ensure context is passed to the AI agent to enable self-validation and iterative refinement. Read the feature file first to understand what needs to be created, how the examples provided help, and any other considerations.
 
 The AI agent only gets the context you are appending to the bug report and training data. Assume the AI agent has access to the codebase and the same knowledge cutoff as you, so its important that your research findings are included. The Agent has Websearch capabilities, so pass urls to documentation and examples.
 
