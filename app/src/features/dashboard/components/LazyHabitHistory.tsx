@@ -27,17 +27,15 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
   const fetchHistoryData = async (): Promise<CompletionHistoryData> => {
     // Simulate API delay for demonstration
     await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const endDate = new Date();
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-
     // Mock completion data for now - would use real API in production
     const completions: HabitCompletion[] = Array.from({ length: Math.floor(Math.random() * days) }, (_, i) => ({
       id: i + 1,
       habitId,
-      completedAt: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString(),
-      value: 1,
+      completionDate: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      isCompleted: true,
+      currentStreak: 0,
+      longestStreak: 0,
+      updatedAt: new Date().toISOString(),
     }));
 
     // Calculate stats
@@ -47,14 +45,14 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
     // Calculate current streak
     let streak = 0;
     const sortedCompletions = [...completions].sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
+      new Date(b.completionDate).getTime() - new Date(a.completionDate).getTime()
     );
     
     const today = new Date().toISOString().split('T')[0];
     let currentDate = new Date(today);
     
     for (const completion of sortedCompletions) {
-      const completionDate = completion.completedAt.split('T')[0];
+      const completionDate = completion.completionDate;
       const expectedDate = currentDate.toISOString().split('T')[0];
       
       if (completionDate === expectedDate) {
@@ -116,7 +114,6 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
     
     // Create calendar grid for last 30 days
     const calendarDays = [];
-    const endDate = new Date();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days + 1);
     
@@ -124,7 +121,7 @@ export const LazyHabitHistory: React.FC<LazyHabitHistoryProps> = ({
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
       const dateString = date.toISOString().split('T')[0];
-      const isCompleted = completions.some(c => c.completedAt.split('T')[0] === dateString);
+      const isCompleted = completions.some(c => c.completionDate === dateString);
       
       calendarDays.push({
         date: dateString,

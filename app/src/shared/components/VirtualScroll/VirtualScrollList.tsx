@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import styles from '../../../styles/shared/components/VirtualScrollList.module.css';
+import styles from '../../../../styles/shared/components/VirtualScrollList.module.css';
 
 interface VirtualScrollListProps<T> {
   items: T[];

@@ -19,7 +19,6 @@ export interface CompletionTrackingTestSuite {
 }
 
 export class IntegrationTestRunner {
-  private testResults: IntegrationTestResult[] = [];
   
   async runCompletionTrackingTests(): Promise<CompletionTrackingTestSuite> {
     console.log('Starting habit completion tracking integration tests...');
@@ -355,7 +354,7 @@ export class IntegrationTestRunner {
   }
   
   // Mock implementations for testing (these would interface with real APIs in production)
-  private async simulateHabitCreation(habit: any): Promise<boolean> {
+  private async simulateHabitCreation(_habit: any): Promise<boolean> {
     // Simulate API call to create habit
     await new Promise(resolve => setTimeout(resolve, 100));
     return true;
@@ -378,28 +377,28 @@ export class IntegrationTestRunner {
     return nameElement?.textContent?.includes(expectedHabit.name) ?? false;
   }
   
-  private async simulateCompletionToggle(habitId: number, date: string): Promise<boolean> {
+  private async simulateCompletionToggle(_habitId: number, _date: string): Promise<boolean> {
     // Simulate clicking completion checkbox
     await new Promise(resolve => setTimeout(resolve, 50));
     return true;
   }
   
-  private async getCompletionState(habitId: number, date: string): Promise<boolean> {
+  private async getCompletionState(_habitId: number, _date: string): Promise<boolean> {
     // Get current completion state for a habit on a specific date
     return Math.random() > 0.5; // Mock implementation
   }
   
-  private async simulateCompletionBatch(completions: any[]): Promise<void> {
+  private async simulateCompletionBatch(_completions: any[]): Promise<void> {
     // Simulate batch completion updates
     await new Promise(resolve => setTimeout(resolve, 200));
   }
   
-  private async getHabitStreak(habitId: number): Promise<number> {
+  private async getHabitStreak(_habitId: number): Promise<number> {
     // Get current streak for a habit
     return Math.floor(Math.random() * 10); // Mock implementation
   }
   
-  private async getHabitStatistics(habitId: number): Promise<any> {
+  private async getHabitStatistics(_habitId: number): Promise<any> {
     // Get habit statistics
     return {
       totalCompletions: Math.floor(Math.random() * 100),
@@ -419,7 +418,7 @@ export class IntegrationTestRunner {
     }));
   }
   
-  private async verifyDashboardSync(habitId: number, date: string): Promise<boolean> {
+  private async verifyDashboardSync(habitId: number, _date: string): Promise<boolean> {
     // Verify dashboard reflects completion state
     const checkbox = document.querySelector(`[data-habit-id="${habitId}"] input[type="checkbox"]`);
     return checkbox ? (checkbox as HTMLInputElement).checked : false;

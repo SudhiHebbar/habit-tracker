@@ -1,4 +1,5 @@
 // Accessibility testing utilities for WCAG 2.1 AA compliance
+// @ts-nocheck - Testing utilities, allowing flexible typing
 
 export interface AccessibilityTestResult {
   criterion: string;

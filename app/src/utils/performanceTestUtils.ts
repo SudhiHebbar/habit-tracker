@@ -37,7 +37,6 @@ const PERFORMANCE_THRESHOLDS = {
 export function generateTestHabits(count: number): any[] {
   const habits = [];
   const frequencies = ['Daily', 'Weekly', 'Monthly'];
-  const categories = ['Health', 'Productivity', 'Learning', 'Fitness', 'Mindfulness'];
   const colors = ['#6366F1', '#8B5CF6', '#EC4899', '#EF4444', '#F59E0B', '#10B981', '#06B6D4'];
   
   for (let i = 0; i < count; i++) {
@@ -250,7 +249,7 @@ export class PerformanceTestRunner {
   private stopLayoutShiftMonitoring(): void {
     if (this.observer) {
       this.observer.disconnect();
-      this.observer = undefined;
+      this.observer = undefined as any;
     }
   }
   

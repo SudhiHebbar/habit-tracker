@@ -92,17 +92,17 @@ export class ResponsiveTestRunner {
     const layout = await this.testLayout(breakpoint);
     const typography = await this.testTypography(breakpoint);
     const interactions = await this.testInteractions(breakpoint);
-    const performance = await this.testPerformance(breakpoint);
+    const performanceResult = await this.testPerformance(breakpoint);
     
     const renderTime = performance.now() - startTime;
-    performance.renderTime = renderTime;
+    performanceResult.renderTime = renderTime;
 
     // Calculate overall score
     const scores = [
       ...Object.values(layout),
       ...Object.values(typography),
       ...Object.values(interactions),
-      performance.layoutStable,
+      performanceResult.layoutStable,
     ];
     const overall = scores.filter(Boolean).length / scores.length >= 0.8;
 
@@ -111,7 +111,7 @@ export class ResponsiveTestRunner {
       layout,
       typography,
       interactions,
-      performance,
+      performance: performanceResult,
       overall,
     };
   }
@@ -154,7 +154,7 @@ export class ResponsiveTestRunner {
   }
 
   private async testLayout(breakpoint: Breakpoint) {
-    const { width, height } = breakpoint;
+    const { width, height: _height } = breakpoint;
     
     // Test header visibility
     const header = document.querySelector('header');
@@ -281,7 +281,7 @@ export class ResponsiveTestRunner {
     };
   }
 
-  private async testPerformance(breakpoint: Breakpoint) {
+  private async testPerformance(_breakpoint: Breakpoint) {
     const startTime = performance.now();
     
     // Force a reflow to measure layout performance

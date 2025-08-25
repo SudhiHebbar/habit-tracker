@@ -209,14 +209,12 @@ export class EmptyStateTestRunner {
       
       // Look for no results message
       const noResultsMessage = this.findTextContent(['no results', 'no habits found', 'try different search']);
-      const searchTerm = document.querySelector('input[type="search"]')?.getAttribute('value');
       const clearSearchButton = document.querySelector('button[class*="clear"], button[aria-label*="clear"]');
       const searchSuggestions = this.findTextContent(['try:', 'suggestions:', 'search tips']);
 
       const executionTime = performance.now() - startTime;
 
       const hasMessage = !!noResultsMessage;
-      const showsSearchTerm = !!searchTerm;
       const hasClearOption = !!clearSearchButton;
       const providesHelp = !!searchSuggestions;
 
@@ -256,13 +254,11 @@ export class EmptyStateTestRunner {
       // Look for no filter results message
       const noFilterMessage = this.findTextContent(['no habits match', 'adjust filters', 'clear filters']);
       const clearFiltersButton = document.querySelector('button[class*="clear"], button[class*="reset"]');
-      const activeFilters = document.querySelectorAll('[class*="filter"][class*="active"], [class*="applied"]');
 
       const executionTime = performance.now() - startTime;
 
       const hasMessage = !!noFilterMessage;
       const hasClearFilters = !!clearFiltersButton;
-      const showsActiveFilters = activeFilters.length > 0;
 
       if (hasMessage || hasClearFilters) {
         return {
@@ -348,7 +344,6 @@ export class EmptyStateTestRunner {
       // Look for error indicators
       const errorMessage = this.findTextContent(['error', 'something went wrong', 'failed to load']);
       const retryButton = document.querySelector('button[class*="retry"], button[class*="reload"]');
-      const errorIcon = document.querySelector('[class*="error"] svg, [class*="warning"]');
       
       // Check for user-friendly messaging
       const userFriendlyMessage = this.findTextContent(['try again', 'refresh the page', 'check connection']);

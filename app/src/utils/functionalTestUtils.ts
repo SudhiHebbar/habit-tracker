@@ -362,9 +362,6 @@ export class FunctionalTestRunner {
       const mobileForcesList = this.isListViewDisplayed();
 
       // Test that toggle is disabled on mobile
-      const viewToggle = document.querySelector('[class*="viewToggle"]');
-      const toggleDisabledOnMobile = viewToggle?.hasAttribute('disabled') || 
-                                   viewToggle?.getAttribute('aria-disabled') === 'true';
 
       const executionTime = performance.now() - startTime;
 
@@ -879,12 +876,12 @@ export class FunctionalTestRunner {
 
   private isGridViewDisplayed(): boolean {
     const gridContainer = document.querySelector('[class*="habitGrid"], [class*="grid"]');
-    return gridContainer !== null && gridContainer.offsetHeight > 0;
+    return gridContainer !== null && (gridContainer as HTMLElement).offsetHeight > 0;
   }
 
   private isListViewDisplayed(): boolean {
     const listContainer = document.querySelector('[class*="habitList"], [class*="list"]');
-    return listContainer !== null && listContainer.offsetHeight > 0;
+    return listContainer !== null && (listContainer as HTMLElement).offsetHeight > 0;
   }
 
   private getVisibleHabits(): Element[] {
@@ -904,7 +901,7 @@ export class FunctionalTestRunner {
   private verifyStatusFilter(habits: Element[], activeOnly: boolean): boolean {
     if (activeOnly) {
       return habits.every(habit => 
-        !habit.textContent?.toLowerCase().includes('inactive') ?? true
+        !(habit.textContent?.toLowerCase().includes('inactive') ?? false)
       );
     }
     return true; // All habits visible
