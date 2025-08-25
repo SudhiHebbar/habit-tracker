@@ -17,21 +17,12 @@ const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  const buttonClass = [
-    styles.button,
-    styles[variant],
-    size !== 'medium' && styles[size],
-    className,
-  ]
+  const buttonClass = [styles.button, styles[variant], size !== 'medium' && styles[size], className]
     .filter(Boolean)
     .join(' ');
 
   return (
-    <button 
-      className={buttonClass} 
-      disabled={disabled || loading} 
-      {...props}
-    >
+    <button className={buttonClass} disabled={disabled || loading} {...props}>
       {loading ? (
         <>
           <span style={{ opacity: 0.7 }}>Loading...</span>

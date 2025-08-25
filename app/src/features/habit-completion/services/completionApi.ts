@@ -8,7 +8,7 @@ import type {
   CompletionStatus,
   CompletionHistory,
   WeeklyCompletions,
-  CompletionStats
+  CompletionStats,
 } from '../types/completion.types';
 
 const COMPLETION_CACHE = new Map<string, { data: any; timestamp: number }>();
@@ -48,30 +48,27 @@ class CompletionApiService {
   ): Promise<HabitCompletion> {
     // Clear cache BEFORE making the call to ensure fresh data
     this.clearHabitCache(habitId);
-    
+
     const response = await api.post<HabitCompletion>(
       `/habits/${habitId}/completions/toggle`,
       request || {}
     );
-    
+
     // Clear cache again after the call to ensure no stale data
     this.clearHabitCache(habitId);
-    
+
     return response.data;
   }
 
-  async completeHabit(
-    habitId: number,
-    request: CompleteHabitRequest
-  ): Promise<HabitCompletion> {
+  async completeHabit(habitId: number, request: CompleteHabitRequest): Promise<HabitCompletion> {
     const response = await api.post<HabitCompletion>(
       `/habits/${habitId}/completions/complete`,
       request
     );
-    
+
     // Clear cache for this habit
     this.clearHabitCache(habitId);
-    
+
     return response.data;
   }
 
@@ -102,7 +99,7 @@ class CompletionApiService {
     forceRefresh: boolean = false
   ): Promise<CompletionStatus> {
     const cacheKey = this.getCacheKey(habitId, 'status', date);
-    
+
     if (!forceRefresh) {
       const cached = this.getFromCache<CompletionStatus>(cacheKey);
       if (cached) return cached;
@@ -117,44 +114,36 @@ class CompletionApiService {
     return response.data;
   }
 
-  async getCompletionHistory(
-    habitId: number,
-    page = 1,
-    pageSize = 30
-  ): Promise<CompletionHistory> {
+  async getCompletionHistory(habitId: number, page = 1, pageSize = 30): Promise<CompletionHistory> {
     const response = await api.get<CompletionHistory>(
       `/habits/${habitId}/completions/history?page=${page}&pageSize=${pageSize}`
     );
     return response.data;
   }
 
-  async getCompletionStats(habitId: number, forceRefresh: boolean = false): Promise<CompletionStats> {
+  async getCompletionStats(
+    habitId: number,
+    forceRefresh: boolean = false
+  ): Promise<CompletionStats> {
     const cacheKey = this.getCacheKey(habitId, 'stats');
-    
+
     if (!forceRefresh) {
       const cached = this.getFromCache<CompletionStats>(cacheKey);
       if (cached) return cached;
     }
 
-    const response = await api.get<CompletionStats>(
-      `/habits/${habitId}/completions/stats`
-    );
+    const response = await api.get<CompletionStats>(`/habits/${habitId}/completions/stats`);
 
     this.setCache(cacheKey, response.data);
     return response.data;
   }
 
-  async bulkToggleCompletions(
-    request: BulkCompletionRequest
-  ): Promise<BulkCompletionResponse> {
-    const response = await api.post<BulkCompletionResponse>(
-      '/completions/bulk',
-      request
-    );
-    
+  async bulkToggleCompletions(request: BulkCompletionRequest): Promise<BulkCompletionResponse> {
+    const response = await api.post<BulkCompletionResponse>('/completions/bulk', request);
+
     // Clear cache for all affected habits
     request.habitIds.forEach(habitId => this.clearHabitCache(habitId));
-    
+
     return response.data;
   }
 
@@ -183,11 +172,11 @@ class CompletionApiService {
         completionDate: request?.date || new Date().toISOString(),
         isCompleted: true, // Will be toggled
       };
-      
+
       if (request?.notes) {
         optimisticCompletion.notes = request.notes;
       }
-      
+
       onOptimisticUpdate(optimisticCompletion);
     }
 
@@ -211,7 +200,7 @@ class CompletionApiService {
     delay = 1000
   ): Promise<HabitCompletion> {
     let lastError: any;
-    
+
     for (let i = 0; i < maxRetries; i++) {
       try {
         return await this.toggleCompletion(habitId, request);
@@ -222,7 +211,7 @@ class CompletionApiService {
         }
       }
     }
-    
+
     throw lastError;
   }
 
@@ -234,7 +223,7 @@ class CompletionApiService {
     request?: ToggleCompletionRequest
   ): Promise<HabitCompletion> {
     const key = `toggle_${habitId}_${request?.date || 'today'}`;
-    
+
     if (this.pendingRequests.has(key)) {
       return this.pendingRequests.get(key)!;
     }

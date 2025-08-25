@@ -17,13 +17,13 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
   onClose,
   onSubmit,
   isUpdating = false,
-  error = null
+  error = null,
 }) => {
   const [formData, setFormData] = useState<UpdateTrackerDto>({
     name: '',
     description: '',
     isShared: false,
-    displayOrder: 0
+    displayOrder: 0,
   });
 
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
@@ -34,29 +34,32 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
         name: tracker.name,
         description: tracker.description || '',
         isShared: tracker.isShared,
-        displayOrder: tracker.displayOrder
+        displayOrder: tracker.displayOrder,
       });
     }
   }, [tracker]);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value, type } = e.target;
+      const checked = (e.target as HTMLInputElement).checked;
 
-    // Clear validation error for this field
-    if (validationErrors[name]) {
-      setValidationErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  }, [validationErrors]);
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value,
+      }));
+
+      // Clear validation error for this field
+      if (validationErrors[name]) {
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
+    },
+    [validationErrors]
+  );
 
   const validateForm = useCallback((): boolean => {
     const errors: Record<string, string> = {};
@@ -66,7 +69,8 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
     } else if (formData.name.length > 100) {
       errors.name = 'Tracker name must not exceed 100 characters';
     } else if (!/^[a-zA-Z0-9\s\-_]+$/.test(formData.name)) {
-      errors.name = 'Tracker name can only contain letters, numbers, spaces, hyphens, and underscores';
+      errors.name =
+        'Tracker name can only contain letters, numbers, spaces, hyphens, and underscores';
     }
 
     if (formData.description && formData.description.length > 500) {
@@ -77,67 +81,57 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
     return Object.keys(errors).length === 0;
   }, [formData]);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm() || !tracker) {
-      return;
-    }
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    try {
-      await onSubmit(tracker.id, formData);
-      onClose();
-    } catch (err) {
-      // Error is handled by parent component
-    }
-  }, [formData, tracker, validateForm, onSubmit, onClose]);
+      if (!validateForm() || !tracker) {
+        return;
+      }
+
+      try {
+        await onSubmit(tracker.id, formData);
+        onClose();
+      } catch (err) {
+        // Error is handled by parent component
+      }
+    },
+    [formData, tracker, validateForm, onSubmit, onClose]
+  );
 
   if (!isOpen || !tracker) {
     return null;
   }
 
   return (
-    <div 
-      className={styles.modalOverlay} 
-      onClick={onClose}
-      role="presentation"
-      aria-hidden="false"
-    >
-      <div 
-        className={styles.modal} 
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
+    <div className={styles.modalOverlay} onClick={onClose} role='presentation' aria-hidden='false'>
+      <div
+        className={styles.modal}
+        onClick={e => e.stopPropagation()}
+        role='dialog'
+        aria-modal='true'
+        aria-labelledby='modal-title'
       >
         <div className={styles.modalHeader}>
-          <h2 id="modal-title">Edit Tracker</h2>
-          <button 
-            className={styles.closeButton} 
-            onClick={onClose}
-            aria-label="Close modal"
-          >
+          <h2 id='modal-title'>Edit Tracker</h2>
+          <button className={styles.closeButton} onClick={onClose} aria-label='Close modal'>
             ×
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          {error && (
-            <div className={styles.errorAlert}>
-              {error}
-            </div>
-          )}
+          {error && <div className={styles.errorAlert}>{error}</div>}
 
           <div className={styles.formGroup}>
-            <label htmlFor="name">Name *</label>
+            <label htmlFor='name'>Name *</label>
             <input
-              type="text"
-              id="name"
-              name="name"
+              type='text'
+              id='name'
+              name='name'
               value={formData.name}
               onChange={handleInputChange}
               className={validationErrors.name ? styles.inputError : ''}
-              placeholder="Enter tracker name"
+              placeholder='Enter tracker name'
               disabled={isUpdating}
               autoFocus
             />
@@ -147,14 +141,14 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="description">Description</label>
+            <label htmlFor='description'>Description</label>
             <textarea
-              id="description"
-              name="description"
+              id='description'
+              name='description'
               value={formData.description}
               onChange={handleInputChange}
               className={validationErrors.description ? styles.inputError : ''}
-              placeholder="Enter tracker description (optional)"
+              placeholder='Enter tracker description (optional)'
               disabled={isUpdating}
               rows={3}
             />
@@ -166,8 +160,8 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
           <div className={styles.formGroup}>
             <label className={styles.checkboxLabel}>
               <input
-                type="checkbox"
-                name="isShared"
+                type='checkbox'
+                name='isShared'
                 checked={formData.isShared}
                 onChange={handleInputChange}
                 disabled={isUpdating}
@@ -178,18 +172,14 @@ export const EditTrackerModal: React.FC<EditTrackerModalProps> = ({
 
           <div className={styles.modalFooter}>
             <button
-              type="button"
+              type='button'
               className={styles.cancelButton}
               onClick={onClose}
               disabled={isUpdating}
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={isUpdating}
-            >
+            <button type='submit' className={styles.submitButton} disabled={isUpdating}>
               {isUpdating ? 'Updating...' : 'Update Tracker'}
             </button>
           </div>

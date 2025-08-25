@@ -17,7 +17,7 @@ describe('useCompletion', () => {
     toggleCompletion: vi.fn(),
     getOptimisticState: vi.fn(),
     hasOptimisticUpdate: vi.fn(),
-    isLoading: false
+    isLoading: false,
   };
 
   const mockStatus: CompletionStatus = {
@@ -26,7 +26,7 @@ describe('useCompletion', () => {
     isCompleted: false,
     currentStreak: 2,
     longestStreak: 5,
-    lastCompletedDate: '2024-01-14'
+    lastCompletedDate: '2024-01-14',
   };
 
   const mockStats: CompletionStats = {
@@ -34,13 +34,13 @@ describe('useCompletion', () => {
     totalCompletions: 10,
     completionRate: 75.5,
     currentStreak: 2,
-    longestStreak: 5
+    longestStreak: 5,
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-    
+
     mockUseOptimisticCompletion.mockReturnValue(mockOptimisticHook);
     mockCompletionApi.getCompletionStatus = vi.fn();
     mockCompletionApi.getCompletionStats = vi.fn();
@@ -96,7 +96,7 @@ describe('useCompletion', () => {
     expect(result.current.error).toEqual(error);
     expect(result.current.status).toBeNull();
     expect(consoleSpy).toHaveBeenCalledWith('Failed to fetch completion status:', error);
-    
+
     consoleSpy.mockRestore();
   });
 
@@ -110,7 +110,7 @@ describe('useCompletion', () => {
       completionDate: '2024-01-15' as any,
       isCompleted: true,
       currentStreak: 3,
-      longestStreak: 5
+      longestStreak: 5,
     };
 
     // Mock optimistic success callback
@@ -120,7 +120,7 @@ describe('useCompletion', () => {
         if (onSuccess) {
           onSuccess(completedResult);
         }
-      })
+      }),
     }));
 
     const { result } = renderHook(() => useCompletion({ habitId: 1 }));
@@ -152,7 +152,7 @@ describe('useCompletion', () => {
       completionDate: '2024-01-15' as any,
       isCompleted: true,
       currentStreak: 3,
-      longestStreak: 5
+      longestStreak: 5,
     };
 
     mockUseOptimisticCompletion.mockImplementation(({ onSuccess }) => ({
@@ -161,7 +161,7 @@ describe('useCompletion', () => {
         if (onSuccess) {
           onSuccess(completedResult);
         }
-      })
+      }),
     }));
 
     const { result } = renderHook(() => useCompletion({ habitId: 1 }));
@@ -187,7 +187,11 @@ describe('useCompletion', () => {
 
     // Should call refresh with force flag
     await waitFor(() => {
-      expect(mockCompletionApi.getCompletionStatus).toHaveBeenCalledWith(1, expect.any(String), true);
+      expect(mockCompletionApi.getCompletionStatus).toHaveBeenCalledWith(
+        1,
+        expect.any(String),
+        true
+      );
       expect(mockCompletionApi.getCompletionStats).toHaveBeenCalledWith(1, true);
     });
   });
@@ -203,7 +207,7 @@ describe('useCompletion', () => {
       completionDate: '2024-01-15' as any,
       isCompleted: true,
       currentStreak: 3,
-      longestStreak: 5
+      longestStreak: 5,
     };
 
     mockUseOptimisticCompletion.mockImplementation(({ onSuccess }) => ({
@@ -212,13 +216,15 @@ describe('useCompletion', () => {
         if (onSuccess) {
           onSuccess(completedResult);
         }
-      })
+      }),
     }));
 
-    const { result } = renderHook(() => useCompletion({ 
-      habitId: 1, 
-      onToggleSuccess: mockOnToggleSuccess 
-    }));
+    const { result } = renderHook(() =>
+      useCompletion({
+        habitId: 1,
+        onToggleSuccess: mockOnToggleSuccess,
+      })
+    );
 
     await waitFor(() => {
       expect(result.current.status).toEqual(mockStatus);
@@ -240,10 +246,12 @@ describe('useCompletion', () => {
 
     mockOptimisticHook.toggleCompletion.mockRejectedValue(error);
 
-    const { result } = renderHook(() => useCompletion({ 
-      habitId: 1, 
-      onToggleError: mockOnToggleError 
-    }));
+    const { result } = renderHook(() =>
+      useCompletion({
+        habitId: 1,
+        onToggleError: mockOnToggleError,
+      })
+    );
 
     await waitFor(() => {
       expect(result.current.status).toEqual(mockStatus);
@@ -372,13 +380,16 @@ describe('useCompletion', () => {
     mockCompletionApi.getCompletionStatus.mockResolvedValue(mockStatus);
     mockCompletionApi.getCompletionStats.mockResolvedValue(mockStats);
 
-    const { rerender } = renderHook(
-      ({ habitId }) => useCompletion({ habitId }),
-      { initialProps: { habitId: 1 } }
-    );
+    const { rerender } = renderHook(({ habitId }) => useCompletion({ habitId }), {
+      initialProps: { habitId: 1 },
+    });
 
     await waitFor(() => {
-      expect(mockCompletionApi.getCompletionStatus).toHaveBeenCalledWith(1, expect.any(String), false);
+      expect(mockCompletionApi.getCompletionStatus).toHaveBeenCalledWith(
+        1,
+        expect.any(String),
+        false
+      );
     });
 
     mockCompletionApi.getCompletionStatus.mockClear();
@@ -387,7 +398,11 @@ describe('useCompletion', () => {
     rerender({ habitId: 2 });
 
     await waitFor(() => {
-      expect(mockCompletionApi.getCompletionStatus).toHaveBeenCalledWith(2, expect.any(String), false);
+      expect(mockCompletionApi.getCompletionStatus).toHaveBeenCalledWith(
+        2,
+        expect.any(String),
+        false
+      );
       expect(mockCompletionApi.getCompletionStats).toHaveBeenCalledWith(2, false);
     });
   });
@@ -402,7 +417,7 @@ describe('useCompletion', () => {
       completionDate: '2024-01-15' as any,
       isCompleted: true,
       currentStreak: 3,
-      longestStreak: 5
+      longestStreak: 5,
     };
 
     mockUseOptimisticCompletion.mockImplementation(({ onSuccess }) => ({
@@ -411,7 +426,7 @@ describe('useCompletion', () => {
         if (onSuccess) {
           onSuccess(completedResult);
         }
-      })
+      }),
     }));
 
     const { result } = renderHook(() => useCompletion({ habitId: 1 }));
@@ -440,7 +455,7 @@ describe('useCompletion', () => {
       completionDate: '2024-01-15' as any,
       isCompleted: false,
       currentStreak: 0,
-      longestStreak: 5
+      longestStreak: 5,
     };
 
     mockUseOptimisticCompletion.mockImplementation(({ onSuccess }) => ({
@@ -449,7 +464,7 @@ describe('useCompletion', () => {
         if (onSuccess) {
           onSuccess(uncompletedResult);
         }
-      })
+      }),
     }));
 
     const { result } = renderHook(() => useCompletion({ habitId: 1 }));

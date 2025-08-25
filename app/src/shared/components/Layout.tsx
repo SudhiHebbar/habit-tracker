@@ -12,23 +12,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className={styles.layout}>
         <header className={styles.header}>
           <div className={styles.headerContent}>
-            <a href="/" className={styles.logo}>
+            <a href='/' className={styles.logo}>
               Habit Tracker
             </a>
             <nav>
               <ul className={styles.navigation}>
                 <li>
-                  <a href="/dashboard" className={styles.navigationLink}>
+                  <a href='/dashboard' className={styles.navigationLink}>
                     Dashboard
                   </a>
                 </li>
                 <li>
-                  <a href="/habits" className={styles.navigationLink}>
+                  <a href='/habits' className={styles.navigationLink}>
                     Habits
                   </a>
                 </li>
                 <li>
-                  <a href="/settings" className={styles.navigationLink}>
+                  <a href='/settings' className={styles.navigationLink}>
                     Settings
                   </a>
                 </li>

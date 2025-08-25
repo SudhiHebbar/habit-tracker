@@ -28,7 +28,7 @@ const FadeText: React.FC<FadeTextProps> = ({
   }, [delay]);
 
   return (
-    <div 
+    <div
       className={`${styles.fadeText} ${isVisible ? styles.visible : ''} ${className}`}
       style={{
         transitionDuration: `${duration}ms`,

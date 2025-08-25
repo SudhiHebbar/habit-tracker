@@ -1,4 +1,12 @@
-import { useState, useCallback, useContext, createContext, useRef, useEffect, type ReactNode } from 'react';
+import {
+  useState,
+  useCallback,
+  useContext,
+  createContext,
+  useRef,
+  useEffect,
+  type ReactNode,
+} from 'react';
 import type { Habit } from '../types/habit.types';
 
 interface EditSession {
@@ -44,7 +52,7 @@ const useStandaloneEditMode = () => {
     isEditModeActive: false,
     activeEditSessions: new Map(),
     pendingChanges: new Map(),
-    isDirty: false
+    isDirty: false,
   });
 
   const sessionTimeoutRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
@@ -56,11 +64,11 @@ const useStandaloneEditMode = () => {
     setState(prev => {
       const newSessions = new Map(prev.activeEditSessions);
       const now = Date.now();
-      
+
       newSessions.set(habitId, {
         habitId,
         startTime: now,
-        lastModified: now
+        lastModified: now,
       });
 
       // Clear any existing timeout
@@ -78,7 +86,7 @@ const useStandaloneEditMode = () => {
       return {
         ...prev,
         isEditModeActive: true,
-        activeEditSessions: newSessions
+        activeEditSessions: newSessions,
       };
     });
   }, []);
@@ -87,7 +95,7 @@ const useStandaloneEditMode = () => {
     setState(prev => {
       const newSessions = new Map(prev.activeEditSessions);
       const newChanges = new Map(prev.pendingChanges);
-      
+
       newSessions.delete(habitId);
       newChanges.delete(habitId);
 
@@ -103,48 +111,51 @@ const useStandaloneEditMode = () => {
         isEditModeActive: newSessions.size > 0,
         activeEditSessions: newSessions,
         pendingChanges: newChanges,
-        isDirty: newChanges.size > 0
+        isDirty: newChanges.size > 0,
       };
     });
   }, []);
 
-  const updatePendingChanges = useCallback((habitId: string, changes: Partial<Habit>) => {
-    setState(prev => {
-      const newChanges = new Map(prev.pendingChanges);
-      const newSessions = new Map(prev.activeEditSessions);
-      
-      // Merge with existing pending changes
-      const existingChanges = newChanges.get(habitId) || {};
-      newChanges.set(habitId, { ...existingChanges, ...changes });
+  const updatePendingChanges = useCallback(
+    (habitId: string, changes: Partial<Habit>) => {
+      setState(prev => {
+        const newChanges = new Map(prev.pendingChanges);
+        const newSessions = new Map(prev.activeEditSessions);
 
-      // Update session last modified time
-      const session = newSessions.get(habitId);
-      if (session) {
-        newSessions.set(habitId, {
-          ...session,
-          lastModified: Date.now()
-        });
+        // Merge with existing pending changes
+        const existingChanges = newChanges.get(habitId) || {};
+        newChanges.set(habitId, { ...existingChanges, ...changes });
 
-        // Reset timeout
-        const existingTimeout = sessionTimeoutRef.current.get(habitId);
-        if (existingTimeout) {
-          clearTimeout(existingTimeout);
+        // Update session last modified time
+        const session = newSessions.get(habitId);
+        if (session) {
+          newSessions.set(habitId, {
+            ...session,
+            lastModified: Date.now(),
+          });
+
+          // Reset timeout
+          const existingTimeout = sessionTimeoutRef.current.get(habitId);
+          if (existingTimeout) {
+            clearTimeout(existingTimeout);
+          }
+
+          const timeout = setTimeout(() => {
+            exitEditMode(habitId);
+          }, SESSION_TIMEOUT);
+          sessionTimeoutRef.current.set(habitId, timeout);
         }
-        
-        const timeout = setTimeout(() => {
-          exitEditMode(habitId);
-        }, SESSION_TIMEOUT);
-        sessionTimeoutRef.current.set(habitId, timeout);
-      }
 
-      return {
-        ...prev,
-        activeEditSessions: newSessions,
-        pendingChanges: newChanges,
-        isDirty: true
-      };
-    });
-  }, [exitEditMode]);
+        return {
+          ...prev,
+          activeEditSessions: newSessions,
+          pendingChanges: newChanges,
+          isDirty: true,
+        };
+      });
+    },
+    [exitEditMode]
+  );
 
   const clearPendingChanges = useCallback((habitId: string) => {
     setState(prev => {
@@ -154,26 +165,35 @@ const useStandaloneEditMode = () => {
       return {
         ...prev,
         pendingChanges: newChanges,
-        isDirty: newChanges.size > 0
+        isDirty: newChanges.size > 0,
       };
     });
   }, []);
 
-  const isHabitBeingEdited = useCallback((habitId: string) => {
-    return state.activeEditSessions.has(habitId);
-  }, [state.activeEditSessions]);
+  const isHabitBeingEdited = useCallback(
+    (habitId: string) => {
+      return state.activeEditSessions.has(habitId);
+    },
+    [state.activeEditSessions]
+  );
 
-  const getPendingChanges = useCallback((habitId: string) => {
-    return state.pendingChanges.get(habitId);
-  }, [state.pendingChanges]);
+  const getPendingChanges = useCallback(
+    (habitId: string) => {
+      return state.pendingChanges.get(habitId);
+    },
+    [state.pendingChanges]
+  );
 
   const hasUnsavedChanges = useCallback(() => {
     return state.isDirty;
   }, [state.isDirty]);
 
-  const getEditSession = useCallback((habitId: string) => {
-    return state.activeEditSessions.get(habitId);
-  }, [state.activeEditSessions]);
+  const getEditSession = useCallback(
+    (habitId: string) => {
+      return state.activeEditSessions.get(habitId);
+    },
+    [state.activeEditSessions]
+  );
 
   // Cleanup timeouts on unmount
   useEffect(() => {
@@ -192,7 +212,7 @@ const useStandaloneEditMode = () => {
     isHabitBeingEdited,
     getPendingChanges,
     hasUnsavedChanges,
-    getEditSession
+    getEditSession,
   };
 };
 
@@ -204,11 +224,7 @@ interface EditModeProviderProps {
 export const EditModeProvider = ({ children }: EditModeProviderProps) => {
   const editMode = useStandaloneEditMode();
 
-  return (
-    <EditModeContext.Provider value={editMode}>
-      {children}
-    </EditModeContext.Provider>
-  );
+  return <EditModeContext.Provider value={editMode}>{children}</EditModeContext.Provider>;
 };
 
 // Hook for conflict detection and resolution
@@ -216,61 +232,77 @@ export const useEditConflicts = () => {
   const { state, exitEditMode } = useEditMode();
   const [conflicts, setConflicts] = useState<Map<string, EditSession[]>>(new Map());
 
-  const detectConflict = useCallback((habitId: string, otherSession: EditSession) => {
-    const currentSession = state.activeEditSessions.get(habitId);
-    
-    if (currentSession && otherSession.userId && currentSession.startTime < otherSession.startTime) {
+  const detectConflict = useCallback(
+    (habitId: string, otherSession: EditSession) => {
+      const currentSession = state.activeEditSessions.get(habitId);
+
+      if (
+        currentSession &&
+        otherSession.userId &&
+        currentSession.startTime < otherSession.startTime
+      ) {
+        setConflicts(prev => {
+          const newConflicts = new Map(prev);
+          const existingConflicts = newConflicts.get(habitId) || [];
+          newConflicts.set(habitId, [...existingConflicts, otherSession]);
+          return newConflicts;
+        });
+        return true;
+      }
+
+      return false;
+    },
+    [state.activeEditSessions]
+  );
+
+  const resolveConflict = useCallback(
+    (habitId: string, resolution: 'keepLocal' | 'takeRemote' | 'merge') => {
       setConflicts(prev => {
         const newConflicts = new Map(prev);
-        const existingConflicts = newConflicts.get(habitId) || [];
-        newConflicts.set(habitId, [...existingConflicts, otherSession]);
+
+        switch (resolution) {
+          case 'keepLocal':
+            // Keep current changes, ignore remote
+            newConflicts.delete(habitId);
+            break;
+          case 'takeRemote':
+            // Discard local changes, exit edit mode
+            exitEditMode(habitId);
+            newConflicts.delete(habitId);
+            break;
+          case 'merge':
+            // Implement merge logic (placeholder)
+            newConflicts.delete(habitId);
+            break;
+        }
+
         return newConflicts;
       });
-      return true;
-    }
-    
-    return false;
-  }, [state.activeEditSessions]);
+    },
+    [exitEditMode]
+  );
 
-  const resolveConflict = useCallback((habitId: string, resolution: 'keepLocal' | 'takeRemote' | 'merge') => {
-    setConflicts(prev => {
-      const newConflicts = new Map(prev);
-      
-      switch (resolution) {
-        case 'keepLocal':
-          // Keep current changes, ignore remote
-          newConflicts.delete(habitId);
-          break;
-        case 'takeRemote':
-          // Discard local changes, exit edit mode
-          exitEditMode(habitId);
-          newConflicts.delete(habitId);
-          break;
-        case 'merge':
-          // Implement merge logic (placeholder)
-          newConflicts.delete(habitId);
-          break;
+  const getConflicts = useCallback(
+    (habitId: string) => {
+      return conflicts.get(habitId) || [];
+    },
+    [conflicts]
+  );
+
+  const hasConflicts = useCallback(
+    (habitId?: string) => {
+      if (habitId) {
+        return conflicts.has(habitId);
       }
-      
-      return newConflicts;
-    });
-  }, [exitEditMode]);
-
-  const getConflicts = useCallback((habitId: string) => {
-    return conflicts.get(habitId) || [];
-  }, [conflicts]);
-
-  const hasConflicts = useCallback((habitId?: string) => {
-    if (habitId) {
-      return conflicts.has(habitId);
-    }
-    return conflicts.size > 0;
-  }, [conflicts]);
+      return conflicts.size > 0;
+    },
+    [conflicts]
+  );
 
   return {
     detectConflict,
     resolveConflict,
     getConflicts,
-    hasConflicts
+    hasConflicts,
   };
 };

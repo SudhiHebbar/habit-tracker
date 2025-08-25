@@ -17,7 +17,7 @@ export const TrackerSelector: React.FC<TrackerSelectorProps> = ({
   onSelect,
   onCreate,
   placeholder = 'Select a tracker',
-  isLoading = false
+  isLoading = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -62,19 +62,17 @@ export const TrackerSelector: React.FC<TrackerSelectorProps> = ({
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         disabled={isLoading}
-        aria-haspopup="listbox"
+        aria-haspopup='listbox'
         aria-expanded={isOpen}
       >
         <span className={styles.selectedValue}>
-          {isLoading ? 'Loading...' : (selectedTracker?.name || placeholder)}
+          {isLoading ? 'Loading...' : selectedTracker?.name || placeholder}
         </span>
-        <span className={`${styles.arrow} ${isOpen ? styles.arrowUp : ''}`}>
-          ▼
-        </span>
+        <span className={`${styles.arrow} ${isOpen ? styles.arrowUp : ''}`}>▼</span>
       </button>
 
       {isOpen && (
-        <div className={styles.dropdown} role="listbox">
+        <div className={styles.dropdown} role='listbox'>
           {trackers.length === 0 ? (
             <div className={styles.emptyState}>
               <p>No trackers available</p>
@@ -92,21 +90,19 @@ export const TrackerSelector: React.FC<TrackerSelectorProps> = ({
             </div>
           ) : (
             <>
-              {trackers.map((tracker) => (
+              {trackers.map(tracker => (
                 <button
                   key={tracker.id}
                   className={`${styles.dropdownItem} ${
                     selectedTracker?.id === tracker.id ? styles.selected : ''
                   }`}
                   onClick={() => handleSelect(tracker)}
-                  role="option"
+                  role='option'
                   aria-selected={selectedTracker?.id === tracker.id}
                 >
                   <span className={styles.trackerName}>{tracker.name}</span>
                   {tracker.habitCount > 0 && (
-                    <span className={styles.habitCount}>
-                      {tracker.habitCount} habits
-                    </span>
+                    <span className={styles.habitCount}>{tracker.habitCount} habits</span>
                   )}
                 </button>
               ))}

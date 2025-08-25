@@ -15,10 +15,7 @@ export const useEditHabit = (): UseEditHabitReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const editHabit = useCallback(async (
-    id: number, 
-    data: EditHabitRequest
-  ): Promise<any> => {
+  const editHabit = useCallback(async (id: number, data: EditHabitRequest): Promise<any> => {
     setLoading(true);
     setError(null);
 
@@ -35,10 +32,7 @@ export const useEditHabit = (): UseEditHabitReturn => {
     }
   }, []);
 
-  const deactivateHabit = useCallback(async (
-    id: number,
-    reason?: string
-  ): Promise<boolean> => {
+  const deactivateHabit = useCallback(async (id: number, reason?: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
 
@@ -82,6 +76,6 @@ export const useEditHabit = (): UseEditHabitReturn => {
     reactivateHabit,
     loading,
     error,
-    clearError
+    clearError,
   };
 };

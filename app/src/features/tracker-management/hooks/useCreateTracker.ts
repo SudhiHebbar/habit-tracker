@@ -11,7 +11,7 @@ export const useCreateTracker = () => {
     setIsCreating(true);
     setError(null);
     setCreatedTracker(null);
-    
+
     try {
       const tracker = await trackerApi.createTracker(data);
       setCreatedTracker(tracker);

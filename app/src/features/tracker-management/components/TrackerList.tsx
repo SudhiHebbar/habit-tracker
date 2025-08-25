@@ -20,7 +20,7 @@ export const TrackerList: React.FC<TrackerListProps> = ({
   onDelete,
   onSelect,
   isLoading = false,
-  error = null
+  error = null,
 }) => {
   if (isLoading) {
     return (
@@ -41,14 +41,16 @@ export const TrackerList: React.FC<TrackerListProps> = ({
   if (trackers.length === 0) {
     return (
       <div className={styles.emptyContainer}>
-        <p className={styles.emptyMessage}>No trackers found. Create your first tracker to get started!</p>
+        <p className={styles.emptyMessage}>
+          No trackers found. Create your first tracker to get started!
+        </p>
       </div>
     );
   }
 
   return (
     <div className={styles.trackerGrid}>
-      {trackers.map((tracker) => (
+      {trackers.map(tracker => (
         <TrackerCard
           key={tracker.id}
           tracker={tracker}

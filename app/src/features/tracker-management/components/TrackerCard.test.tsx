@@ -13,7 +13,7 @@ const mockTracker: Tracker = {
   updatedAt: '2024-01-01T00:00:00Z',
   isActive: true,
   displayOrder: 0,
-  habitCount: 5
+  habitCount: 5,
 };
 
 describe('TrackerCard Component', () => {
@@ -27,77 +27,77 @@ describe('TrackerCard Component', () => {
 
   it('renders tracker information correctly', () => {
     render(
-      <TrackerCard 
+      <TrackerCard
         tracker={mockTracker}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
       />
     );
-    
+
     expect(screen.getByText('Fitness Tracker')).toBeInTheDocument();
     expect(screen.getByText('Track my daily fitness habits')).toBeInTheDocument();
   });
 
   it('calls onEdit when edit button is clicked', () => {
     render(
-      <TrackerCard 
+      <TrackerCard
         tracker={mockTracker}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
       />
     );
-    
+
     const editButton = screen.getByRole('button', { name: /edit/i });
     fireEvent.click(editButton);
-    
+
     expect(mockOnEdit).toHaveBeenCalledWith(mockTracker);
   });
 
   it('calls onDelete when delete button is clicked', () => {
     render(
-      <TrackerCard 
+      <TrackerCard
         tracker={mockTracker}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
       />
     );
-    
+
     const deleteButton = screen.getByRole('button', { name: /delete/i });
     fireEvent.click(deleteButton);
-    
+
     expect(mockOnDelete).toHaveBeenCalledWith(mockTracker);
   });
 
   it('calls onSelect when card is clicked', () => {
     render(
-      <TrackerCard 
+      <TrackerCard
         tracker={mockTracker}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
       />
     );
-    
+
     const card = screen.getByRole('article');
     fireEvent.click(card);
-    
+
     expect(mockOnSelect).toHaveBeenCalledWith(mockTracker);
   });
 
   it('applies selected styles when isSelected is true', () => {
     render(
-      <TrackerCard 
+      <TrackerCard
         tracker={mockTracker}
         onEdit={mockOnEdit}
         onDelete={mockOnDelete}
         onSelect={mockOnSelect}
-        isSelected={true}
+        isSelected
       />
     );
-    
+
     const card = screen.getByRole('article');
     expect(card).toHaveClass('selected');
   });

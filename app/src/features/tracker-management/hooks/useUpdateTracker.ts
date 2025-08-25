@@ -11,7 +11,7 @@ export const useUpdateTracker = () => {
     setIsUpdating(true);
     setError(null);
     setUpdatedTracker(null);
-    
+
     try {
       const tracker = await trackerApi.updateTracker(id, data);
       setUpdatedTracker(tracker);

@@ -8,7 +8,7 @@ export const useDeleteTracker = () => {
   const deleteTracker = useCallback(async (id: number) => {
     setIsDeleting(true);
     setError(null);
-    
+
     try {
       await trackerApi.deleteTracker(id);
       return true;
@@ -24,7 +24,7 @@ export const useDeleteTracker = () => {
   const restoreTracker = useCallback(async (id: number) => {
     setIsDeleting(true);
     setError(null);
-    
+
     try {
       await trackerApi.restoreTracker(id);
       return true;

@@ -1,0 +1,74 @@
+.habitList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.listItem {
+  animation: slideInLeft 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+.listItem:nth-child(1) { animation-delay: 0ms; }
+.listItem:nth-child(2) { animation-delay: 50ms; }
+.listItem:nth-child(3) { animation-delay: 100ms; }
+.listItem:nth-child(4) { animation-delay: 150ms; }
+.listItem:nth-child(n+5) { animation-delay: 200ms; }
+
+.habitCard {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.habitCard:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* Animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .habitCard:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .habitList {
+    gap: 0.75rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .listItem {
+    animation: none;
+  }
+  
+  .habitCard {
+    transition: none;
+  }
+  
+  .habitCard:hover {
+    transform: none;
+  }
+}

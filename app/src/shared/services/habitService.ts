@@ -36,7 +36,10 @@ export const habitService = {
   },
 
   // Update an existing habit
-  updateHabit: async (id: string, habitData: UpdateHabitRequest): Promise<BaseApiResponse<Habit>> => {
+  updateHabit: async (
+    id: string,
+    habitData: UpdateHabitRequest
+  ): Promise<BaseApiResponse<Habit>> => {
     const response = await api.put<BaseApiResponse<Habit>>(`/habits/${id}`, habitData);
     return response.data;
   },
@@ -60,11 +63,11 @@ export const habitService = {
 export const habitEntryService = {
   // Get entries for a specific habit
   getHabitEntries: async (
-    habitId: string, 
+    habitId: string,
     params?: ApiQueryParams & { startDate?: string; endDate?: string }
   ): Promise<PaginatedApiResponse<HabitEntry>> => {
     const response = await api.get<PaginatedApiResponse<HabitEntry>>(
-      `/habits/${habitId}/entries`, 
+      `/habits/${habitId}/entries`,
       params
     );
     return response.data;
@@ -72,14 +75,15 @@ export const habitEntryService = {
 
   // Get entries for a specific date range (all habits)
   getEntriesForDateRange: async (
-    startDate: string, 
-    endDate: string, 
+    startDate: string,
+    endDate: string,
     params?: ApiQueryParams
   ): Promise<PaginatedApiResponse<HabitEntry>> => {
-    const response = await api.get<PaginatedApiResponse<HabitEntry>>(
-      '/entries', 
-      { ...params, startDate, endDate }
-    );
+    const response = await api.get<PaginatedApiResponse<HabitEntry>>('/entries', {
+      ...params,
+      startDate,
+      endDate,
+    });
     return response.data;
   },
 
@@ -96,7 +100,10 @@ export const habitEntryService = {
   },
 
   // Update a habit entry
-  updateEntry: async (id: string, entryData: UpdateHabitEntryRequest): Promise<BaseApiResponse<HabitEntry>> => {
+  updateEntry: async (
+    id: string,
+    entryData: UpdateHabitEntryRequest
+  ): Promise<BaseApiResponse<HabitEntry>> => {
     const response = await api.put<BaseApiResponse<HabitEntry>>(`/entries/${id}`, entryData);
     return response.data;
   },
@@ -108,18 +115,22 @@ export const habitEntryService = {
   },
 
   // Mark habit as completed for today
-  markCompleted: async (habitId: string, count: number = 1, note?: string): Promise<BaseApiResponse<HabitEntry>> => {
+  markCompleted: async (
+    habitId: string,
+    count: number = 1,
+    note?: string
+  ): Promise<BaseApiResponse<HabitEntry>> => {
     const today = new Date().toISOString().split('T')[0];
     const entryData: CreateHabitEntryRequest = {
       habitId,
       date: today,
       count,
     };
-    
+
     if (note) {
       entryData.note = note;
     }
-    
+
     const response = await api.post<BaseApiResponse<HabitEntry>>('/entries/complete', entryData);
     return response.data;
   },
@@ -142,16 +153,22 @@ export const habitStatsService = {
   },
 
   // Get streak information for a habit
-  getHabitStreak: async (habitId: string): Promise<BaseApiResponse<{
-    currentStreak: number;
-    longestStreak: number;
-    streakDates: string[];
-  }>> => {
-    const response = await api.get<BaseApiResponse<{
+  getHabitStreak: async (
+    habitId: string
+  ): Promise<
+    BaseApiResponse<{
       currentStreak: number;
       longestStreak: number;
       streakDates: string[];
-    }>>(`/habits/${habitId}/streak`);
+    }>
+  > => {
+    const response = await api.get<
+      BaseApiResponse<{
+        currentStreak: number;
+        longestStreak: number;
+        streakDates: string[];
+      }>
+    >(`/habits/${habitId}/streak`);
     return response.data;
   },
 };

@@ -31,7 +31,7 @@ export class ApiClient {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const config: RequestInit = createCorsRequestOptions({
       headers: {
         ...this.defaultHeaders,
@@ -42,14 +42,14 @@ export class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         const errorData = await this.parseErrorResponse(response);
         throw new Error(errorData.message || `HTTP Error: ${response.status}`);
       }
 
       const data = await response.json();
-      
+
       return {
         data,
         status: response.status,
@@ -80,7 +80,10 @@ export class ApiClient {
   }
 
   // HTTP Methods
-  async get<T = unknown>(endpoint: string, params?: Record<string, string | number | undefined>): Promise<ApiResponse<T>> {
+  async get<T = unknown>(
+    endpoint: string,
+    params?: Record<string, string | number | undefined>
+  ): Promise<ApiResponse<T>> {
     let url = endpoint;
     if (params) {
       const searchParams = new URLSearchParams();
@@ -98,11 +101,11 @@ export class ApiClient {
     const requestOptions: RequestInit = {
       method: 'POST',
     };
-    
+
     if (data) {
       requestOptions.body = JSON.stringify(data);
     }
-    
+
     return this.request<T>(endpoint, requestOptions);
   }
 
@@ -110,11 +113,11 @@ export class ApiClient {
     const requestOptions: RequestInit = {
       method: 'PUT',
     };
-    
+
     if (data) {
       requestOptions.body = JSON.stringify(data);
     }
-    
+
     return this.request<T>(endpoint, requestOptions);
   }
 
@@ -122,11 +125,11 @@ export class ApiClient {
     const requestOptions: RequestInit = {
       method: 'PATCH',
     };
-    
+
     if (data) {
       requestOptions.body = JSON.stringify(data);
     }
-    
+
     return this.request<T>(endpoint, requestOptions);
   }
 
@@ -154,18 +157,14 @@ export const apiClient = new ApiClient();
 
 // Export type-safe API methods
 export const api = {
-  get: <T = unknown>(endpoint: string, params?: Record<string, string | number | undefined>) => 
+  get: <T = unknown>(endpoint: string, params?: Record<string, string | number | undefined>) =>
     apiClient.get<T>(endpoint, params),
-  
-  post: <T = unknown>(endpoint: string, data?: unknown) => 
-    apiClient.post<T>(endpoint, data),
-  
-  put: <T = unknown>(endpoint: string, data?: unknown) => 
-    apiClient.put<T>(endpoint, data),
-  
-  patch: <T = unknown>(endpoint: string, data?: unknown) => 
-    apiClient.patch<T>(endpoint, data),
-  
-  delete: <T = unknown>(endpoint: string) => 
-    apiClient.delete<T>(endpoint),
+
+  post: <T = unknown>(endpoint: string, data?: unknown) => apiClient.post<T>(endpoint, data),
+
+  put: <T = unknown>(endpoint: string, data?: unknown) => apiClient.put<T>(endpoint, data),
+
+  patch: <T = unknown>(endpoint: string, data?: unknown) => apiClient.patch<T>(endpoint, data),
+
+  delete: <T = unknown>(endpoint: string) => apiClient.delete<T>(endpoint),
 };

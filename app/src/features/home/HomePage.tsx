@@ -10,24 +10,20 @@ const HomePage = () => {
   return (
     <div className={styles.homePage}>
       <div className={styles.hero}>
-        <FadeText 
-          text="Welcome to Habit Tracker" 
+        <FadeText
+          text='Welcome to Habit Tracker'
           className={styles.title}
           delay={200}
           duration={800}
         />
-        <FadeText 
-          text="Build better habits, track your progress, achieve your goals" 
+        <FadeText
+          text='Build better habits, track your progress, achieve your goals'
           className={styles.subtitle}
           delay={600}
           duration={800}
         />
         <div className={styles.actions}>
-          <Button 
-            variant="primary" 
-            size="large" 
-            onClick={goToDashboard}
-          >
+          <Button variant='primary' size='large' onClick={goToDashboard}>
             Get Started
           </Button>
         </div>

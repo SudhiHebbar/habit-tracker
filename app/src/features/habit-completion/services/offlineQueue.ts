@@ -55,7 +55,7 @@ class OfflineQueueService {
       ...item,
       id: this.generateId(),
       timestamp: Date.now(),
-      retryCount: 0
+      retryCount: 0,
     };
 
     this.queue.push(queueItem);
@@ -97,12 +97,12 @@ class OfflineQueueService {
           this.dequeue(item.id);
         } catch (error) {
           console.error(`Failed to process queue item ${item.id}:`, error);
-          
+
           // Increment retry count
           const index = this.queue.findIndex(qi => qi.id === item.id);
           if (index !== -1) {
             this.queue[index].retryCount++;
-            
+
             // Remove if max retries exceeded
             if (this.queue[index].retryCount >= MAX_RETRY_COUNT) {
               console.error(`Max retries exceeded for item ${item.id}, removing from queue`);
@@ -140,7 +140,7 @@ class OfflineQueueService {
 
   subscribe(listener: (queue: OfflineQueueItem[]) => void): () => void {
     this.listeners.add(listener);
-    
+
     // Return unsubscribe function
     return () => {
       this.listeners.delete(listener);

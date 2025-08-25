@@ -1,8 +1,8 @@
 import { api } from '@shared/services/api';
-import type { 
-  TrackerSummary, 
-  TrackerWithStats, 
-  TrackerSwitchData 
+import type {
+  TrackerSummary,
+  TrackerWithStats,
+  TrackerSwitchData,
 } from '../types/trackerSwitching.types';
 
 export const trackerSwitchingApi = {
@@ -17,7 +17,9 @@ export const trackerSwitchingApi = {
   },
 
   async getTrackerSwitchData(trackerId: number): Promise<TrackerSwitchData> {
-    const response = await api.get<TrackerSwitchData>(`/tracker-switching/${trackerId}/switch-data`);
+    const response = await api.get<TrackerSwitchData>(
+      `/tracker-switching/${trackerId}/switch-data`
+    );
     return response.data;
   },
 
@@ -27,19 +29,19 @@ export const trackerSwitchingApi = {
 
   async getRecentTrackers(count: number = 5): Promise<TrackerSummary[]> {
     const response = await api.get<TrackerSummary[]>('/tracker-switching/recent', {
-      count
+      count,
     });
     return response.data;
   },
 
   async getFavoriteTrackers(count: number = 5): Promise<TrackerSummary[]> {
     const response = await api.get<TrackerSummary[]>('/tracker-switching/favorites', {
-      count
+      count,
     });
     return response.data;
   },
 
   async preloadTrackerData(trackerId: number): Promise<void> {
     await api.post(`/tracker-switching/${trackerId}/preload`);
-  }
+  },
 };

@@ -18,7 +18,7 @@ export const UndoDeleteToast: React.FC<UndoDeleteToastProps> = ({
   onUndoComplete,
   onTimeout,
   onClose,
-  timeoutDuration = 5
+  timeoutDuration = 5,
 }) => {
   const [timeLeft, setTimeLeft] = useState(timeoutDuration);
   const [isUndoing, setIsUndoing] = useState(false);
@@ -85,19 +85,12 @@ export const UndoDeleteToast: React.FC<UndoDeleteToastProps> = ({
     <div className={`${styles.toast} ${isVisible ? styles.visible : ''}`}>
       <div className={styles.content}>
         <div className={styles.habitInfo}>
-          <div 
-            className={styles.habitColor} 
-            style={{ backgroundColor: habit.color }}
-          />
+          <div className={styles.habitColor} style={{ backgroundColor: habit.color }} />
           <div className={styles.textContent}>
             <div className={styles.message}>
               <strong>{habit.name}</strong> was deleted
             </div>
-            {error && (
-              <div className={styles.errorText}>
-                Failed to undo: {error}
-              </div>
-            )}
+            {error && <div className={styles.errorText}>Failed to undo: {error}</div>}
           </div>
         </div>
 
@@ -118,16 +111,14 @@ export const UndoDeleteToast: React.FC<UndoDeleteToastProps> = ({
           </button>
 
           <div className={styles.timer}>
-            {!isUndoing && timeLeft > 0 && (
-              <span className={styles.timeText}>{timeLeft}s</span>
-            )}
+            {!isUndoing && timeLeft > 0 && <span className={styles.timeText}>{timeLeft}s</span>}
           </div>
 
           <button
             className={styles.closeButton}
             onClick={handleClose}
             disabled={isUndoing}
-            aria-label="Close notification"
+            aria-label='Close notification'
           >
             ×
           </button>
@@ -136,11 +127,11 @@ export const UndoDeleteToast: React.FC<UndoDeleteToastProps> = ({
 
       {/* Progress bar */}
       <div className={styles.progressBar}>
-        <div 
+        <div
           className={styles.progress}
-          style={{ 
+          style={{
             width: `${progressPercentage}%`,
-            transition: isUndoing ? 'none' : 'width 1s linear'
+            transition: isUndoing ? 'none' : 'width 1s linear',
           }}
         />
       </div>

@@ -14,7 +14,7 @@ export const SlideTransition: React.FC<SlideTransitionProps> = ({
   show,
   direction = 'left',
   duration = 300,
-  className = ''
+  className = '',
 }) => {
   const [shouldRender, setShouldRender] = useState(show);
   const [isVisible, setIsVisible] = useState(show);

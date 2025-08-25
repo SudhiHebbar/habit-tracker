@@ -33,7 +33,7 @@ export function useActiveTracker() {
         if (cached) {
           setActiveTracker(cached);
           setIsLoading(false);
-          
+
           // Record access in background
           trackerSwitchingApi.recordTrackerAccess(activeTrackerId).catch(console.error);
           return;
@@ -46,7 +46,7 @@ export function useActiveTracker() {
 
         // Record access
         await trackerSwitchingApi.recordTrackerAccess(activeTrackerId);
-        
+
         // Update last access time
         localStorage.setItem(LAST_ACCESS_KEY, new Date().toISOString());
       } catch (err) {
@@ -61,15 +61,18 @@ export function useActiveTracker() {
     loadTracker();
   }, [activeTrackerId]);
 
-  const switchTracker = useCallback(async (trackerId: number) => {
-    if (trackerId === activeTrackerId) {
-      return;
-    }
+  const switchTracker = useCallback(
+    async (trackerId: number) => {
+      if (trackerId === activeTrackerId) {
+        return;
+      }
 
-    // Update localStorage immediately for persistence
-    localStorage.setItem(ACTIVE_TRACKER_KEY, trackerId.toString());
-    setActiveTrackerId(trackerId);
-  }, [activeTrackerId]);
+      // Update localStorage immediately for persistence
+      localStorage.setItem(ACTIVE_TRACKER_KEY, trackerId.toString());
+      setActiveTrackerId(trackerId);
+    },
+    [activeTrackerId]
+  );
 
   const clearActiveTracker = useCallback(() => {
     localStorage.removeItem(ACTIVE_TRACKER_KEY);
@@ -109,6 +112,6 @@ export function useActiveTracker() {
     switchTracker,
     clearActiveTracker,
     refreshActiveTracker,
-    getLastAccessTime
+    getLastAccessTime,
   };
 }

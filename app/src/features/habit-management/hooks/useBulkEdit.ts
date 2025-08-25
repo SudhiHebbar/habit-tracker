@@ -26,217 +26,226 @@ export const useBulkEdit = () => {
   const [state, setState] = useState<BulkEditState>({
     isLoading: false,
     error: null,
-    progress: null
+    progress: null,
   });
 
-  const updateProgress = useCallback((
-    completed: number, 
-    total: number, 
-    failed: number, 
-    current?: string
-  ) => {
-    setState(prev => ({
-      ...prev,
-      progress: { completed, total, failed, current }
-    }));
-  }, []);
+  const updateProgress = useCallback(
+    (completed: number, total: number, failed: number, current?: string) => {
+      setState(prev => ({
+        ...prev,
+        progress: { completed, total, failed, current },
+      }));
+    },
+    []
+  );
 
-  const bulkEditHabits = useCallback(async (
-    habits: Habit[],
-    updates: Partial<UpdateHabitRequest>,
-    onProgress?: (completed: number, total: number, current: string) => void
-  ): Promise<BulkEditResult> => {
-    setState({
-      isLoading: true,
-      error: null,
-      progress: { total: habits.length, completed: 0, failed: 0 }
-    });
+  const bulkEditHabits = useCallback(
+    async (
+      habits: Habit[],
+      updates: Partial<UpdateHabitRequest>,
+      onProgress?: (completed: number, total: number, current: string) => void
+    ): Promise<BulkEditResult> => {
+      setState({
+        isLoading: true,
+        error: null,
+        progress: { total: habits.length, completed: 0, failed: 0 },
+      });
 
-    const results: BulkEditResult['results'] = [];
-    let completed = 0;
-    let failed = 0;
+      const results: BulkEditResult['results'] = [];
+      let completed = 0;
+      let failed = 0;
 
-    try {
-      for (const habit of habits) {
-        try {
-          updateProgress(completed, habits.length, failed, habit.name);
-          onProgress?.(completed, habits.length, habit.name);
+      try {
+        for (const habit of habits) {
+          try {
+            updateProgress(completed, habits.length, failed, habit.name);
+            onProgress?.(completed, habits.length, habit.name);
 
-          await habitApi.updateHabit(habit.id, updates as UpdateHabitRequest);
-          
-          results.push({
-            habitId: habit.id.toString(),
-            success: true
-          });
-          completed++;
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          results.push({
-            habitId: habit.id.toString(),
-            success: false,
-            error: errorMessage
-          });
-          failed++;
+            await habitApi.updateHabit(habit.id, updates as UpdateHabitRequest);
+
+            results.push({
+              habitId: habit.id.toString(),
+              success: true,
+            });
+            completed++;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            results.push({
+              habitId: habit.id.toString(),
+              success: false,
+              error: errorMessage,
+            });
+            failed++;
+          }
+
+          updateProgress(completed, habits.length, failed);
         }
-        
-        updateProgress(completed, habits.length, failed);
+
+        setState({
+          isLoading: false,
+          error: failed > 0 ? `${failed} out of ${habits.length} habits failed to update` : null,
+          progress: { total: habits.length, completed, failed },
+        });
+
+        return {
+          success: failed === 0,
+          results,
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setState({
+          isLoading: false,
+          error: errorMessage,
+          progress: null,
+        });
+
+        return {
+          success: false,
+          results,
+        };
       }
+    },
+    [updateProgress]
+  );
 
+  const bulkDeactivateHabits = useCallback(
+    async (
+      habitIds: string[],
+      reason?: string,
+      onProgress?: (completed: number, total: number, current: string) => void
+    ): Promise<BulkEditResult> => {
       setState({
-        isLoading: false,
-        error: failed > 0 ? `${failed} out of ${habits.length} habits failed to update` : null,
-        progress: { total: habits.length, completed, failed }
+        isLoading: true,
+        error: null,
+        progress: { total: habitIds.length, completed: 0, failed: 0 },
       });
 
-      return {
-        success: failed === 0,
-        results
-      };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      setState({
-        isLoading: false,
-        error: errorMessage,
-        progress: null
-      });
+      const results: BulkEditResult['results'] = [];
+      let completed = 0;
+      let failed = 0;
 
-      return {
-        success: false,
-        results
-      };
-    }
-  }, [updateProgress]);
+      try {
+        for (const habitId of habitIds) {
+          try {
+            updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
+            onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
 
-  const bulkDeactivateHabits = useCallback(async (
-    habitIds: string[],
-    reason?: string,
-    onProgress?: (completed: number, total: number, current: string) => void
-  ): Promise<BulkEditResult> => {
-    setState({
-      isLoading: true,
-      error: null,
-      progress: { total: habitIds.length, completed: 0, failed: 0 }
-    });
+            await habitApi.deactivateHabit(Number(habitId), reason);
 
-    const results: BulkEditResult['results'] = [];
-    let completed = 0;
-    let failed = 0;
+            results.push({
+              habitId,
+              success: true,
+            });
+            completed++;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            results.push({
+              habitId,
+              success: false,
+              error: errorMessage,
+            });
+            failed++;
+          }
 
-    try {
-      for (const habitId of habitIds) {
-        try {
-          updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
-          onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
-
-          await habitApi.deactivateHabit(Number(habitId), reason);
-          
-          results.push({
-            habitId,
-            success: true
-          });
-          completed++;
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          results.push({
-            habitId,
-            success: false,
-            error: errorMessage
-          });
-          failed++;
+          updateProgress(completed, habitIds.length, failed);
         }
-        
-        updateProgress(completed, habitIds.length, failed);
+
+        setState({
+          isLoading: false,
+          error:
+            failed > 0 ? `${failed} out of ${habitIds.length} habits failed to deactivate` : null,
+          progress: { total: habitIds.length, completed, failed },
+        });
+
+        return {
+          success: failed === 0,
+          results,
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setState({
+          isLoading: false,
+          error: errorMessage,
+          progress: null,
+        });
+
+        return {
+          success: false,
+          results,
+        };
       }
+    },
+    [updateProgress]
+  );
 
+  const bulkActivateHabits = useCallback(
+    async (
+      habitIds: string[],
+      onProgress?: (completed: number, total: number, current: string) => void
+    ): Promise<BulkEditResult> => {
       setState({
-        isLoading: false,
-        error: failed > 0 ? `${failed} out of ${habitIds.length} habits failed to deactivate` : null,
-        progress: { total: habitIds.length, completed, failed }
+        isLoading: true,
+        error: null,
+        progress: { total: habitIds.length, completed: 0, failed: 0 },
       });
 
-      return {
-        success: failed === 0,
-        results
-      };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      setState({
-        isLoading: false,
-        error: errorMessage,
-        progress: null
-      });
+      const results: BulkEditResult['results'] = [];
+      let completed = 0;
+      let failed = 0;
 
-      return {
-        success: false,
-        results
-      };
-    }
-  }, [updateProgress]);
+      try {
+        for (const habitId of habitIds) {
+          try {
+            updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
+            onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
 
-  const bulkActivateHabits = useCallback(async (
-    habitIds: string[],
-    onProgress?: (completed: number, total: number, current: string) => void
-  ): Promise<BulkEditResult> => {
-    setState({
-      isLoading: true,
-      error: null,
-      progress: { total: habitIds.length, completed: 0, failed: 0 }
-    });
+            await habitApi.reactivateHabit(Number(habitId));
 
-    const results: BulkEditResult['results'] = [];
-    let completed = 0;
-    let failed = 0;
+            results.push({
+              habitId,
+              success: true,
+            });
+            completed++;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            results.push({
+              habitId,
+              success: false,
+              error: errorMessage,
+            });
+            failed++;
+          }
 
-    try {
-      for (const habitId of habitIds) {
-        try {
-          updateProgress(completed, habitIds.length, failed, `Habit ${habitId}`);
-          onProgress?.(completed, habitIds.length, `Habit ${habitId}`);
-
-          await habitApi.reactivateHabit(Number(habitId));
-          
-          results.push({
-            habitId,
-            success: true
-          });
-          completed++;
-        } catch (error) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          results.push({
-            habitId,
-            success: false,
-            error: errorMessage
-          });
-          failed++;
+          updateProgress(completed, habitIds.length, failed);
         }
-        
-        updateProgress(completed, habitIds.length, failed);
+
+        setState({
+          isLoading: false,
+          error:
+            failed > 0 ? `${failed} out of ${habitIds.length} habits failed to activate` : null,
+          progress: { total: habitIds.length, completed, failed },
+        });
+
+        return {
+          success: failed === 0,
+          results,
+        };
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        setState({
+          isLoading: false,
+          error: errorMessage,
+          progress: null,
+        });
+
+        return {
+          success: false,
+          results,
+        };
       }
-
-      setState({
-        isLoading: false,
-        error: failed > 0 ? `${failed} out of ${habitIds.length} habits failed to activate` : null,
-        progress: { total: habitIds.length, completed, failed }
-      });
-
-      return {
-        success: failed === 0,
-        results
-      };
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      setState({
-        isLoading: false,
-        error: errorMessage,
-        progress: null
-      });
-
-      return {
-        success: false,
-        results
-      };
-    }
-  }, [updateProgress]);
+    },
+    [updateProgress]
+  );
 
   const clearError = useCallback(() => {
     setState(prev => ({ ...prev, error: null }));
@@ -246,7 +255,7 @@ export const useBulkEdit = () => {
     setState({
       isLoading: false,
       error: null,
-      progress: null
+      progress: null,
     });
   }, []);
 
@@ -256,6 +265,6 @@ export const useBulkEdit = () => {
     bulkDeactivateHabits,
     bulkActivateHabits,
     clearError,
-    reset
+    reset,
   };
 };

@@ -15,7 +15,7 @@ export const TrackerCard: React.FC<TrackerCardProps> = ({
   onEdit,
   onDelete,
   onSelect,
-  isSelected = false
+  isSelected = false,
 }) => {
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -28,12 +28,12 @@ export const TrackerCard: React.FC<TrackerCardProps> = ({
   };
 
   return (
-    <div 
+    <div
       className={`${styles.trackerCard} ${isSelected ? styles.selected : ''}`}
       onClick={() => onSelect(tracker)}
-      role="button"
+      role='button'
       tabIndex={0}
-      onKeyPress={(e) => {
+      onKeyPress={e => {
         if (e.key === 'Enter' || e.key === ' ') {
           onSelect(tracker);
         }
@@ -41,15 +41,11 @@ export const TrackerCard: React.FC<TrackerCardProps> = ({
     >
       <div className={styles.cardHeader}>
         <h3 className={styles.trackerName}>{tracker.name}</h3>
-        {tracker.isShared && (
-          <span className={styles.sharedBadge}>Shared</span>
-        )}
+        {tracker.isShared && <span className={styles.sharedBadge}>Shared</span>}
       </div>
-      
-      {tracker.description && (
-        <p className={styles.trackerDescription}>{tracker.description}</p>
-      )}
-      
+
+      {tracker.description && <p className={styles.trackerDescription}>{tracker.description}</p>}
+
       <div className={styles.cardStats}>
         <span className={styles.habitCount}>
           {tracker.habitCount} {tracker.habitCount === 1 ? 'habit' : 'habits'}
@@ -58,7 +54,7 @@ export const TrackerCard: React.FC<TrackerCardProps> = ({
           Created {new Date(tracker.createdAt).toLocaleDateString()}
         </span>
       </div>
-      
+
       <div className={styles.cardActions}>
         <button
           className={styles.editButton}

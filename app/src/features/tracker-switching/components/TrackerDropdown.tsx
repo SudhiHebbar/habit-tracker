@@ -17,7 +17,7 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
   recentTrackers = [],
   favoriteTrackers = [],
   onSelect,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,11 +30,12 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
   // Filter trackers based on search query
   const filteredTrackers = useMemo(() => {
     if (!searchQuery) return trackers;
-    
+
     const query = searchQuery.toLowerCase();
-    return trackers.filter(tracker => 
-      tracker.name.toLowerCase().includes(query) ||
-      tracker.description?.toLowerCase().includes(query)
+    return trackers.filter(
+      tracker =>
+        tracker.name.toLowerCase().includes(query) ||
+        tracker.description?.toLowerCase().includes(query)
     );
   }, [trackers, searchQuery]);
 
@@ -68,25 +69,21 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setHighlightedIndex(prev => 
-          prev < filteredTrackers.length - 1 ? prev + 1 : 0
-        );
+        setHighlightedIndex(prev => (prev < filteredTrackers.length - 1 ? prev + 1 : 0));
         break;
-      
+
       case 'ArrowUp':
         e.preventDefault();
-        setHighlightedIndex(prev => 
-          prev > 0 ? prev - 1 : filteredTrackers.length - 1
-        );
+        setHighlightedIndex(prev => (prev > 0 ? prev - 1 : filteredTrackers.length - 1));
         break;
-      
+
       case 'Enter':
         e.preventDefault();
         if (highlightedIndex >= 0 && highlightedIndex < filteredTrackers.length) {
           handleSelect(filteredTrackers[highlightedIndex].id);
         }
         break;
-      
+
       case 'Escape':
         e.preventDefault();
         setIsOpen(false);
@@ -99,14 +96,14 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
   const renderTrackerItem = (tracker: TrackerSummary, index: number) => {
     const isActive = tracker.id === activeTrackerId;
     const isHighlighted = index === highlightedIndex;
-    
+
     return (
       <div
         key={tracker.id}
         className={`${styles.trackerItem} ${isActive ? styles.active : ''} ${isHighlighted ? styles.highlighted : ''}`}
         onClick={() => handleSelect(tracker.id)}
         onMouseEnter={() => setHighlightedIndex(index)}
-        role="option"
+        role='option'
         aria-selected={isActive}
       >
         <div className={styles.trackerInfo}>
@@ -134,29 +131,27 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
         className={styles.dropdownTrigger}
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading}
-        aria-haspopup="listbox"
+        aria-haspopup='listbox'
         aria-expanded={isOpen}
       >
         <span className={styles.currentTracker}>
-          {isLoading ? 'Loading...' : (activeTracker?.name || 'Select a tracker')}
+          {isLoading ? 'Loading...' : activeTracker?.name || 'Select a tracker'}
         </span>
-        <span className={styles.dropdownIcon}>
-          {isOpen ? '▲' : '▼'}
-        </span>
+        <span className={styles.dropdownIcon}>{isOpen ? '▲' : '▼'}</span>
       </button>
 
       {isOpen && (
-        <div className={styles.dropdownMenu} role="listbox">
+        <div className={styles.dropdownMenu} role='listbox'>
           <div className={styles.searchContainer}>
             <input
               ref={searchInputRef}
-              type="text"
+              type='text'
               className={styles.searchInput}
-              placeholder="Search trackers..."
+              placeholder='Search trackers...'
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              aria-label="Search trackers"
+              aria-label='Search trackers'
             />
           </div>
 
@@ -165,16 +160,14 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
               {recentTrackers.length > 0 && (
                 <div className={styles.section}>
                   <div className={styles.sectionTitle}>Recent</div>
-                  {recentTrackers.map((tracker, index) => 
-                    renderTrackerItem(tracker, index)
-                  )}
+                  {recentTrackers.map((tracker, index) => renderTrackerItem(tracker, index))}
                 </div>
               )}
 
               {favoriteTrackers.length > 0 && (
                 <div className={styles.section}>
                   <div className={styles.sectionTitle}>Favorites</div>
-                  {favoriteTrackers.map((tracker, index) => 
+                  {favoriteTrackers.map((tracker, index) =>
                     renderTrackerItem(tracker, recentTrackers.length + index)
                   )}
                 </div>
@@ -188,9 +181,7 @@ export const TrackerDropdown: React.FC<TrackerDropdownProps> = ({
             {filteredTrackers.length === 0 ? (
               <div className={styles.noResults}>No trackers found</div>
             ) : (
-              filteredTrackers.map((tracker, index) => 
-                renderTrackerItem(tracker, index)
-              )
+              filteredTrackers.map((tracker, index) => renderTrackerItem(tracker, index))
             )}
           </div>
         </div>

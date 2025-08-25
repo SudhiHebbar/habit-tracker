@@ -1,7 +1,14 @@
-// Dashboard Components
-// Export all components from this feature
+// Dashboard Components Barrel Export
+export { Dashboard } from './Dashboard';
+export { DashboardHeader } from './DashboardHeader';
+export { TodayHeader } from './TodayHeader';
+export { ProgressOverview } from './ProgressOverview';
+export { QuickStats } from './QuickStats';
+export { HabitGrid } from './HabitGrid';
+export { HabitList } from './HabitList';
+export { ViewToggle } from './ViewToggle';
+export { EmptyDashboard } from './EmptyDashboard';
+export { FilterSortControls } from './FilterSortControls';
 
-// Example:
-// export { Dashboard } from './Dashboard';
-// export { StatsCard } from './StatsCard';
-// export { ProgressChart } from './ProgressChart';
+// Export types
+export type { ViewMode, TimeRange } from './Dashboard';

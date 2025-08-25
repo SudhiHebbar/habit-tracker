@@ -15,7 +15,7 @@ const deactivationReasons = [
   'No longer relevant',
   'Too difficult',
   'Changing goals',
-  'Other'
+  'Other',
 ];
 
 export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
@@ -23,7 +23,7 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
   habitName,
   onConfirm,
   onCancel,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [selectedReason, setSelectedReason] = useState('');
   const [customReason, setCustomReason] = useState('');
@@ -31,7 +31,7 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
 
   const handleConfirm = async () => {
     const reason = selectedReason === 'Other' ? customReason : selectedReason;
-    
+
     if (!reason.trim()) {
       setError('Please select or provide a reason');
       return;
@@ -59,13 +59,13 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
 
   return (
     <div className={styles.dialogOverlay} onClick={handleClose}>
-      <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.dialog} onClick={e => e.stopPropagation()}>
         <div className={styles.header}>
           <h3 className={styles.title}>Deactivate Habit</h3>
-          <button 
-            className={styles.closeButton} 
+          <button
+            className={styles.closeButton}
             onClick={handleClose}
-            aria-label="Close dialog"
+            aria-label='Close dialog'
             disabled={isLoading}
           >
             ×
@@ -74,15 +74,20 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
 
         <div className={styles.content}>
           <div className={styles.warningBox}>
-            <svg className={styles.warningIcon} viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            <svg className={styles.warningIcon} viewBox='0 0 20 20' fill='currentColor'>
+              <path
+                fillRule='evenodd'
+                d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z'
+                clipRule='evenodd'
+              />
             </svg>
             <div>
               <p className={styles.warningTitle}>
                 Are you sure you want to deactivate "{habitName}"?
               </p>
               <p className={styles.warningText}>
-                The habit will be hidden from your active list, but all your completion history will be preserved. You can reactivate it anytime.
+                The habit will be hidden from your active list, but all your completion history will
+                be preserved. You can reactivate it anytime.
               </p>
             </div>
           </div>
@@ -90,14 +95,14 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
           <div className={styles.reasonSection}>
             <label className={styles.label}>Reason for deactivation:</label>
             <div className={styles.reasonOptions}>
-              {deactivationReasons.map((reason) => (
+              {deactivationReasons.map(reason => (
                 <label key={reason} className={styles.radioLabel}>
                   <input
-                    type="radio"
-                    name="reason"
+                    type='radio'
+                    name='reason'
                     value={reason}
                     checked={selectedReason === reason}
-                    onChange={(e) => {
+                    onChange={e => {
                       setSelectedReason(e.target.value);
                       setError('');
                     }}
@@ -112,9 +117,9 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
               <div className={styles.customReasonBox}>
                 <textarea
                   className={styles.textarea}
-                  placeholder="Please specify your reason..."
+                  placeholder='Please specify your reason...'
                   value={customReason}
-                  onChange={(e) => {
+                  onChange={e => {
                     setCustomReason(e.target.value);
                     setError('');
                   }}
@@ -125,9 +130,7 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
               </div>
             )}
 
-            {error && (
-              <div className={styles.errorMessage}>{error}</div>
-            )}
+            {error && <div className={styles.errorMessage}>{error}</div>}
           </div>
 
           <div className={styles.infoBox}>
@@ -142,11 +145,7 @@ export const HabitDeactivateDialog: React.FC<HabitDeactivateDialogProps> = ({
         </div>
 
         <div className={styles.footer}>
-          <button
-            className={styles.cancelButton}
-            onClick={handleClose}
-            disabled={isLoading}
-          >
+          <button className={styles.cancelButton} onClick={handleClose} disabled={isLoading}>
             Cancel
           </button>
           <button

@@ -31,34 +31,36 @@ export function useTrackerHistory() {
     }
   }, [history]);
 
-  const addToHistory = useCallback((trackerId: number) => {
-    setHistory(prev => {
-      const now = Date.now();
-      const newEntry: HistoryEntry = { trackerId, timestamp: now };
-      
-      // If we're not at the end of history, remove everything after current position
-      let newHistory = currentIndex < prev.length - 1 
-        ? prev.slice(0, currentIndex + 1)
-        : [...prev];
-      
-      // Don't add duplicate consecutive entries
-      const lastEntry = newHistory[newHistory.length - 1];
-      if (lastEntry?.trackerId === trackerId) {
-        return prev;
-      }
-      
-      // Add new entry
-      newHistory.push(newEntry);
-      
-      // Limit history size
-      if (newHistory.length > MAX_HISTORY_SIZE) {
-        newHistory = newHistory.slice(-MAX_HISTORY_SIZE);
-      }
-      
-      setCurrentIndex(newHistory.length - 1);
-      return newHistory;
-    });
-  }, [currentIndex]);
+  const addToHistory = useCallback(
+    (trackerId: number) => {
+      setHistory(prev => {
+        const now = Date.now();
+        const newEntry: HistoryEntry = { trackerId, timestamp: now };
+
+        // If we're not at the end of history, remove everything after current position
+        let newHistory =
+          currentIndex < prev.length - 1 ? prev.slice(0, currentIndex + 1) : [...prev];
+
+        // Don't add duplicate consecutive entries
+        const lastEntry = newHistory[newHistory.length - 1];
+        if (lastEntry?.trackerId === trackerId) {
+          return prev;
+        }
+
+        // Add new entry
+        newHistory.push(newEntry);
+
+        // Limit history size
+        if (newHistory.length > MAX_HISTORY_SIZE) {
+          newHistory = newHistory.slice(-MAX_HISTORY_SIZE);
+        }
+
+        setCurrentIndex(newHistory.length - 1);
+        return newHistory;
+      });
+    },
+    [currentIndex]
+  );
 
   const canGoBack = useCallback(() => {
     return currentIndex > 0;
@@ -70,7 +72,7 @@ export function useTrackerHistory() {
 
   const goBack = useCallback(() => {
     if (!canGoBack()) return null;
-    
+
     const newIndex = currentIndex - 1;
     setCurrentIndex(newIndex);
     return history[newIndex]?.trackerId || null;
@@ -78,7 +80,7 @@ export function useTrackerHistory() {
 
   const goForward = useCallback(() => {
     if (!canGoForward()) return null;
-    
+
     const newIndex = currentIndex + 1;
     setCurrentIndex(newIndex);
     return history[newIndex]?.trackerId || null;
@@ -94,42 +96,48 @@ export function useTrackerHistory() {
     }
   }, []);
 
-  const getRecentTrackers = useCallback((count: number = 5): number[] => {
-    const uniqueTrackers = new Set<number>();
-    
-    // Start from the most recent and work backwards
-    for (let i = history.length - 1; i >= 0 && uniqueTrackers.size < count; i--) {
-      uniqueTrackers.add(history[i].trackerId);
-    }
-    
-    return Array.from(uniqueTrackers);
-  }, [history]);
+  const getRecentTrackers = useCallback(
+    (count: number = 5): number[] => {
+      const uniqueTrackers = new Set<number>();
 
-  const getMostVisited = useCallback((count: number = 5): { trackerId: number; visits: number }[] => {
-    const visitCounts = new Map<number, number>();
-    
-    history.forEach(entry => {
-      const current = visitCounts.get(entry.trackerId) || 0;
-      visitCounts.set(entry.trackerId, current + 1);
-    });
-    
-    return Array.from(visitCounts.entries())
-      .map(([trackerId, visits]) => ({ trackerId, visits }))
-      .sort((a, b) => b.visits - a.visits)
-      .slice(0, count);
-  }, [history]);
+      // Start from the most recent and work backwards
+      for (let i = history.length - 1; i >= 0 && uniqueTrackers.size < count; i--) {
+        uniqueTrackers.add(history[i].trackerId);
+      }
+
+      return Array.from(uniqueTrackers);
+    },
+    [history]
+  );
+
+  const getMostVisited = useCallback(
+    (count: number = 5): { trackerId: number; visits: number }[] => {
+      const visitCounts = new Map<number, number>();
+
+      history.forEach(entry => {
+        const current = visitCounts.get(entry.trackerId) || 0;
+        visitCounts.set(entry.trackerId, current + 1);
+      });
+
+      return Array.from(visitCounts.entries())
+        .map(([trackerId, visits]) => ({ trackerId, visits }))
+        .sort((a, b) => b.visits - a.visits)
+        .slice(0, count);
+    },
+    [history]
+  );
 
   const getHistoryStats = useCallback(() => {
     const uniqueTrackers = new Set(history.map(h => h.trackerId));
     const totalVisits = history.length;
     const averageVisitsPerTracker = totalVisits / (uniqueTrackers.size || 1);
-    
+
     return {
       totalVisits,
       uniqueTrackers: uniqueTrackers.size,
       averageVisitsPerTracker,
       currentPosition: currentIndex + 1,
-      historyLength: history.length
+      historyLength: history.length,
     };
   }, [history, currentIndex]);
 
@@ -144,6 +152,6 @@ export function useTrackerHistory() {
     clearHistory,
     getRecentTrackers,
     getMostVisited,
-    getHistoryStats
+    getHistoryStats,
   };
 }

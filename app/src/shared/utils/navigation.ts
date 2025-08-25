@@ -30,18 +30,18 @@ export const useAppNavigation = () => {
     goToSettings: () => navigate(ROUTES.SETTINGS),
     goBack: () => navigate(-1),
     goForward: () => navigate(1),
-    
+
     // Generic navigation
     navigateTo: (path: string, options?: { replace?: boolean; state?: unknown }) => {
       navigate(path, options);
     },
-    
+
     // Current route information
     currentPath: location.pathname,
     currentSearch: location.search,
     currentState: location.state,
     routeParams: params,
-    
+
     // Route checking utilities
     isHomePage: () => location.pathname === ROUTES.HOME,
     isDashboardPage: () => location.pathname === ROUTES.DASHBOARD,
@@ -55,27 +55,27 @@ export const useAppNavigation = () => {
  */
 export const useBreadcrumbs = () => {
   const { currentPath, routeParams } = useAppNavigation();
-  
+
   const breadcrumbs = [];
-  
+
   // Always include home
   breadcrumbs.push({ label: 'Home', path: ROUTES.HOME });
-  
+
   if (currentPath.startsWith('/dashboard')) {
     breadcrumbs.push({ label: 'Dashboard', path: ROUTES.DASHBOARD });
   } else if (currentPath.startsWith('/habits')) {
     breadcrumbs.push({ label: 'Habits', path: ROUTES.HABITS });
-    
+
     if (routeParams.id) {
-      breadcrumbs.push({ 
-        label: `Habit ${routeParams.id}`, 
-        path: ROUTES.HABIT_DETAIL(routeParams.id) 
+      breadcrumbs.push({
+        label: `Habit ${routeParams.id}`,
+        path: ROUTES.HABIT_DETAIL(routeParams.id),
       });
     }
   } else if (currentPath.startsWith('/settings')) {
     breadcrumbs.push({ label: 'Settings', path: ROUTES.SETTINGS });
   }
-  
+
   return breadcrumbs;
 };
 

@@ -18,7 +18,7 @@ export const TrackerSwitcher: React.FC<TrackerSwitcherProps> = ({
   showDropdown = true,
   showNavigation = true,
   showQuickSwitch = false,
-  onSwitch
+  onSwitch,
 }) => {
   const {
     activeTrackerId,
@@ -28,23 +28,17 @@ export const TrackerSwitcher: React.FC<TrackerSwitcherProps> = ({
     loadingSummaries,
     performSwitch,
     switchToNext,
-    switchToPrevious
+    switchToPrevious,
   } = useTrackerSwitching();
 
-  const {
-    addToHistory,
-    canGoBack,
-    canGoForward,
-    goBack,
-    goForward
-  } = useTrackerHistory();
+  const { addToHistory, canGoBack, canGoForward, goBack, goForward } = useTrackerHistory();
 
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Preload trackers
   useTrackerPreloading(trackerSummaries, activeTrackerId, {
     enabled: true,
-    priorityStrategy: 'recent'
+    priorityStrategy: 'recent',
   });
 
   // Add to history when tracker changes
@@ -56,14 +50,14 @@ export const TrackerSwitcher: React.FC<TrackerSwitcherProps> = ({
 
   const handleSwitch = async (trackerId: number) => {
     setIsTransitioning(true);
-    
+
     try {
       await performSwitch(trackerId, {
         animate: true,
         preload: true,
-        recordAccess: true
+        recordAccess: true,
       });
-      
+
       if (onSwitch) {
         onSwitch(trackerId);
       }
@@ -125,9 +119,7 @@ export const TrackerSwitcher: React.FC<TrackerSwitcherProps> = ({
         />
       )}
 
-      {isTransitioning && (
-        <div className={styles.transitionOverlay} aria-hidden="true" />
-      )}
+      {isTransitioning && <div className={styles.transitionOverlay} aria-hidden='true' />}
     </div>
   );
 };

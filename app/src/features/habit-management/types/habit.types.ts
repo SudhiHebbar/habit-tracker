@@ -16,7 +16,7 @@ export interface Habit {
   updatedAt: string;
   isActive: boolean;
   displayOrder: number;
-  
+
   // Computed properties from backend
   currentStreak?: number;
   longestStreak?: number;
@@ -233,28 +233,28 @@ export interface DeletionImpact {
   habitName: string;
   color: string;
   icon?: string;
-  
+
   // Completion impact data
   totalCompletions: number;
   completionsLast30Days: number;
   completionsLast7Days: number;
   lastCompletionDate?: string;
   firstCompletionDate?: string;
-  
+
   // Streak impact data
   currentStreak?: number;
   longestStreak?: number;
   streakStartDate?: string;
-  
+
   // Historical data preservation
   daysOfHistory: number;
   willPreserveHistory: boolean;
-  
+
   // Habit metadata
   habitCreatedAt: string;
   targetFrequency: string;
   targetCount: number;
-  
+
   // Impact warnings
   impactWarnings: string[];
   impactSeverity: 'Low' | 'Medium' | 'High';

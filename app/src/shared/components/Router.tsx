@@ -19,13 +19,15 @@ const NotFoundPage = lazy(() => import('../../features/404/NotFoundPage'));
  * Loading fallback component for lazy loaded pages
  */
 const PageLoader = () => (
-  <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '50vh'
-  }}>
-    <LoadingSpinner size="large" />
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '50vh',
+    }}
+  >
+    <LoadingSpinner size='large' />
   </div>
 );
 
@@ -40,21 +42,21 @@ const Router = () => {
           <Suspense fallback={<PageLoader />}>
             <Routes>
               {/* Home route */}
-              <Route path="/" element={<HomePage />} />
-              
+              <Route path='/' element={<HomePage />} />
+
               {/* Dashboard route */}
-              <Route path="/dashboard" element={<DashboardPage />} />
-              
+              <Route path='/dashboard' element={<DashboardPage />} />
+
               {/* Habits management routes */}
-              <Route path="/habits" element={<HabitsPage />} />
-              <Route path="/habits/:id" element={<HabitsPage />} />
-              
+              <Route path='/habits' element={<HabitsPage />} />
+              <Route path='/habits/:id' element={<HabitsPage />} />
+
               {/* Settings route */}
-              <Route path="/settings" element={<SettingsPage />} />
-              
+              <Route path='/settings' element={<SettingsPage />} />
+
               {/* 404 and catch-all routes */}
-              <Route path="/404" element={<NotFoundPage />} />
-              <Route path="*" element={<Navigate to="/404" replace />} />
+              <Route path='/404' element={<NotFoundPage />} />
+              <Route path='*' element={<Navigate to='/404' replace />} />
             </Routes>
           </Suspense>
         </Layout>

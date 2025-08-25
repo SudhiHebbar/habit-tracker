@@ -1,0 +1,218 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-background, #ffffff);
+}
+
+/* Header */
+.header {
+  background: var(--color-surface, #ffffff);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-primary, #6366F1);
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoIcon {
+  font-size: 1.5rem;
+}
+
+.logoText {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  align-items: center;
+}
+
+.navigationList {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigationLink {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  color: var(--color-text-secondary, #6b7280);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.navigationLink:hover {
+  background: var(--color-background-hover, #f3f4f6);
+  color: var(--color-text-primary, #1f2937);
+}
+
+.navigationLink:active,
+.navigationLink[aria-current="page"] {
+  background: var(--color-primary-light, #e0e7ff);
+  color: var(--color-primary, #6366F1);
+}
+
+/* Body */
+.body {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+.sidebar {
+  width: 240px;
+  background: var(--color-surface, #ffffff);
+  border-right: 1px solid var(--color-border, #e5e7eb);
+  padding: 1rem;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  min-height: calc(100vh - 64px - 80px); /* Header and footer heights */
+}
+
+/* Footer */
+.footer {
+  background: var(--color-surface, #ffffff);
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  margin-top: auto;
+}
+
+.footerContent {
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.footerText {
+  color: var(--color-text-tertiary, #9ca3af);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .layout {
+    background: var(--color-background-dark, #111827);
+  }
+
+  .header {
+    background: rgba(31, 41, 55, 0.95);
+    border-bottom-color: var(--color-border-dark, #374151);
+  }
+
+  .logo {
+    color: var(--color-primary-dark, #818cf8);
+  }
+
+  .navigationLink {
+    color: var(--color-text-secondary-dark, #9ca3af);
+  }
+
+  .navigationLink:hover {
+    background: var(--color-background-hover-dark, #374151);
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+
+  .navigationLink:active,
+  .navigationLink[aria-current="page"] {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-primary-dark, #818cf8);
+  }
+
+  .sidebar {
+    background: var(--color-surface-dark, #1f2937);
+    border-right-color: var(--color-border-dark, #374151);
+  }
+
+  .footer {
+    background: var(--color-surface-dark, #1f2937);
+    border-top-color: var(--color-border-dark, #374151);
+  }
+
+  .footerText {
+    color: var(--color-text-tertiary-dark, #6b7280);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .headerContent {
+    height: 56px;
+  }
+
+  .logo {
+    font-size: 1.125rem;
+  }
+
+  .logoIcon {
+    font-size: 1.25rem;
+  }
+
+  .navigationList {
+    gap: 0.25rem;
+  }
+
+  .navigationLink {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    min-height: calc(100vh - 56px - 60px);
+  }
+
+  .footerContent {
+    padding: 1rem;
+  }
+
+  .footerText {
+    font-size: 0.75rem;
+  }
+}
+
+/* Tablet responsive */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+  }
+}

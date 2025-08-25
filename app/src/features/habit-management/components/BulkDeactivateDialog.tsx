@@ -16,7 +16,7 @@ const DEACTIVATION_REASONS = [
   { value: 'no_longer_relevant', label: 'No longer relevant to my goals' },
   { value: 'too_difficult', label: 'Found it too difficult to maintain' },
   { value: 'lifestyle_change', label: 'Lifestyle has changed' },
-  { value: 'other', label: 'Other reason' }
+  { value: 'other', label: 'Other reason' },
 ];
 
 export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
@@ -24,7 +24,7 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
   onClose,
   selectedHabits,
   onBulkDeactivate,
-  isLoading = false
+  isLoading = false,
 }) => {
   const [reason, setReason] = useState<string>('');
   const [customReason, setCustomReason] = useState<string>('');
@@ -38,7 +38,7 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
   const handleConfirm = async () => {
     const deactivationReason = reason === 'other' ? customReason : reason;
     const habitIds = selectedHabits.map(h => h.id.toString());
-    
+
     await onBulkDeactivate(habitIds, deactivationReason);
     resetForm();
     onClose();
@@ -71,8 +71,10 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
 
           <div className={styles.content}>
             <div className={styles.warning}>
-              <p>You are about to deactivate <strong>{selectedHabits.length}</strong> habits:</p>
-              
+              <p>
+                You are about to deactivate <strong>{selectedHabits.length}</strong> habits:
+              </p>
+
               <div className={styles.habitList}>
                 {selectedHabits.map(habit => (
                   <div key={habit.id} className={styles.habitItem}>
@@ -94,29 +96,32 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
               </div>
 
               <div className={styles.reasonSummary}>
-                <strong>Reason:</strong> {reason === 'other' ? customReason : DEACTIVATION_REASONS.find(r => r.value === reason)?.label}
+                <strong>Reason:</strong>{' '}
+                {reason === 'other'
+                  ? customReason
+                  : DEACTIVATION_REASONS.find(r => r.value === reason)?.label}
               </div>
             </div>
 
             <div className={styles.confirmationSection}>
-              <label htmlFor="confirmText" className={styles.confirmLabel}>
+              <label htmlFor='confirmText' className={styles.confirmLabel}>
                 Type "deactivate" to confirm this action:
               </label>
               <input
-                id="confirmText"
-                type="text"
+                id='confirmText'
+                type='text'
                 value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
+                onChange={e => setConfirmText(e.target.value)}
                 className={styles.confirmInput}
-                placeholder="deactivate"
-                autoComplete="off"
+                placeholder='deactivate'
+                autoComplete='off'
               />
             </div>
           </div>
 
           <div className={styles.footer}>
             <button
-              type="button"
+              type='button'
               className={styles.cancelButton}
               onClick={() => setShowConfirmation(false)}
               disabled={isLoading}
@@ -124,7 +129,7 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
               Back
             </button>
             <button
-              type="button"
+              type='button'
               className={`${styles.confirmButton} ${styles.destructive}`}
               onClick={handleConfirm}
               disabled={!isConfirmValid || isLoading}
@@ -142,7 +147,9 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
       <div className={styles.dialog}>
         <div className={styles.header}>
           <h2 className={styles.title}>Deactivate Multiple Habits</h2>
-          <button className={styles.closeButton} onClick={handleCancel}>×</button>
+          <button className={styles.closeButton} onClick={handleCancel}>
+            ×
+          </button>
         </div>
 
         <div className={styles.content}>
@@ -171,11 +178,11 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
               {DEACTIVATION_REASONS.map(reasonOption => (
                 <label key={reasonOption.value} className={styles.reasonOption}>
                   <input
-                    type="radio"
-                    name="deactivation-reason"
+                    type='radio'
+                    name='deactivation-reason'
                     value={reasonOption.value}
                     checked={reason === reasonOption.value}
-                    onChange={(e) => setReason(e.target.value)}
+                    onChange={e => setReason(e.target.value)}
                     className={styles.radio}
                   />
                   <span className={styles.reasonLabel}>{reasonOption.label}</span>
@@ -185,14 +192,14 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
 
             {reason === 'other' && (
               <div className={styles.customReasonSection}>
-                <label htmlFor="customReason" className={styles.customReasonLabel}>
+                <label htmlFor='customReason' className={styles.customReasonLabel}>
                   Please specify:
                 </label>
                 <textarea
-                  id="customReason"
+                  id='customReason'
                   value={customReason}
-                  onChange={(e) => setCustomReason(e.target.value)}
-                  placeholder="Enter your reason..."
+                  onChange={e => setCustomReason(e.target.value)}
+                  placeholder='Enter your reason...'
                   className={styles.customReasonInput}
                   rows={3}
                 />
@@ -204,21 +211,19 @@ export const BulkDeactivateDialog: React.FC<BulkDeactivateDialogProps> = ({
             <div className={styles.infoIcon}>ℹ️</div>
             <div className={styles.infoContent}>
               <h4>Don't worry!</h4>
-              <p>Your historical data will be preserved and you can reactivate these habits anytime.</p>
+              <p>
+                Your historical data will be preserved and you can reactivate these habits anytime.
+              </p>
             </div>
           </div>
         </div>
 
         <div className={styles.footer}>
-          <button
-            type="button"
-            className={styles.cancelButton}
-            onClick={handleCancel}
-          >
+          <button type='button' className={styles.cancelButton} onClick={handleCancel}>
             Cancel
           </button>
           <button
-            type="button"
+            type='button'
             className={styles.deactivateButton}
             onClick={handleDeactivate}
             disabled={!canProceed}

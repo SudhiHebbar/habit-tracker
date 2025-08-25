@@ -1,13 +1,12 @@
-import type { 
-  Tracker, 
-  CreateTrackerDto, 
-  UpdateTrackerDto, 
-  TrackerOrderDto 
+import type {
+  Tracker,
+  CreateTrackerDto,
+  UpdateTrackerDto,
+  TrackerOrderDto,
 } from '../types/tracker.types';
 import { api } from '../../../shared/services/api';
 
 class TrackerApiService {
-
   async getAllTrackers(includeInactive = false): Promise<Tracker[]> {
     const params = includeInactive ? { includeInactive: 'true' } : undefined;
     const response = await api.get<Tracker[]>('/trackers', params);

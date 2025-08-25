@@ -18,7 +18,7 @@ export function useCompletionSync() {
       setIsOnline(false);
     };
 
-    const unsubscribe = offlineQueue.subscribe((queue) => {
+    const unsubscribe = offlineQueue.subscribe(queue => {
       setQueueSize(queue.length);
       setFailedItems(queue.filter(item => item.retryCount > 0));
     });
@@ -44,7 +44,7 @@ export function useCompletionSync() {
 
   const syncQueue = useCallback(async () => {
     if (isSyncing) return;
-    
+
     setIsSyncing(true);
     try {
       await offlineQueue.processSyncQueue();
@@ -69,6 +69,6 @@ export function useCompletionSync() {
     syncQueue,
     retryFailed,
     clearQueue,
-    hasFailedItems: failedItems.length > 0
+    hasFailedItems: failedItems.length > 0,
   };
 }

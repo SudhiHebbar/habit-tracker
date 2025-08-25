@@ -1,26 +1,32 @@
 import { useState, useCallback } from 'react';
 import { habitApi } from '../services/habitApi';
-import type { 
-  DeleteHabitRequest, 
+import type {
+  DeleteHabitRequest,
   DeleteHabitResponse,
   RestoreHabitRequest,
   RestoreHabitResponse,
   DeletionImpact,
-  UndoDeleteResponse
+  UndoDeleteResponse,
 } from '../types/habit.types';
 
 interface UseDeleteHabitReturn {
   // New enhanced deletion methods
   getDeletionImpact: (id: number) => Promise<DeletionImpact | null>;
-  deleteHabitWithConfirmation: (id: number, data: DeleteHabitRequest) => Promise<DeleteHabitResponse | null>;
-  restoreHabitWithConfirmation: (id: number, data: RestoreHabitRequest) => Promise<RestoreHabitResponse | null>;
+  deleteHabitWithConfirmation: (
+    id: number,
+    data: DeleteHabitRequest
+  ) => Promise<DeleteHabitResponse | null>;
+  restoreHabitWithConfirmation: (
+    id: number,
+    data: RestoreHabitRequest
+  ) => Promise<RestoreHabitResponse | null>;
   undoDelete: (id: number) => Promise<UndoDeleteResponse | null>;
   getDeletedHabits: (trackerId: number) => Promise<any[] | null>;
-  
+
   // Legacy methods for backward compatibility
   deleteHabit: (id: number) => Promise<boolean>;
   restoreHabit: (id: number) => Promise<boolean>;
-  
+
   // State
   loading: boolean;
   error: string | null;
@@ -48,45 +54,45 @@ export const useDeleteHabit = (): UseDeleteHabitReturn => {
     }
   }, []);
 
-  const deleteHabitWithConfirmation = useCallback(async (
-    id: number, 
-    data: DeleteHabitRequest
-  ): Promise<DeleteHabitResponse | null> => {
-    setLoading(true);
-    setError(null);
+  const deleteHabitWithConfirmation = useCallback(
+    async (id: number, data: DeleteHabitRequest): Promise<DeleteHabitResponse | null> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await habitApi.deleteHabit(id, data);
-      return response;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete habit';
-      setError(errorMessage);
-      console.error('Error deleting habit:', err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        const response = await habitApi.deleteHabit(id, data);
+        return response;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to delete habit';
+        setError(errorMessage);
+        console.error('Error deleting habit:', err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-  const restoreHabitWithConfirmation = useCallback(async (
-    id: number, 
-    data: RestoreHabitRequest
-  ): Promise<RestoreHabitResponse | null> => {
-    setLoading(true);
-    setError(null);
+  const restoreHabitWithConfirmation = useCallback(
+    async (id: number, data: RestoreHabitRequest): Promise<RestoreHabitResponse | null> => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      const response = await habitApi.restoreHabit(id, data);
-      return response;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to restore habit';
-      setError(errorMessage);
-      console.error('Error restoring habit:', err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        const response = await habitApi.restoreHabit(id, data);
+        return response;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to restore habit';
+        setError(errorMessage);
+        console.error('Error restoring habit:', err);
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   const undoDelete = useCallback(async (id: number): Promise<UndoDeleteResponse | null> => {
     setLoading(true);
@@ -168,14 +174,14 @@ export const useDeleteHabit = (): UseDeleteHabitReturn => {
     restoreHabitWithConfirmation,
     undoDelete,
     getDeletedHabits,
-    
+
     // Legacy methods
     deleteHabit,
     restoreHabit,
-    
+
     // State
     loading,
     error,
-    clearError
+    clearError,
   };
 };

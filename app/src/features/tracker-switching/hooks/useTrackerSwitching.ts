@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { trackerSwitchingApi } from '../services/trackerSwitchingApi';
 import { trackerCache } from '../services/trackerCache';
 import { useActiveTracker } from './useActiveTracker';
-import type { 
-  TrackerSummary, 
+import type {
+  TrackerSummary,
   TrackerSwitchData,
-  TrackerSwitchOptions 
+  TrackerSwitchOptions,
 } from '../types/trackerSwitching.types';
 
 export function useTrackerSwitching() {
   const navigate = useNavigate();
   const { activeTrackerId, switchTracker } = useActiveTracker();
-  
+
   const [isSwitching, setIsSwitching] = useState(false);
   const [switchData, setSwitchData] = useState<TrackerSwitchData | null>(null);
   const [trackerSummaries, setTrackerSummaries] = useState<TrackerSummary[]>([]);
@@ -51,84 +51,86 @@ export function useTrackerSwitching() {
     loadSwitchData();
   }, [activeTrackerId]);
 
-  const performSwitch = useCallback(async (
-    trackerId: number, 
-    options: TrackerSwitchOptions = {}
-  ) => {
-    const { 
-      preload = true, 
-      animate = true, 
-      recordAccess = true 
-    } = options;
+  const performSwitch = useCallback(
+    async (trackerId: number, options: TrackerSwitchOptions = {}) => {
+      const { preload = true, animate = true, recordAccess = true } = options;
 
-    if (trackerId === activeTrackerId || isSwitching) {
-      return;
-    }
+      if (trackerId === activeTrackerId || isSwitching) {
+        return;
+      }
 
-    setIsSwitching(true);
-    const startTime = performance.now();
+      setIsSwitching(true);
+      const startTime = performance.now();
 
-    try {
-      // Check if data is cached
-      const cached = trackerCache.has(trackerId);
-      
-      // If not cached and preload is enabled, start loading
-      if (!cached && preload) {
-        const loadPromise = trackerSwitchingApi.getTrackerWithStats(trackerId);
-        
-        // If animation is enabled, we can switch immediately
-        // and load data in parallel
-        if (animate) {
-          switchTracker(trackerId);
-          navigate(`/trackers/${trackerId}`);
-          
-          // Cache the data when it arrives
-          loadPromise.then(data => {
+      try {
+        // Check if data is cached
+        const cached = trackerCache.has(trackerId);
+
+        // If not cached and preload is enabled, start loading
+        if (!cached && preload) {
+          const loadPromise = trackerSwitchingApi.getTrackerWithStats(trackerId);
+
+          // If animation is enabled, we can switch immediately
+          // and load data in parallel
+          if (animate) {
+            switchTracker(trackerId);
+            navigate(`/trackers/${trackerId}`);
+
+            // Cache the data when it arrives
+            loadPromise
+              .then(data => {
+                trackerCache.set(trackerId, data);
+              })
+              .catch(console.error);
+          } else {
+            // Wait for data before switching
+            const data = await loadPromise;
             trackerCache.set(trackerId, data);
-          }).catch(console.error);
+            await switchTracker(trackerId);
+            navigate(`/trackers/${trackerId}`);
+          }
         } else {
-          // Wait for data before switching
-          const data = await loadPromise;
-          trackerCache.set(trackerId, data);
+          // Data is cached, switch immediately
           await switchTracker(trackerId);
           navigate(`/trackers/${trackerId}`);
         }
-      } else {
-        // Data is cached, switch immediately
-        await switchTracker(trackerId);
-        navigate(`/trackers/${trackerId}`);
-      }
 
-      // Record access if enabled
-      if (recordAccess) {
-        trackerSwitchingApi.recordTrackerAccess(trackerId).catch(console.error);
-      }
-
-      // Update switch data
-      const newSwitchData = await trackerSwitchingApi.getTrackerSwitchData(trackerId);
-      setSwitchData(newSwitchData);
-
-      // Log performance
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-      console.log(`Tracker switch completed in ${duration.toFixed(2)}ms`);
-
-      // Preload adjacent trackers
-      if (preload && newSwitchData) {
-        if (newSwitchData.previousTrackerId) {
-          trackerSwitchingApi.preloadTrackerData(newSwitchData.previousTrackerId).catch(console.error);
+        // Record access if enabled
+        if (recordAccess) {
+          trackerSwitchingApi.recordTrackerAccess(trackerId).catch(console.error);
         }
-        if (newSwitchData.nextTrackerId) {
-          trackerSwitchingApi.preloadTrackerData(newSwitchData.nextTrackerId).catch(console.error);
+
+        // Update switch data
+        const newSwitchData = await trackerSwitchingApi.getTrackerSwitchData(trackerId);
+        setSwitchData(newSwitchData);
+
+        // Log performance
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        console.log(`Tracker switch completed in ${duration.toFixed(2)}ms`);
+
+        // Preload adjacent trackers
+        if (preload && newSwitchData) {
+          if (newSwitchData.previousTrackerId) {
+            trackerSwitchingApi
+              .preloadTrackerData(newSwitchData.previousTrackerId)
+              .catch(console.error);
+          }
+          if (newSwitchData.nextTrackerId) {
+            trackerSwitchingApi
+              .preloadTrackerData(newSwitchData.nextTrackerId)
+              .catch(console.error);
+          }
         }
+      } catch (error) {
+        console.error('Failed to switch tracker:', error);
+        throw error;
+      } finally {
+        setIsSwitching(false);
       }
-    } catch (error) {
-      console.error('Failed to switch tracker:', error);
-      throw error;
-    } finally {
-      setIsSwitching(false);
-    }
-  }, [activeTrackerId, isSwitching, switchTracker, navigate]);
+    },
+    [activeTrackerId, isSwitching, switchTracker, navigate]
+  );
 
   const switchToNext = useCallback(async () => {
     if (!switchData?.nextTrackerId) return;
@@ -140,18 +142,24 @@ export function useTrackerSwitching() {
     await performSwitch(switchData.previousTrackerId);
   }, [switchData, performSwitch]);
 
-  const switchToRecent = useCallback(async (index: number = 0) => {
-    if (!switchData?.recentTrackers[index]) return;
-    await performSwitch(switchData.recentTrackers[index].id);
-  }, [switchData, performSwitch]);
+  const switchToRecent = useCallback(
+    async (index: number = 0) => {
+      if (!switchData?.recentTrackers[index]) return;
+      await performSwitch(switchData.recentTrackers[index].id);
+    },
+    [switchData, performSwitch]
+  );
 
-  const switchToFavorite = useCallback(async (index: number = 0) => {
-    if (!switchData?.favoriteTrackers[index]) return;
-    await performSwitch(switchData.favoriteTrackers[index].id);
-  }, [switchData, performSwitch]);
+  const switchToFavorite = useCallback(
+    async (index: number = 0) => {
+      if (!switchData?.favoriteTrackers[index]) return;
+      await performSwitch(switchData.favoriteTrackers[index].id);
+    },
+    [switchData, performSwitch]
+  );
 
   const preloadTrackers = useCallback(async (trackerIds: number[]) => {
-    const promises = trackerIds.map(id => 
+    const promises = trackerIds.map(id =>
       trackerSwitchingApi.preloadTrackerData(id).catch(console.error)
     );
     await Promise.all(promises);
@@ -168,6 +176,6 @@ export function useTrackerSwitching() {
     switchToPrevious,
     switchToRecent,
     switchToFavorite,
-    preloadTrackers
+    preloadTrackers,
   };
 }

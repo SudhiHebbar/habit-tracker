@@ -23,7 +23,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsAnimating(true);
-    
+
     // Reset animation after it completes
     setTimeout(() => {
       setIsAnimating(false);
@@ -34,21 +34,10 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
     }
   };
 
-  const buttonClass = [
-    className,
-    isAnimating && styles[animationType],
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const buttonClass = [className, isAnimating && styles[animationType]].filter(Boolean).join(' ');
 
   return (
-    <Button
-      variant={variant}
-      size={size}
-      className={buttonClass}
-      onClick={handleClick}
-      {...props}
-    >
+    <Button variant={variant} size={size} className={buttonClass} onClick={handleClick} {...props}>
       {children}
     </Button>
   );

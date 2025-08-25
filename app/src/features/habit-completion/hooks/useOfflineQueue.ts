@@ -8,7 +8,7 @@ export function useOfflineQueue() {
 
   useEffect(() => {
     // Subscribe to queue updates
-    const unsubscribe = offlineQueue.subscribe((updatedQueue) => {
+    const unsubscribe = offlineQueue.subscribe(updatedQueue => {
       setQueue(updatedQueue);
     });
 
@@ -18,17 +18,16 @@ export function useOfflineQueue() {
     return unsubscribe;
   }, []);
 
-  const addToQueue = useCallback((
-    type: 'toggle' | 'complete' | 'bulk',
-    habitId: number | undefined,
-    data: any
-  ) => {
-    offlineQueue.enqueue({
-      type,
-      habitId: habitId || 0,
-      data
-    });
-  }, []);
+  const addToQueue = useCallback(
+    (type: 'toggle' | 'complete' | 'bulk', habitId: number | undefined, data: any) => {
+      offlineQueue.enqueue({
+        type,
+        habitId: habitId || 0,
+        data,
+      });
+    },
+    []
+  );
 
   const removeFromQueue = useCallback((id: string) => {
     offlineQueue.dequeue(id);
@@ -36,7 +35,7 @@ export function useOfflineQueue() {
 
   const processQueue = useCallback(async () => {
     if (isProcessing) return;
-    
+
     setIsProcessing(true);
     try {
       await offlineQueue.processSyncQueue();
@@ -64,6 +63,6 @@ export function useOfflineQueue() {
     removeFromQueue,
     processQueue,
     clearQueue,
-    retryFailedItems
+    retryFailedItems,
   };
 }
