@@ -1,0 +1,407 @@
+/* ColorSwatch Component Styles */
+
+.colorSwatch {
+  position: relative;
+  border: 2px solid var(--color-gray-300, #d1d5db);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  background: none;
+  padding: 0;
+  overflow: visible;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+}
+
+.colorSwatch:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-background, #ffffff), 0 0 0 4px var(--color-primary-500, #6366f1);
+  z-index: 10;
+}
+
+.colorSwatch:focus-visible {
+  outline: 2px solid var(--color-primary-500, #6366f1);
+  outline-offset: 2px;
+}
+
+/* Size variants */
+.small {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 1px;
+}
+
+.medium {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-width: 2px;
+}
+
+.large {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-width: 3px;
+}
+
+/* Shape variants */
+.circle {
+  border-radius: 50%;
+}
+
+.square {
+  border-radius: 0;
+}
+
+.rounded {
+  border-radius: 6px;
+}
+
+.rounded.small {
+  border-radius: 4px;
+}
+
+.rounded.large {
+  border-radius: 8px;
+}
+
+/* States */
+.colorSwatch:hover:not(.disabled) {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-gray-400, #9ca3af);
+  z-index: 10;
+}
+
+.colorSwatch:active:not(.disabled) {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.selected {
+  border-color: var(--color-primary-500, #6366f1) !important;
+  border-width: 3px !important;
+  box-shadow: 0 0 0 2px var(--color-primary-100, #e0e7ff);
+  transform: scale(1.1);
+  z-index: 5;
+}
+
+.selected.small {
+  border-width: 2px !important;
+}
+
+.selected.large {
+  border-width: 4px !important;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--color-gray-300, #d1d5db);
+}
+
+.accessible {
+  border-style: solid;
+}
+
+.accessible::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 6px;
+  height: 6px;
+  background: var(--color-success-500, #10b981);
+  border-radius: 50%;
+  border: 1px solid var(--color-background, #ffffff);
+}
+
+/* Checkmark */
+.checkmark {
+  width: 1rem;
+  height: 1rem;
+  color: var(--text-color);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  z-index: 2;
+  position: relative;
+}
+
+.small .checkmark {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.large .checkmark {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Accessibility badge */
+.accessibilityBadge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--color-success-500, #10b981);
+  border-radius: 50%;
+  border: 2px solid var(--color-background, #ffffff);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.small .accessibilityBadge {
+  width: 0.5rem;
+  height: 0.5rem;
+  top: -2px;
+  right: -2px;
+  border-width: 1px;
+}
+
+.large .accessibilityBadge {
+  width: 1rem;
+  height: 1rem;
+  top: -4px;
+  right: -4px;
+  border-width: 2px;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 20;
+  margin-bottom: 0.5rem;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+
+.colorSwatch:hover .tooltip,
+.colorSwatch:focus .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltipContent {
+  background: var(--color-gray-900, #111827);
+  color: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  min-width: 8rem;
+}
+
+.tooltipContent::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--color-gray-900, #111827);
+}
+
+.tooltipHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.colorName {
+  font-weight: 600;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.colorHex {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--color-gray-300, #d1d5db);
+  text-transform: uppercase;
+}
+
+.colorCategory {
+  font-size: 0.625rem;
+  color: var(--color-gray-400, #9ca3af);
+  text-transform: capitalize;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--color-gray-700, #374151);
+}
+
+.contrastInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.contrastRatio {
+  font-family: monospace;
+  font-size: 0.625rem;
+  color: var(--color-gray-300, #d1d5db);
+}
+
+.wcagBadge {
+  padding: 0.125rem 0.25rem;
+  border-radius: 2px;
+  font-size: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.wcagBadge.pass {
+  background: var(--color-success-500, #10b981);
+  color: white;
+}
+
+.wcagBadge.fail {
+  background: var(--color-error-500, #ef4444);
+  color: white;
+}
+
+/* Screen reader only */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .tooltipContent {
+    background: var(--color-gray-100, #f3f4f6);
+    color: var(--color-gray-900, #111827);
+  }
+  
+  .tooltipContent::after {
+    border-top-color: var(--color-gray-100, #f3f4f6);
+  }
+  
+  .colorName {
+    color: var(--color-gray-900, #111827);
+  }
+  
+  .colorHex {
+    color: var(--color-gray-600, #4b5563);
+  }
+  
+  .colorCategory {
+    color: var(--color-gray-500, #6b7280);
+    border-bottom-color: var(--color-gray-300, #d1d5db);
+  }
+  
+  .contrastRatio {
+    color: var(--color-gray-600, #4b5563);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .colorSwatch {
+    border-width: 3px;
+  }
+  
+  .small {
+    border-width: 2px;
+  }
+  
+  .large {
+    border-width: 4px;
+  }
+  
+  .selected {
+    border-width: 4px !important;
+  }
+  
+  .selected.small {
+    border-width: 3px !important;
+  }
+  
+  .selected.large {
+    border-width: 5px !important;
+  }
+  
+  .accessibilityBadge {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .colorSwatch,
+  .tooltip {
+    transition: none;
+  }
+  
+  .colorSwatch:hover {
+    transform: none;
+  }
+  
+  .selected {
+    transform: none;
+  }
+}
+
+/* Touch devices */
+@media (hover: none) {
+  .tooltip {
+    display: none;
+  }
+  
+  .colorSwatch:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .colorSwatch:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Drag and drop states */
+.colorSwatch[draggable="true"]:not(.disabled) {
+  cursor: grab;
+}
+
+.colorSwatch[draggable="true"]:not(.disabled):active {
+  cursor: grabbing;
+}
+
+/* Animation for dynamic insertion */
+@keyframes swatchFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.colorSwatch[data-animate="true"] {
+  animation: swatchFadeIn 0.3s ease-out;
+}

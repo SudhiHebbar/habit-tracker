@@ -17,7 +17,7 @@
   background: white;
   border-radius: 12px;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow:
@@ -237,6 +237,57 @@
   .cancelButton:hover:not(:disabled) {
     background-color: #4b5563;
     border-color: #6b7280;
+  }
+}
+
+/* Visual Customization Styles */
+.previewSection {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: #f9fafb;
+}
+
+.customizationRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.colorSection,
+.iconSection {
+  min-height: 200px;
+}
+
+.sectionTitle {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+@media (prefers-color-scheme: dark) {
+  .previewSection {
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+
+  .sectionTitle {
+    color: #d1d5db;
+  }
+}
+
+@media (max-width: 768px) {
+  .customizationRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .colorSection,
+  .iconSection {
+    min-height: 150px;
   }
 }
 
