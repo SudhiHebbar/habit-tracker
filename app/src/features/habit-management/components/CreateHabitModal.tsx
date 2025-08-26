@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ColorPicker } from './ColorPicker';
+import { IconSelector } from './IconSelector';
 import type { CreateHabitRequest } from '../types/habit.types';
 import styles from './CreateHabitModal.module.css';
 
@@ -48,6 +49,15 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
 
   const handleColorSelect = (color: string) => {
     setFormData(prev => ({ ...prev, color }));
+  };
+
+  const handleIconSelect = (iconId: string | null) => {
+    if (iconId === null) {
+      const { icon, ...rest } = formData;
+      setFormData(rest);
+    } else {
+      setFormData(prev => ({ ...prev, icon: iconId }));
+    }
   };
 
   const validateForm = (): boolean => {
@@ -209,14 +219,55 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
             )}
           </div>
 
-          {/* Color Picker */}
+          {/* Visual Customization */}
           <div className={styles.formGroup}>
-            <label className={styles.label}>Color</label>
-            <ColorPicker
-              selectedColor={formData.color}
-              onColorSelect={handleColorSelect}
-              disabled={isLoading}
-            />
+            <label className={styles.label}>Visual Customization</label>
+            
+            {/* Preview */}
+            <div className={styles.previewSection}>
+              <div style={{
+                padding: '12px',
+                border: `2px solid ${formData.color}`,
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                backgroundColor: '#f9fafb'
+              }}>
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  backgroundColor: formData.color,
+                  borderRadius: '4px'
+                }} />
+                <span style={{ fontWeight: 'bold', color: formData.color }}>
+                  {formData.name || 'Habit Name'}
+                </span>
+              </div>
+            </div>
+
+            {/* Color Selection */}
+            <div className={styles.customizationRow}>
+              <div className={styles.colorSection}>
+                <h4 className={styles.sectionTitle}>Color</h4>
+                <ColorPicker
+                  selectedColor={formData.color}
+                  onColorSelect={handleColorSelect}
+                  disabled={isLoading}
+                />
+              </div>
+
+              {/* Icon Selection */}
+              <div className={styles.iconSection}>
+                <h4 className={styles.sectionTitle}>Icon</h4>
+                <IconSelector
+                  selectedIcon={formData.icon || null}
+                  onIconSelect={handleIconSelect}
+                  disabled={isLoading}
+                  size="medium"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Form Actions */}

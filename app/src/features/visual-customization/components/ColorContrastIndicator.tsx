@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { ContrastCalculator, COMMON_BACKGROUNDS } from '../services/contrastCalculator';
-import type { ColorAccessibilityInfo } from '../services/contrastCalculator';
 import styles from './ColorContrastIndicator.module.css';
 
 interface ColorContrastIndicatorProps {

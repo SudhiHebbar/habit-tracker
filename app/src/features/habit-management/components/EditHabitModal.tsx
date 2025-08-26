@@ -296,23 +296,48 @@ export const EditHabitModal: React.FC<EditHabitModalProps> = ({
       case 1: // Appearance
         return (
           <div className={styles.stepContent}>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Color</label>
-              <ColorPicker
-                selectedColor={formData.color}
-                onColorSelect={handleColorSelect}
-                disabled={isLoading}
-              />
+            {/* Preview Section */}
+            <div className={styles.previewSection}>
+              <div style={{
+                padding: '12px',
+                border: `2px solid ${formData.color}`,
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                backgroundColor: '#f9fafb'
+              }}>
+                <div style={{
+                  width: '24px',
+                  height: '24px',
+                  backgroundColor: formData.color,
+                  borderRadius: '4px'
+                }} />
+                <span style={{ fontWeight: 'bold', color: formData.color }}>
+                  {formData.name || 'Habit Name'}
+                </span>
+              </div>
             </div>
 
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Icon (Optional)</label>
-              <IconSelector
-                selectedIcon={formData.icon || null}
-                onIconSelect={handleIconSelect}
-                disabled={isLoading}
-                size='medium'
-              />
+            <div className={styles.customizationRow}>
+              <div className={styles.colorSection}>
+                <label className={styles.label}>Color</label>
+                <ColorPicker
+                  selectedColor={formData.color}
+                  onColorSelect={handleColorSelect}
+                  disabled={isLoading}
+                />
+              </div>
+
+              <div className={styles.iconSection}>
+                <label className={styles.label}>Icon (Optional)</label>
+                <IconSelector
+                  selectedIcon={formData.icon || null}
+                  onIconSelect={handleIconSelect}
+                  disabled={isLoading}
+                  size='small'
+                />
+              </div>
             </div>
           </div>
         );

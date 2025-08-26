@@ -7,6 +7,13 @@
 export { default as ColorPalette } from './components/ColorPalette';
 export { default as ColorPicker } from './components/ColorPicker';
 export { default as ColorContrastIndicator } from './components/ColorContrastIndicator';
+export { default as IconSelector } from './components/IconSelector';
+export { default as CustomizationPreview } from './components/CustomizationPreview';
+export { default as CustomizationPresets } from './components/CustomizationPresets';
+export { default as RecentColors } from './components/RecentColors';
+
+// Shared Components
+export { ColorSwatch, IconDisplay, PreviewCard } from './components/shared';
 
 // Services
 export { ColorSystem } from './services/colorSystem';
@@ -102,6 +109,9 @@ export const VISUAL_CUSTOMIZATION_FEATURE = {
     'CustomizationPreview',
     'CustomizationPresets',
     'RecentColors',
+    'ColorSwatch',
+    'IconDisplay',
+    'PreviewCard',
   ],
   services: [
     'ColorSystem',
