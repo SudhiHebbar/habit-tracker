@@ -134,7 +134,7 @@
   margin-bottom: 12px;
 }
 
-.fieldToggle input[type="checkbox"] {
+.fieldToggle input[type='checkbox'] {
   width: 16px;
   height: 16px;
   cursor: pointer;

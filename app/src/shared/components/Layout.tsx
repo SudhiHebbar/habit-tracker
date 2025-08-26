@@ -44,7 +44,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </main>
 
         <footer className={styles.footer}>
-          <p>© 2024 Habit Tracker. Built with React 19 and React Bits.</p>
+          <p>© 2024 Habit Tracker. Built with React 19 and TypeScript.</p>
         </footer>
       </div>
     </ErrorBoundary>

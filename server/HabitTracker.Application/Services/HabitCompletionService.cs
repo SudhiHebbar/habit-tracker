@@ -355,15 +355,20 @@ namespace HabitTracker.Application.Services
         {
             try
             {
+                _logger.LogInformation("Getting completion stats for habit {HabitId}", habitId);
                 var totalCompletions = await _unitOfWork.HabitCompletions.GetCompletionCountAsync(
                     habitId, 
-                    cancellationToken: cancellationToken);
+                    null, 
+                    null, 
+                    cancellationToken);
                 
                 var streak = await _streakRepository.GetStreakByHabitIdAsync(habitId, cancellationToken);
                 
                 var completionRate = await _unitOfWork.HabitCompletions.GetCompletionRateAsync(
                     habitId, 
-                    cancellationToken: cancellationToken);
+                    null, 
+                    null, 
+                    cancellationToken);
                 
                 var firstCompletion = await _unitOfWork.HabitCompletions.GetFirstCompletionAsync(
                     habitId, 
@@ -375,7 +380,9 @@ namespace HabitTracker.Application.Services
                 
                 var completionsByDayOfWeek = await _unitOfWork.HabitCompletions.GetCompletionsByDayOfWeekAsync(
                     habitId, 
-                    cancellationToken: cancellationToken);
+                    null, 
+                    null, 
+                    cancellationToken);
                 
                 return new CompletionStatsDto
                 {

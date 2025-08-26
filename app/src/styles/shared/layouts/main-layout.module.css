@@ -77,11 +77,11 @@
   .header {
     padding: var(--spacing-3) var(--spacing-4);
   }
-  
+
   .navigation {
     display: none;
   }
-  
+
   .main {
     padding: var(--spacing-4);
   }

@@ -114,30 +114,30 @@
   .title {
     color: var(--color-text-primary-dark, #f9fafb);
   }
-  
+
   .subtitle {
     color: var(--color-text-secondary-dark, #9ca3af);
   }
-  
+
   .helpText {
     color: var(--color-text-secondary-dark, #9ca3af);
   }
-  
+
   .selectorLabel {
     color: var(--color-text-primary-dark, #f9fafb);
   }
-  
+
   .trackerSelect {
     background: var(--color-background-dark, #1f2937);
     border-color: var(--color-border-dark, #374151);
     color: var(--color-text-primary-dark, #f9fafb);
   }
-  
+
   .currentTracker {
     background: var(--color-surface-dark, #374151);
     border-color: var(--color-border-dark, #4b5563);
   }
-  
+
   .currentTracker h3 {
     color: var(--color-text-primary-dark, #f9fafb);
   }
@@ -148,23 +148,23 @@
   .habitsPage {
     padding: 1rem;
   }
-  
+
   .header {
     margin-bottom: 1.5rem;
   }
-  
+
   .title {
     font-size: 1.75rem;
   }
-  
+
   .subtitle {
     font-size: 1rem;
   }
-  
+
   .habitsSection {
     gap: 1.5rem;
   }
-  
+
   .trackerSelector {
     max-width: none;
   }

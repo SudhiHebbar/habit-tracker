@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container } from '../../../shared/components/Layout/Container';
 import { DashboardHeader } from './DashboardHeader';
 import { TodayHeader } from './TodayHeader';
@@ -13,6 +13,8 @@ import { CreateTrackerModal } from '../../tracker-management/components/CreateTr
 import { useTrackers } from '../../tracker-management/hooks/useTrackers';
 import { useHabits } from '../../habit-management/hooks/useHabits';
 import { useDashboardPreferences } from '../../../shared/hooks/useLocalStorage';
+import { useDashboardProgress } from '../hooks/useDashboardProgress';
+import { useHabitCompletionListener } from '../../../shared/hooks/useEventBus';
 import { trackerApi } from '../../tracker-management/services/trackerApi';
 import type { Habit } from '../../habit-management/types/habit.types';
 import type { CreateTrackerDto } from '../../tracker-management/types/tracker.types';
@@ -55,6 +57,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
       setSelectedTrackerId(activeTracker?.id || null);
     }
   }, [trackers, selectedTrackerId]);
+
+  // Listen for habit completion events to refresh habits data
+  useHabitCompletionListener(
+    useCallback(() => {
+      // Refetch habits data when any habit is completed
+      // This ensures the dashboard gets the updated lastCompletedDate values
+      setTimeout(() => {
+        refetchHabits();
+      }, 300); // Small delay to ensure backend has processed the completion
+    }, [refetchHabits])
+  );
 
   // Get current tracker
   const currentTracker = useMemo(() => {
@@ -102,20 +115,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
     return filtered;
   }, [habits, searchQuery, filterFrequency, sortBy]);
 
-  // Calculate statistics
-  const stats = useMemo(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const completedToday = filteredHabits.filter(h => h.lastCompletedDate === today).length;
-    const totalHabits = filteredHabits.length;
-    const completionRate = totalHabits > 0 ? (completedToday / totalHabits) * 100 : 0;
-
-    return {
-      totalHabits,
-      completedToday,
-      completionRate: Math.round(completionRate),
-      activeStreaks: filteredHabits.filter(h => (h.currentStreak || 0) > 0).length,
-    };
-  }, [filteredHabits]);
+  // Reactive progress statistics
+  const { stats } = useDashboardProgress({
+    habits: filteredHabits,
+    timeRange,
+    enabled: !trackersLoading && filteredHabits.length > 0,
+  });
 
   // Handle tracker switching
   const handleTrackerChange = (trackerId: number) => {
@@ -139,8 +144,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
 
   // Handle habit completion
   const handleHabitComplete = async (_habit: Habit) => {
-    // This would trigger the completion API
-    await refetchHabits();
+    // Completion events are handled via the event bus system
+    // and dashboard progress updates reactively through useDashboardProgress
   };
 
   // Handle tracker creation

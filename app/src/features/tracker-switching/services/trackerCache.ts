@@ -129,17 +129,17 @@ class TrackerCache {
 
   async preload(trackerIds: number[], options: { maxConcurrent?: number } = {}): Promise<void> {
     const { maxConcurrent = 3 } = options;
-    
+
     // Filter out trackers that are already cached to avoid redundant API calls
     const uncachedIds = trackerIds.filter(id => !this.has(id));
-    
+
     if (uncachedIds.length === 0) {
       return; // Nothing to preload
     }
 
     // Import API service dynamically to avoid circular dependencies
     const { trackerSwitchingApi } = await import('./trackerSwitchingApi');
-    
+
     // Process trackers in concurrent batches to avoid overwhelming the API
     const chunks: number[][] = [];
     for (let i = 0; i < uncachedIds.length; i += maxConcurrent) {
@@ -147,7 +147,7 @@ class TrackerCache {
     }
 
     for (const chunk of chunks) {
-      const loadPromises = chunk.map(async (trackerId) => {
+      const loadPromises = chunk.map(async trackerId => {
         try {
           const data = await trackerSwitchingApi.getTrackerWithStats(trackerId);
           this.set(trackerId, data);

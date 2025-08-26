@@ -1,7 +1,5 @@
 // Dashboard Hooks
 // Export all hooks from this feature
 
-// Example:
-// export { useDashboardData } from './useDashboardData';
-// export { useStats } from './useStats';
-// export { useProgressData } from './useProgressData';
+export { useDashboardProgress } from './useDashboardProgress';
+export type { DashboardProgressStats, UseDashboardProgressOptions } from './useDashboardProgress';

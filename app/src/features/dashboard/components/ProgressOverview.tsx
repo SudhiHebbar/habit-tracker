@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Heading } from '../../../shared/components/Typography/Heading';
 import { Text } from '../../../shared/components/Typography/Text';
 import styles from '../../../../styles/features/dashboard/ProgressOverview.module.css';
@@ -14,6 +14,36 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({
   totalHabits,
   completionRate,
 }) => {
+  const progressRef = useRef<HTMLDivElement>(null);
+  const prevCompletionRateRef = useRef(completionRate);
+
+  // Add highlight effect when completion rate changes
+  useEffect(() => {
+    if (prevCompletionRateRef.current !== completionRate && progressRef.current) {
+      const element = progressRef.current;
+
+      // Remove existing animation class
+      element.classList.remove(styles.progressHighlight);
+
+      // Trigger reflow to ensure class removal is processed
+      void element.offsetHeight;
+
+      // Add highlight animation
+      element.classList.add(styles.progressHighlight);
+
+      // Remove animation class after animation completes
+      const timeoutId = setTimeout(() => {
+        element.classList.remove(styles.progressHighlight);
+      }, 600);
+
+      // Update previous value
+      prevCompletionRateRef.current = completionRate;
+
+      return () => clearTimeout(timeoutId);
+    } else {
+      prevCompletionRateRef.current = completionRate;
+    }
+  }, [completionRate]);
   const getProgressColor = () => {
     if (completionRate >= 80) return 'success';
     if (completionRate >= 50) return 'warning';
@@ -29,7 +59,7 @@ export const ProgressOverview: React.FC<ProgressOverviewProps> = ({
   };
 
   return (
-    <div className={styles.progressOverview}>
+    <div className={styles.progressOverview} ref={progressRef}>
       <div className={styles.header}>
         <Heading level={3} size='lg' weight='semibold'>
           Today's Progress

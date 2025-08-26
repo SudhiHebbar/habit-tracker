@@ -29,7 +29,8 @@ export const useHabits = (trackerId: number | null): UseHabitsReturn => {
       setError(null);
 
       try {
-        const fetchedHabits = await habitApi.getHabitsByTracker(trackerId);
+        // Use the endpoint that includes completion data to get lastCompletedDate
+        const fetchedHabits = await habitApi.getHabitsWithCompletions(trackerId);
         setHabits(fetchedHabits);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to fetch habits';

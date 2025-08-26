@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { completionApi } from '../services/completionApi';
 import { useOptimisticCompletion } from './useOptimisticCompletion';
+import { useEventEmitter } from '../../../shared/hooks/useEventBus';
 import type {
   HabitCompletion,
   CompletionStatus,
@@ -29,6 +30,9 @@ export function useCompletion({
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  // Event emitter for dashboard communication
+  const { emitHabitCompletion } = useEventEmitter();
+
   const {
     toggleCompletion: optimisticToggle,
     getOptimisticState,
@@ -55,6 +59,15 @@ export function useCompletion({
 
         setStatus(updatedStatus);
       }
+
+      // Emit completion event for dashboard updates
+      emitHabitCompletion({
+        habitId,
+        isCompleted: completion.isCompleted,
+        completionDate: completion.completionDate,
+        currentStreak: completion.currentStreak,
+        longestStreak: completion.longestStreak,
+      });
 
       // Refresh both status and stats immediately with cache-busting
       setTimeout(() => {
