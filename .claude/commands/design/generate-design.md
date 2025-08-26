@@ -5,7 +5,7 @@ Note: Refer to 'Artefacts/requirements.md' file if argument is not passed
 
 As an expert Software Architect read through the requirements to generate a complete design for general feature implementation with thorough research. Ensure context is passed to the AI agent to enable self-validation and iterative refinement. Read the feature file first to understand what needs to be created, how the examples provided help, and any other considerations.
 
-The AI agent only gets the context you are appending to the PRP and training data. Assuma the AI agent has access to the codebase and the same knowledge cutoff as you, so its important that your research findings are included or referenced in the PRP. The Agent has Websearch capabilities, so pass urls to documentation and examples.
+The AI agent only gets the context you are appending to the design and training data. Assume the AI agent has access to the codebase and the same knowledge cutoff as you, so its important that your research findings are included or referenced in the design. The Agent has Websearch capabilities, so pass urls to documentation and examples.
 
 *** Understanding the requirements and user stories, is mandatory ***
 *** ULTRATHINK ABOUT THE DESIGN AND PLAN YOUR APPROACH ***
@@ -13,6 +13,8 @@ The AI agent only gets the context you are appending to the PRP and training dat
 *** If the output file is already available make the necessary changes to applicable sections. Do not overwrite the whole file ***
 
 ## Research Process
+
+During the research process, create clear tasks and spawn as many agents and subagents as needed using the batch tools. The deeper research we do here the better the design will be. we optminize for chance of success and not for speed.
 
 1. **Codebase Analysis**
    - Search for similar features/patterns in the codebase (if provided)

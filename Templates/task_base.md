@@ -66,5 +66,14 @@ Template optimized for AI agents to implement features with sufficient context a
 ## Implementation Validation Strategy
 - []
 
+## Anti-Patterns to Avoid
+- Don't create new patterns when existing ones work
+- Don't skip validation because "it should work"
+- Don't ignore failing tests - fix them
+- Don't use sync functions in async context
+- Don't hardcode values that should be config
+- Don't catch all exceptions - be specific
+- Don't ignore rate limits for APIs
+
 ## ToDo Task
 - [List of tasks to do based on a phase manner. Provide a provision to update the todo list based on the completion of the task. Includes the feature implementation, UI/UX, unit test and validation]
