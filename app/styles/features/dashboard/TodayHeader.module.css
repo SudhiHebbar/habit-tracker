@@ -1,0 +1,117 @@
+.todayHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: var(--color-surface, #ffffff);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Date Section */
+.dateSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dayOfWeek {
+  color: var(--color-primary, #6366F1);
+  margin: 0;
+}
+
+.fullDate {
+  margin: 0;
+}
+
+.motivational {
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Time Range Toggle */
+.timeRangeToggle {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--color-background, #f3f4f6);
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.rangeButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.rangeButton:hover {
+  color: var(--color-text-primary, #1f2937);
+}
+
+.rangeButton.active {
+  background: var(--color-surface, #ffffff);
+  color: var(--color-primary, #6366F1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .todayHeader {
+    background: var(--color-surface-dark, #1f2937);
+  }
+
+  .dayOfWeek {
+    color: var(--color-primary-dark, #818cf8);
+  }
+
+  .timeRangeToggle {
+    background: var(--color-background-dark, #111827);
+  }
+
+  .rangeButton {
+    color: var(--color-text-secondary-dark, #9ca3af);
+  }
+
+  .rangeButton:hover {
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+
+  .rangeButton.active {
+    background: var(--color-surface-dark, #1f2937);
+    color: var(--color-primary-dark, #818cf8);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .todayHeader {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .timeRangeToggle {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .rangeButton {
+    flex: 1;
+    padding: 0.75rem;
+  }
+}

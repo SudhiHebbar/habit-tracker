@@ -31,7 +31,7 @@
 }
 
 .checkbox:focus-visible {
-  outline: 2px solid var(--habit-color, #6366F1);
+  outline: 2px solid var(--habit-color, #6366f1);
   outline-offset: 2px;
   border-radius: 8px;
 }
@@ -40,7 +40,7 @@
   position: relative;
   width: 24px;
   height: 24px;
-  border: 2px solid var(--habit-color, #6366F1);
+  border: 2px solid var(--habit-color, #6366f1);
   border-radius: 6px;
   background: white;
   display: flex;
@@ -49,13 +49,13 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.container[data-completed="true"] .checkboxInner {
-  background: var(--habit-color, #6366F1);
-  border-color: var(--habit-color, #6366F1);
+.container[data-completed='true'] .checkboxInner {
+  background: var(--habit-color, #6366f1);
+  border-color: var(--habit-color, #6366f1);
   animation: checkboxComplete 0.3s ease;
 }
 
-.container[data-optimistic="true"] .checkboxInner {
+.container[data-optimistic='true'] .checkboxInner {
   opacity: 0.7;
 }
 
@@ -106,7 +106,7 @@
   width: 32px;
   height: 32px;
   border: 3px solid rgba(0, 0, 0, 0.1);
-  border-top-color: var(--habit-color, #6366F1);
+  border-top-color: var(--habit-color, #6366f1);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -120,7 +120,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--habit-color, #6366F1);
+  background: var(--habit-color, #6366f1);
   opacity: 0.3;
   animation: ripple 0.6s ease-out;
   pointer-events: none;
@@ -206,12 +206,12 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .checkboxInner {
-    background: #1F2937;
-    border-color: #6B7280;
+    background: #1f2937;
+    border-color: #6b7280;
   }
-  
-  .container[data-completed="true"] .checkboxInner {
-    background: var(--habit-color, #6366F1);
-    border-color: var(--habit-color, #6366F1);
+
+  .container[data-completed='true'] .checkboxInner {
+    background: var(--habit-color, #6366f1);
+    border-color: var(--habit-color, #6366f1);
   }
 }

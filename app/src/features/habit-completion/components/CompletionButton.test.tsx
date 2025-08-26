@@ -14,7 +14,7 @@ describe('CompletionButton Component', () => {
     habitName: 'Morning Meditation',
     habitColor: '#10B981',
     habitIcon: '🧘',
-    date: '2024-01-15'
+    date: '2024-01-15',
   };
 
   const defaultHookReturn = {
@@ -23,7 +23,7 @@ describe('CompletionButton Component', () => {
     isToggling: false,
     currentStreak: 0,
     completionRate: 0,
-    toggleCompletion: vi.fn()
+    toggleCompletion: vi.fn(),
   };
 
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('CompletionButton Component', () => {
 
   it('renders uncompleted button by default', () => {
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
     expect(button).toHaveAttribute('aria-label', 'Mark Morning Meditation as complete');
@@ -47,15 +47,15 @@ describe('CompletionButton Component', () => {
   it('renders completed button when isCompleted is true', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isCompleted: true
+      isCompleted: true,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('aria-label', 'Mark Morning Meditation as incomplete');
     expect(button).toHaveAttribute('data-completed', 'true');
-    
+
     // Check if checkmark icon is visible
     const checkmark = screen.getByRole('img', { hidden: true });
     expect(checkmark).toBeInTheDocument();
@@ -63,14 +63,14 @@ describe('CompletionButton Component', () => {
 
   it('shows habit icon when provided', () => {
     render(<CompletionButton {...defaultProps} />);
-    
+
     expect(screen.getByText('🧘')).toBeInTheDocument();
   });
 
   it('does not show icon when not provided', () => {
     const { habitIcon, ...propsWithoutIcon } = defaultProps;
     render(<CompletionButton {...propsWithoutIcon} />);
-    
+
     expect(screen.queryByText('🧘')).not.toBeInTheDocument();
   });
 
@@ -78,14 +78,14 @@ describe('CompletionButton Component', () => {
     const mockToggleCompletion = vi.fn().mockResolvedValue({});
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(mockToggleCompletion).toHaveBeenCalledTimes(1);
     });
@@ -96,14 +96,14 @@ describe('CompletionButton Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       isToggling: true,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    
+
     fireEvent.click(button);
     expect(mockToggleCompletion).not.toHaveBeenCalled();
   });
@@ -111,11 +111,11 @@ describe('CompletionButton Component', () => {
   it('shows loading overlay when toggling', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isToggling: true
+      isToggling: true,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const spinner = screen.getByRole('progressbar');
     expect(spinner).toBeInTheDocument();
   });
@@ -124,11 +124,11 @@ describe('CompletionButton Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       currentStreak: 7,
-      completionRate: 85.5
+      completionRate: 85.5,
     });
 
-    render(<CompletionButton {...defaultProps} showStats={true} />);
-    
+    render(<CompletionButton {...defaultProps} showStats />);
+
     expect(screen.getByText('🔥 7')).toBeInTheDocument();
     expect(screen.getByText('86%')).toBeInTheDocument(); // Rounded
   });
@@ -137,11 +137,11 @@ describe('CompletionButton Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       currentStreak: 7,
-      completionRate: 85.5
+      completionRate: 85.5,
     });
 
     render(<CompletionButton {...defaultProps} showStats={false} />);
-    
+
     expect(screen.queryByText('🔥 7')).not.toBeInTheDocument();
     expect(screen.queryByText('86%')).not.toBeInTheDocument();
   });
@@ -150,11 +150,11 @@ describe('CompletionButton Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       currentStreak: 0,
-      completionRate: 85.5
+      completionRate: 85.5,
     });
 
-    render(<CompletionButton {...defaultProps} showStats={true} />);
-    
+    render(<CompletionButton {...defaultProps} showStats />);
+
     expect(screen.queryByText('🔥')).not.toBeInTheDocument();
     expect(screen.getByText('86%')).toBeInTheDocument();
   });
@@ -163,20 +163,20 @@ describe('CompletionButton Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       currentStreak: 5,
-      completionRate: 0
+      completionRate: 0,
     });
 
-    render(<CompletionButton {...defaultProps} showStats={true} />);
-    
+    render(<CompletionButton {...defaultProps} showStats />);
+
     expect(screen.getByText('🔥 5')).toBeInTheDocument();
     expect(screen.queryByText('%')).not.toBeInTheDocument();
   });
 
   it('applies correct variant classes', () => {
-    const { rerender } = render(<CompletionButton {...defaultProps} variant="card" />);
+    const { rerender } = render(<CompletionButton {...defaultProps} variant='card' />);
     expect(screen.getByRole('button')).toHaveClass('card');
 
-    rerender(<CompletionButton {...defaultProps} variant="inline" />);
+    rerender(<CompletionButton {...defaultProps} variant='inline' />);
     expect(screen.getByRole('button')).toHaveClass('inline');
 
     rerender(<CompletionButton {...defaultProps} />);
@@ -184,14 +184,14 @@ describe('CompletionButton Component', () => {
   });
 
   it('applies custom className', () => {
-    render(<CompletionButton {...defaultProps} className="custom-class" />);
-    
+    render(<CompletionButton {...defaultProps} className='custom-class' />);
+
     expect(screen.getByRole('button')).toHaveClass('custom-class');
   });
 
   it('applies habit color as CSS custom property', () => {
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveStyle({ '--habit-color': '#10B981' });
   });
@@ -200,11 +200,11 @@ describe('CompletionButton Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       isCompleted: true,
-      isOptimistic: true
+      isOptimistic: true,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     expect(button).toHaveAttribute('data-completed', 'true');
     expect(button).toHaveAttribute('data-optimistic', 'true');
@@ -212,7 +212,7 @@ describe('CompletionButton Component', () => {
 
   it('shows circle indicator when not completed', () => {
     render(<CompletionButton {...defaultProps} />);
-    
+
     const circle = screen.getByRole('button').querySelector('.circle');
     expect(circle).toBeInTheDocument();
   });
@@ -220,36 +220,36 @@ describe('CompletionButton Component', () => {
   it('shows checkmark when completed', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isCompleted: true
+      isCompleted: true,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const checkmark = screen.getByRole('img', { hidden: true });
     expect(checkmark).toBeInTheDocument();
   });
 
   it('calls onToggle callback when provided', async () => {
     const mockOnToggle = vi.fn();
-    
+
     mockUseCompletion.mockImplementation(({ onToggleSuccess }) => {
       const toggleCompletion = vi.fn().mockImplementation(async () => {
         if (onToggleSuccess) {
           onToggleSuccess({ isCompleted: true });
         }
       });
-      
+
       return {
         ...defaultHookReturn,
-        toggleCompletion
+        toggleCompletion,
       };
     });
 
     render(<CompletionButton {...defaultProps} onToggle={mockOnToggle} />);
-    
+
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(mockOnToggle).toHaveBeenCalledWith(true);
     });
@@ -257,76 +257,70 @@ describe('CompletionButton Component', () => {
 
   it('shows success animation when completion succeeds', async () => {
     vi.useFakeTimers();
-    
+
     mockUseCompletion.mockImplementation(({ onToggleSuccess }) => {
       const toggleCompletion = vi.fn().mockImplementation(async () => {
         if (onToggleSuccess) {
           onToggleSuccess({ isCompleted: true });
         }
       });
-      
+
       return {
         ...defaultHookReturn,
-        toggleCompletion
+        toggleCompletion,
       };
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(button).toHaveAttribute('data-animating', 'true');
     });
 
     // Fast-forward timers to end animation
     vi.advanceTimersByTime(600);
-    
+
     await waitFor(() => {
       expect(button).toHaveAttribute('data-animating', 'false');
     });
-    
+
     vi.useRealTimers();
   });
 
   it('handles toggle completion errors gracefully', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const mockToggleCompletion = vi.fn().mockRejectedValue(new Error('Network error'));
-    
+
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith('Failed to toggle completion:', expect.any(Error));
     });
-    
+
     consoleSpy.mockRestore();
   });
 
   it('uses current date when no date prop provided', () => {
     const { habitId, habitName, habitColor } = defaultProps;
-    
-    render(
-      <CompletionButton 
-        habitId={habitId}
-        habitName={habitName}
-        habitColor={habitColor}
-      />
-    );
-    
+
+    render(<CompletionButton habitId={habitId} habitName={habitName} habitColor={habitColor} />);
+
     const today = new Date().toISOString().split('T')[0];
     expect(mockUseCompletion).toHaveBeenCalledWith(
       expect.objectContaining({
         habitId,
-        date: today
+        date: today,
       })
     );
   });
@@ -334,57 +328,57 @@ describe('CompletionButton Component', () => {
   it('rounds completion rate to nearest integer', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      completionRate: 67.89
+      completionRate: 67.89,
     });
 
-    render(<CompletionButton {...defaultProps} showStats={true} />);
-    
+    render(<CompletionButton {...defaultProps} showStats />);
+
     expect(screen.getByText('68%')).toBeInTheDocument();
   });
 
   it('handles zero completion rate correctly', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      completionRate: 0.5 // Less than 1 but greater than 0
+      completionRate: 0.5, // Less than 1 but greater than 0
     });
 
-    render(<CompletionButton {...defaultProps} showStats={true} />);
-    
+    render(<CompletionButton {...defaultProps} showStats />);
+
     expect(screen.getByText('1%')).toBeInTheDocument();
   });
 
   it('displays success flash animation during success', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isCompleted: true
+      isCompleted: true,
     });
 
     const { container } = render(<CompletionButton {...defaultProps} />);
-    
+
     const button = screen.getByRole('button');
     button.setAttribute('data-animating', 'true');
-    
+
     const successFlash = container.querySelector('.successFlash');
     expect(successFlash).toBeInTheDocument();
   });
 
   it('accessibly handles completion state changes', () => {
     const { rerender } = render(<CompletionButton {...defaultProps} />);
-    
+
     expect(screen.getByRole('button')).toHaveAttribute(
-      'aria-label', 
+      'aria-label',
       'Mark Morning Meditation as complete'
     );
 
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isCompleted: true
+      isCompleted: true,
     });
 
     rerender(<CompletionButton {...defaultProps} />);
-    
+
     expect(screen.getByRole('button')).toHaveAttribute(
-      'aria-label', 
+      'aria-label',
       'Mark Morning Meditation as incomplete'
     );
   });

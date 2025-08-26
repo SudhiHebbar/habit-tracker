@@ -21,52 +21,52 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
   size = 'medium',
   showStreak = false,
   onToggle,
-  className
+  className,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  
-  const {
-    isCompleted,
-    isOptimistic,
-    isToggling,
-    currentStreak,
-    toggleCompletion
-  } = useCompletion({
+
+  const { isCompleted, isOptimistic, isToggling, currentStreak, toggleCompletion } = useCompletion({
     habitId,
     date: date || new Date().toISOString().split('T')[0],
-    onToggleSuccess: (completion) => {
+    onToggleSuccess: completion => {
       if (onToggle) {
         onToggle(completion.isCompleted);
       }
-      
+
       // Trigger success animation
       setIsAnimating(true);
       setTimeout(() => setIsAnimating(false), 600);
-    }
+    },
   });
 
-  const handleClick = useCallback(async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (isToggling) return;
-    
-    try {
-      await toggleCompletion();
-    } catch (error) {
-      console.error('Failed to toggle completion:', error);
-    }
-  }, [isToggling, toggleCompletion]);
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+  const handleClick = useCallback(
+    async (e: React.MouseEvent) => {
       e.preventDefault();
-      handleClick(e as any);
-    }
-  }, [handleClick]);
+      e.stopPropagation();
+
+      if (isToggling) return;
+
+      try {
+        await toggleCompletion();
+      } catch (error) {
+        console.error('Failed to toggle completion:', error);
+      }
+    },
+    [isToggling, toggleCompletion]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleClick(e as any);
+      }
+    },
+    [handleClick]
+  );
 
   return (
-    <div 
+    <div
       className={`${styles.container} ${styles[size]} ${className || ''}`}
       data-completed={isCompleted}
       data-optimistic={isOptimistic}
@@ -79,36 +79,34 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
         disabled={isToggling}
         aria-label={`Mark ${habitName} as ${isCompleted ? 'incomplete' : 'complete'}`}
         aria-checked={isCompleted}
-        role="checkbox"
-        style={{
-          '--habit-color': habitColor
-        } as React.CSSProperties}
+        role='checkbox'
+        style={
+          {
+            '--habit-color': habitColor,
+          } as React.CSSProperties
+        }
       >
         <div className={styles.checkboxInner}>
           {isCompleted && (
-            <svg 
-              className={styles.checkmark} 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <svg
+              className={styles.checkmark}
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='3'
+              strokeLinecap='round'
+              strokeLinejoin='round'
             >
-              <polyline points="20 6 9 17 4 12" />
+              <polyline points='20 6 9 17 4 12' />
             </svg>
           )}
         </div>
-        
-        {isToggling && (
-          <div className={styles.loadingSpinner} />
-        )}
-        
-        {isAnimating && isCompleted && (
-          <div className={styles.successRipple} />
-        )}
+
+        {isToggling && <div className={styles.loadingSpinner} />}
+
+        {isAnimating && isCompleted && <div className={styles.successRipple} />}
       </button>
-      
+
       {showStreak && currentStreak > 0 && (
         <div className={styles.streakBadge}>
           <span className={styles.streakIcon}>🔥</span>

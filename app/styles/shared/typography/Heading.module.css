@@ -1,0 +1,131 @@
+.heading {
+  margin: 0;
+  line-height: 1.2;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Size variants */
+.size-xs {
+  font-size: 0.75rem;
+}
+
+.size-sm {
+  font-size: 0.875rem;
+}
+
+.size-md {
+  font-size: 1rem;
+}
+
+.size-lg {
+  font-size: 1.125rem;
+}
+
+.size-xl {
+  font-size: 1.25rem;
+}
+
+.size-2xl {
+  font-size: 1.5rem;
+}
+
+.size-3xl {
+  font-size: 2rem;
+}
+
+/* Weight variants */
+.weight-normal {
+  font-weight: 400;
+}
+
+.weight-medium {
+  font-weight: 500;
+}
+
+.weight-semibold {
+  font-weight: 600;
+}
+
+.weight-bold {
+  font-weight: 700;
+}
+
+/* Color variants */
+.color-primary {
+  color: var(--color-text-primary, #1f2937);
+}
+
+.color-secondary {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.color-tertiary {
+  color: var(--color-text-tertiary, #9ca3af);
+}
+
+.color-success {
+  color: var(--color-success, #10B981);
+}
+
+.color-warning {
+  color: var(--color-warning, #F59E0B);
+}
+
+.color-error {
+  color: var(--color-error, #EF4444);
+}
+
+/* Alignment */
+.align-left {
+  text-align: left;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .color-primary {
+    color: var(--color-text-primary-dark, #f9fafb);
+  }
+
+  .color-secondary {
+    color: var(--color-text-secondary-dark, #9ca3af);
+  }
+
+  .color-tertiary {
+    color: var(--color-text-tertiary-dark, #6b7280);
+  }
+
+  .color-success {
+    color: var(--color-success-dark, #34D399);
+  }
+
+  .color-warning {
+    color: var(--color-warning-dark, #FBBF24);
+  }
+
+  .color-error {
+    color: var(--color-error-dark, #F87171);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .size-3xl {
+    font-size: 1.5rem;
+  }
+
+  .size-2xl {
+    font-size: 1.25rem;
+  }
+
+  .size-xl {
+    font-size: 1.125rem;
+  }
+}

@@ -12,16 +12,11 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   color,
   className = '',
 }) => {
-  const spinnerClass = [styles.spinner, styles[size], className]
-    .filter(Boolean)
-    .join(' ');
+  const spinnerClass = [styles.spinner, styles[size], className].filter(Boolean).join(' ');
 
   return (
-    <div className={spinnerClass} role="presentation" aria-hidden="true">
-      <div 
-        className={styles.circle} 
-        style={color ? { borderTopColor: color } : undefined}
-      />
+    <div className={spinnerClass} role='presentation' aria-hidden='true'>
+      <div className={styles.circle} style={color ? { borderTopColor: color } : undefined} />
     </div>
   );
 };

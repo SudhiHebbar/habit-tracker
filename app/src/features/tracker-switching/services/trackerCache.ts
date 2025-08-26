@@ -12,11 +12,11 @@ class TrackerCache {
     const entry: TrackerCacheEntry = {
       data,
       timestamp: now,
-      expiresAt: now + CACHE_EXPIRY_MS
+      expiresAt: now + CACHE_EXPIRY_MS,
     };
 
     this.memoryCache.set(trackerId, entry);
-    
+
     // Store in localStorage for persistence
     try {
       localStorage.setItem(`${CACHE_KEY_PREFIX}${trackerId}`, JSON.stringify(entry));
@@ -29,10 +29,10 @@ class TrackerCache {
 
   get(trackerId: number): TrackerWithStats | null {
     const now = Date.now();
-    
+
     // Check memory cache first
     let entry = this.memoryCache.get(trackerId);
-    
+
     // If not in memory, check localStorage
     if (!entry) {
       try {
@@ -69,7 +69,7 @@ class TrackerCache {
 
   clear(): void {
     this.memoryCache.clear();
-    
+
     // Clear from localStorage
     try {
       const keys = Object.keys(localStorage);
@@ -109,8 +109,9 @@ class TrackerCache {
     }
 
     // Remove oldest entries
-    const sortedEntries = Array.from(this.memoryCache.entries())
-      .sort((a, b) => a[1].timestamp - b[1].timestamp);
+    const sortedEntries = Array.from(this.memoryCache.entries()).sort(
+      (a, b) => a[1].timestamp - b[1].timestamp
+    );
 
     while (this.memoryCache.size > MAX_CACHE_SIZE) {
       const [trackerId] = sortedEntries.shift()!;
@@ -126,10 +127,38 @@ class TrackerCache {
     this.clear();
   }
 
-  preload(_trackerIds: number[]): void {
-    // This would trigger background loading
-    // Implementation would depend on the API service
-    // TODO: Implement actual preloading logic
+  async preload(trackerIds: number[], options: { maxConcurrent?: number } = {}): Promise<void> {
+    const { maxConcurrent = 3 } = options;
+
+    // Filter out trackers that are already cached to avoid redundant API calls
+    const uncachedIds = trackerIds.filter(id => !this.has(id));
+
+    if (uncachedIds.length === 0) {
+      return; // Nothing to preload
+    }
+
+    // Import API service dynamically to avoid circular dependencies
+    const { trackerSwitchingApi } = await import('./trackerSwitchingApi');
+
+    // Process trackers in concurrent batches to avoid overwhelming the API
+    const chunks: number[][] = [];
+    for (let i = 0; i < uncachedIds.length; i += maxConcurrent) {
+      chunks.push(uncachedIds.slice(i, i + maxConcurrent));
+    }
+
+    for (const chunk of chunks) {
+      const loadPromises = chunk.map(async trackerId => {
+        try {
+          const data = await trackerSwitchingApi.getTrackerWithStats(trackerId);
+          this.set(trackerId, data);
+        } catch (error) {
+          console.warn(`Failed to preload tracker ${trackerId}:`, error);
+          // Don't rethrow - partial failures are acceptable for preloading
+        }
+      });
+
+      await Promise.all(loadPromises);
+    }
   }
 }
 

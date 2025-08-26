@@ -1,8 +1,8 @@
 /* HabitCard Component Styles */
 
 .habitCard {
-  --habit-color: #6366F1;
-  
+  --habit-color: #6366f1;
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
 
 .habitCard.completed {
   background: rgba(34, 197, 94, 0.05);
-  border-color: #22C55E;
+  border-color: #22c55e;
 }
 
 .header {
@@ -91,24 +91,24 @@
 }
 
 .completeButton {
-  color: #6B7280;
+  color: #6b7280;
 }
 
 .completeButton.active {
-  background: #22C55E;
+  background: #22c55e;
   color: white;
 }
 
 .completeButton:hover {
-  color: #22C55E;
+  color: #22c55e;
 }
 
 .completeButton.active:hover {
-  background: #16A34A;
+  background: #16a34a;
 }
 
 .editButton {
-  color: #6B7280;
+  color: #6b7280;
 }
 
 .editButton:hover {
@@ -116,11 +116,11 @@
 }
 
 .deleteButton {
-  color: #6B7280;
+  color: #6b7280;
 }
 
 .deleteButton:hover {
-  color: #EF4444;
+  color: #ef4444;
 }
 
 .icon {
@@ -278,30 +278,30 @@
     background: var(--color-surface-dark);
     border-color: var(--color-border-dark);
   }
-  
+
   .habitCard:hover {
     border-color: var(--habit-color);
   }
-  
+
   .habitCard.completed {
     background: rgba(34, 197, 94, 0.1);
-    border-color: #22C55E;
+    border-color: #22c55e;
   }
-  
+
   .actionButton {
     background: rgba(0, 0, 0, 0.5);
     color: white;
   }
-  
+
   .actionButton:hover {
     background: rgba(0, 0, 0, 0.7);
   }
-  
+
   .stats {
     background: var(--color-background-dark);
     border-color: var(--color-border-dark);
   }
-  
+
   .footer {
     background: var(--color-background-muted-dark);
     border-color: var(--color-border-dark);
@@ -314,42 +314,42 @@
     padding: 0.75rem;
     gap: 0.75rem;
   }
-  
+
   .titleSection {
     gap: 0.5rem;
   }
-  
+
   .iconContainer {
     width: 2rem;
     height: 2rem;
   }
-  
+
   .habitIcon {
     font-size: 1rem;
   }
-  
+
   .habitName {
     font-size: 1rem;
   }
-  
+
   .stats {
     padding: 0.5rem;
     gap: 0.75rem;
   }
-  
+
   .statValue {
     font-size: 1rem;
   }
-  
+
   .actions {
     gap: 0.25rem;
   }
-  
+
   .actionButton {
     width: 1.75rem;
     height: 1.75rem;
   }
-  
+
   .icon {
     width: 0.875rem;
     height: 0.875rem;
@@ -361,11 +361,11 @@
   .habitCard {
     border-width: 2px;
   }
-  
+
   .colorBar {
     height: 6px;
   }
-  
+
   .actionButton {
     border: 1px solid currentColor;
   }
@@ -376,19 +376,19 @@
   .habitCard {
     transition: none;
   }
-  
+
   .habitCard:hover {
     transform: none;
   }
-  
+
   .actionButton {
     transition: none;
   }
-  
+
   .actionButton:hover {
     transform: none;
   }
-  
+
   .actions {
     transition: none;
   }

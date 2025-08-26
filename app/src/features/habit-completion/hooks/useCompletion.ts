@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { completionApi } from '../services/completionApi';
 import { useOptimisticCompletion } from './useOptimisticCompletion';
+import { useEventEmitter } from '../../../shared/hooks/useEventBus';
 import type {
   HabitCompletion,
   CompletionStatus,
   CompletionStats,
-  ToggleCompletionRequest
+  ToggleCompletionRequest,
 } from '../types/completion.types';
 
 interface UseCompletionOptions {
@@ -21,7 +22,7 @@ export function useCompletion({
   date = new Date().toISOString().split('T')[0],
   autoFetch = true,
   onToggleSuccess,
-  onToggleError
+  onToggleError,
 }: UseCompletionOptions) {
   const [status, setStatus] = useState<CompletionStatus | null>(null);
   const [stats, setStats] = useState<CompletionStats | null>(null);
@@ -29,88 +30,109 @@ export function useCompletion({
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  // Event emitter for dashboard communication
+  const { emitHabitCompletion } = useEventEmitter();
+
   const {
     toggleCompletion: optimisticToggle,
     getOptimisticState,
     hasOptimisticUpdate,
-    isLoading: isToggling
+    isLoading: isToggling,
   } = useOptimisticCompletion({
-    onSuccess: (completion) => {
+    onSuccess: completion => {
       // Update local state with new completion data
       if (status) {
-        const newLastCompletedDate = completion.isCompleted 
-          ? completion.completionDate 
+        const newLastCompletedDate = completion.isCompleted
+          ? completion.completionDate
           : status.lastCompletedDate;
-        
+
         const updatedStatus: CompletionStatus = {
           ...status,
           isCompleted: completion.isCompleted,
           currentStreak: completion.currentStreak,
           longestStreak: completion.longestStreak,
         };
-        
+
         if (newLastCompletedDate) {
           updatedStatus.lastCompletedDate = newLastCompletedDate;
         }
-        
+
         setStatus(updatedStatus);
       }
-      
+
+      // Emit completion event for dashboard updates
+      emitHabitCompletion({
+        habitId,
+        isCompleted: completion.isCompleted,
+        completionDate: completion.completionDate,
+        currentStreak: completion.currentStreak,
+        longestStreak: completion.longestStreak,
+      });
+
       // Refresh both status and stats immediately with cache-busting
       setTimeout(() => {
         fetchStatus(true); // Force refresh status to get latest streak from API
-        fetchStats(true);  // Force refresh stats to bypass cache
+        fetchStats(true); // Force refresh stats to bypass cache
       }, 100); // Small delay to ensure backend calculations are complete
-      
+
       if (onToggleSuccess) {
         onToggleSuccess(completion);
       }
     },
-    onError: onToggleError || undefined
+    onError: onToggleError || undefined,
   });
 
-  const fetchStatus = useCallback(async (forceRefresh: boolean = false) => {
-    if (!habitId) return;
-    
-    setIsLoadingStatus(true);
-    setError(null);
-    
-    try {
-      const result = await completionApi.getCompletionStatus(habitId, date, forceRefresh);
-      setStatus(result);
-    } catch (err) {
-      setError(err as Error);
-      console.error('Failed to fetch completion status:', err);
-    } finally {
-      setIsLoadingStatus(false);
-    }
-  }, [habitId, date]);
+  const fetchStatus = useCallback(
+    async (forceRefresh: boolean = false) => {
+      if (!habitId) return;
 
-  const fetchStats = useCallback(async (forceRefresh: boolean = false) => {
-    if (!habitId) return;
-    
-    setIsLoadingStats(true);
-    
-    try {
-      const result = await completionApi.getCompletionStats(habitId, forceRefresh);
-      setStats(result);
-    } catch (err) {
-      console.error('Failed to fetch completion stats:', err);
-    } finally {
-      setIsLoadingStats(false);
-    }
-  }, [habitId]);
+      setIsLoadingStatus(true);
+      setError(null);
 
-  const toggleCompletion = useCallback(async (request?: ToggleCompletionRequest) => {
-    if (!habitId || !status) return;
-    
-    try {
-      await optimisticToggle(habitId, status.isCompleted, request || { date });
-    } catch (err) {
-      setError(err as Error);
-      throw err;
-    }
-  }, [habitId, status, date, optimisticToggle]);
+      try {
+        const result = await completionApi.getCompletionStatus(habitId, date, forceRefresh);
+        setStatus(result);
+      } catch (err) {
+        setError(err as Error);
+        console.error('Failed to fetch completion status:', err);
+      } finally {
+        setIsLoadingStatus(false);
+      }
+    },
+    [habitId, date]
+  );
+
+  const fetchStats = useCallback(
+    async (forceRefresh: boolean = false) => {
+      if (!habitId) return;
+
+      setIsLoadingStats(true);
+
+      try {
+        const result = await completionApi.getCompletionStats(habitId, forceRefresh);
+        setStats(result);
+      } catch (err) {
+        console.error('Failed to fetch completion stats:', err);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    },
+    [habitId]
+  );
+
+  const toggleCompletion = useCallback(
+    async (request?: ToggleCompletionRequest) => {
+      if (!habitId || !status) return;
+
+      try {
+        await optimisticToggle(habitId, status.isCompleted, request || { date });
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      }
+    },
+    [habitId, status, date, optimisticToggle]
+  );
 
   const isCompleted = useCallback(() => {
     if (!status) return false;
@@ -125,7 +147,7 @@ export function useCompletion({
   useEffect(() => {
     if (autoFetch && habitId) {
       fetchStatus(false); // Don't force refresh on initial load
-      fetchStats(false);  // Don't force refresh on initial load
+      fetchStats(false); // Don't force refresh on initial load
     }
   }, [habitId, date, autoFetch, fetchStatus, fetchStats]);
 
@@ -134,22 +156,22 @@ export function useCompletion({
     status,
     stats,
     error,
-    
+
     // Loading states
     isLoadingStatus,
     isLoadingStats,
     isToggling,
-    
+
     // Actions
     toggleCompletion,
     fetchStatus,
     fetchStats,
-    
+
     // Computed values
     isCompleted: isCompleted(),
     isOptimistic: isOptimistic(),
     currentStreak: status?.currentStreak || 0,
     longestStreak: status?.longestStreak || 0,
-    completionRate: stats?.completionRate || 0
+    completionRate: stats?.completionRate || 0,
   };
 }

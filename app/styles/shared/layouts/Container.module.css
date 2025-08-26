@@ -1,0 +1,46 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Size variants */
+.small {
+  max-width: 640px;
+}
+
+.medium {
+  max-width: 768px;
+}
+
+.large {
+  max-width: 1280px;
+}
+
+.full {
+  max-width: 100%;
+}
+
+/* No padding modifier */
+.noPadding {
+  padding: 0;
+}
+
+/* Responsive adjustments */
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    padding: 0 2rem;
+  }
+}

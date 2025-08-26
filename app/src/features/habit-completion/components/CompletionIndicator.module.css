@@ -7,18 +7,18 @@
 .dot {
   position: relative;
   border-radius: 50%;
-  background: #E5E7EB;
+  background: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
 }
 
-.indicator[data-completed="true"] .dot {
-  background: var(--indicator-color, #10B981);
+.indicator[data-completed='true'] .dot {
+  background: var(--indicator-color, #10b981);
 }
 
-.indicator[data-optimistic="true"] .dot {
+.indicator[data-optimistic='true'] .dot {
   opacity: 0.7;
   animation: pulse 1s ease-in-out infinite;
 }
@@ -51,13 +51,13 @@
 .label {
   font-size: 12px;
   font-weight: 500;
-  color: #6B7280;
+  color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.indicator[data-completed="true"] .label {
-  color: var(--indicator-color, #10B981);
+.indicator[data-completed='true'] .label {
+  color: var(--indicator-color, #10b981);
 }
 
 .small .label {
@@ -70,7 +70,8 @@
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.7;
   }
   50% {
@@ -94,12 +95,12 @@
   .dot {
     background: #374151;
   }
-  
+
   .label {
-    color: #9CA3AF;
+    color: #9ca3af;
   }
-  
-  .indicator[data-completed="true"] .label {
-    color: var(--indicator-color, #10B981);
+
+  .indicator[data-completed='true'] .label {
+    color: var(--indicator-color, #10b981);
   }
 }

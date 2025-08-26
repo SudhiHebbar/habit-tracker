@@ -19,7 +19,7 @@ const DeletedHabitItem: React.FC<DeletedHabitItemProps> = ({
   habit,
   onRestore,
   onPermanentDelete,
-  isLoading
+  isLoading,
 }) => {
   const [isRestoring, setIsRestoring] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -42,34 +42,27 @@ const DeletedHabitItem: React.FC<DeletedHabitItemProps> = ({
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   // Calculate days since deletion
-  const daysSinceDeletion = habit.updatedAt 
+  const daysSinceDeletion = habit.updatedAt
     ? Math.floor((Date.now() - new Date(habit.updatedAt).getTime()) / (1000 * 60 * 60 * 24))
     : 0;
 
   return (
     <div className={styles.deletedHabitItem}>
       <div className={styles.habitInfo}>
-        <div 
-          className={styles.habitColor} 
-          style={{ backgroundColor: habit.color }}
-        />
+        <div className={styles.habitColor} style={{ backgroundColor: habit.color }} />
         <div className={styles.habitDetails}>
           <h3 className={styles.habitName}>{habit.name}</h3>
           <div className={styles.habitMeta}>
-            {habit.description && (
-              <p className={styles.habitDescription}>{habit.description}</p>
-            )}
+            {habit.description && <p className={styles.habitDescription}>{habit.description}</p>}
             <div className={styles.metaRow}>
               <span className={styles.frequency}>{habit.targetFrequency}</span>
               <span className={styles.separator}>•</span>
-              <span className={styles.createdDate}>
-                Created {formatDate(habit.createdAt)}
-              </span>
+              <span className={styles.createdDate}>Created {formatDate(habit.createdAt)}</span>
               <span className={styles.separator}>•</span>
               <span className={styles.deletedInfo}>
                 Deleted {daysSinceDeletion === 0 ? 'today' : `${daysSinceDeletion} days ago`}
@@ -131,7 +124,7 @@ const DeletedHabitItem: React.FC<DeletedHabitItemProps> = ({
 
 export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
   trackerId,
-  onHabitRestored
+  onHabitRestored,
 }) => {
   const [deletedHabits, setDeletedHabits] = useState<Habit[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -141,7 +134,7 @@ export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
   const {
     getDeletedHabits,
     restoreHabitWithConfirmation,
-    loading: deleteLoading
+    loading: deleteLoading,
   } = useDeleteHabit();
 
   // Load deleted habits on component mount and when trackerId changes
@@ -157,8 +150,8 @@ export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
       const habits = await getDeletedHabits(trackerId);
       if (habits) {
         // Sort by deletion date (most recent first)
-        const sortedHabits = habits.sort((a, b) => 
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        const sortedHabits = habits.sort(
+          (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
         );
         setDeletedHabits(sortedHabits);
       }
@@ -174,13 +167,13 @@ export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
       const response = await restoreHabitWithConfirmation(habit.id, {
         confirmed: true,
         restoreToActiveState: true,
-        restoreReason: 'Restored from deleted habits view'
+        restoreReason: 'Restored from deleted habits view',
       });
 
       if (response) {
         // Remove from deleted habits list
         setDeletedHabits(prev => prev.filter(h => h.id !== habit.id));
-        
+
         // Notify parent component
         if (onHabitRestored) {
           onHabitRestored(habit);
@@ -202,9 +195,10 @@ export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
     setSearchQuery(e.target.value);
   };
 
-  const filteredHabits = deletedHabits.filter(habit =>
-    habit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (habit.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
+  const filteredHabits = deletedHabits.filter(
+    habit =>
+      habit.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (habit.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
   );
 
   if (isLoading) {
@@ -248,8 +242,8 @@ export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
       {deletedHabits.length > 0 && (
         <div className={styles.searchSection}>
           <input
-            type="text"
-            placeholder="Search deleted habits..."
+            type='text'
+            placeholder='Search deleted habits...'
             value={searchQuery}
             onChange={handleSearchChange}
             className={styles.searchInput}
@@ -288,8 +282,8 @@ export const DeletedHabitsView: React.FC<DeletedHabitsViewProps> = ({
           <div className={styles.footerInfo}>
             <span className={styles.infoIcon}>ℹ️</span>
             <span>
-              Deleted habits preserve all your completion history. 
-              Permanently deleted habits cannot be recovered.
+              Deleted habits preserve all your completion history. Permanently deleted habits cannot
+              be recovered.
             </span>
           </div>
         </div>

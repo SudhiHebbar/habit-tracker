@@ -13,7 +13,7 @@ describe('CompletionCheckbox Component', () => {
     habitId: 1,
     habitName: 'Daily Exercise',
     habitColor: '#4F46E5',
-    date: '2024-01-15'
+    date: '2024-01-15',
   };
 
   const defaultHookReturn = {
@@ -21,7 +21,7 @@ describe('CompletionCheckbox Component', () => {
     isOptimistic: false,
     isToggling: false,
     currentStreak: 0,
-    toggleCompletion: vi.fn()
+    toggleCompletion: vi.fn(),
   };
 
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('CompletionCheckbox Component', () => {
 
   it('renders uncompleted checkbox by default', () => {
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).toHaveAttribute('aria-checked', 'false');
@@ -45,15 +45,15 @@ describe('CompletionCheckbox Component', () => {
   it('renders completed checkbox when isCompleted is true', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isCompleted: true
+      isCompleted: true,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toHaveAttribute('aria-checked', 'true');
     expect(checkbox).toHaveAttribute('aria-label', 'Mark Daily Exercise as incomplete');
-    
+
     // Check if checkmark icon is visible
     const checkmark = screen.getByRole('img', { hidden: true });
     expect(checkmark).toBeInTheDocument();
@@ -63,14 +63,14 @@ describe('CompletionCheckbox Component', () => {
     const mockToggleCompletion = vi.fn().mockResolvedValue({});
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
-    
+
     await waitFor(() => {
       expect(mockToggleCompletion).toHaveBeenCalledTimes(1);
     });
@@ -81,14 +81,14 @@ describe('CompletionCheckbox Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       isToggling: true,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeDisabled();
-    
+
     fireEvent.click(checkbox);
     expect(mockToggleCompletion).not.toHaveBeenCalled();
   });
@@ -96,11 +96,11 @@ describe('CompletionCheckbox Component', () => {
   it('shows loading spinner when toggling', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      isToggling: true
+      isToggling: true,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const spinner = screen.getByRole('progressbar');
     expect(spinner).toBeInTheDocument();
   });
@@ -109,13 +109,13 @@ describe('CompletionCheckbox Component', () => {
     const mockToggleCompletion = vi.fn().mockResolvedValue({});
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
-    
+
     // Test Enter key
     fireEvent.keyDown(checkbox, { key: 'Enter' });
     await waitFor(() => {
@@ -133,26 +133,26 @@ describe('CompletionCheckbox Component', () => {
     const mockToggleCompletion = vi.fn().mockResolvedValue({});
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.keyDown(checkbox, { key: 'Tab' });
     fireEvent.keyDown(checkbox, { key: 'Escape' });
-    
+
     expect(mockToggleCompletion).not.toHaveBeenCalled();
   });
 
   it('shows streak badge when showStreak is true and streak exists', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      currentStreak: 5
+      currentStreak: 5,
     });
 
-    render(<CompletionCheckbox {...defaultProps} showStreak={true} />);
-    
+    render(<CompletionCheckbox {...defaultProps} showStreak />);
+
     expect(screen.getByText('🔥')).toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();
   });
@@ -160,11 +160,11 @@ describe('CompletionCheckbox Component', () => {
   it('hides streak badge when showStreak is false', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      currentStreak: 5
+      currentStreak: 5,
     });
 
     render(<CompletionCheckbox {...defaultProps} showStreak={false} />);
-    
+
     expect(screen.queryByText('🔥')).not.toBeInTheDocument();
     expect(screen.queryByText('5')).not.toBeInTheDocument();
   });
@@ -172,19 +172,19 @@ describe('CompletionCheckbox Component', () => {
   it('hides streak badge when streak is zero', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      currentStreak: 0
+      currentStreak: 0,
     });
 
-    render(<CompletionCheckbox {...defaultProps} showStreak={true} />);
-    
+    render(<CompletionCheckbox {...defaultProps} showStreak />);
+
     expect(screen.queryByText('🔥')).not.toBeInTheDocument();
   });
 
   it('applies correct size classes', () => {
-    const { rerender } = render(<CompletionCheckbox {...defaultProps} size="small" />);
+    const { rerender } = render(<CompletionCheckbox {...defaultProps} size='small' />);
     expect(screen.getByRole('checkbox').closest('div')).toHaveClass('small');
 
-    rerender(<CompletionCheckbox {...defaultProps} size="large" />);
+    rerender(<CompletionCheckbox {...defaultProps} size='large' />);
     expect(screen.getByRole('checkbox').closest('div')).toHaveClass('large');
 
     rerender(<CompletionCheckbox {...defaultProps} />);
@@ -192,14 +192,14 @@ describe('CompletionCheckbox Component', () => {
   });
 
   it('applies custom className', () => {
-    render(<CompletionCheckbox {...defaultProps} className="custom-class" />);
-    
+    render(<CompletionCheckbox {...defaultProps} className='custom-class' />);
+
     expect(screen.getByRole('checkbox').closest('div')).toHaveClass('custom-class');
   });
 
   it('applies habit color as CSS custom property', () => {
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toHaveStyle({ '--habit-color': '#4F46E5' });
   });
@@ -208,11 +208,11 @@ describe('CompletionCheckbox Component', () => {
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
       isCompleted: true,
-      isOptimistic: true
+      isOptimistic: true,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const container = screen.getByRole('checkbox').closest('div');
     expect(container).toHaveAttribute('data-completed', 'true');
     expect(container).toHaveAttribute('data-optimistic', 'true');
@@ -221,10 +221,10 @@ describe('CompletionCheckbox Component', () => {
   it('calls onToggle callback when provided', async () => {
     const mockOnToggle = vi.fn();
     const mockToggleCompletion = vi.fn().mockResolvedValue({});
-    
+
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     // Mock the onToggleSuccess callback being called
@@ -234,18 +234,18 @@ describe('CompletionCheckbox Component', () => {
           onToggleSuccess({ isCompleted: true });
         }
       });
-      
+
       return {
         ...defaultHookReturn,
-        toggleCompletion
+        toggleCompletion,
       };
     });
 
     render(<CompletionCheckbox {...defaultProps} onToggle={mockOnToggle} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
-    
+
     await waitFor(() => {
       expect(mockOnToggle).toHaveBeenCalledWith(true);
     });
@@ -253,25 +253,25 @@ describe('CompletionCheckbox Component', () => {
 
   it('shows success animation when completion succeeds', async () => {
     vi.useFakeTimers();
-    
+
     mockUseCompletion.mockImplementation(({ onToggleSuccess }) => {
       const toggleCompletion = vi.fn().mockImplementation(async () => {
         if (onToggleSuccess) {
           onToggleSuccess({ isCompleted: true });
         }
       });
-      
+
       return {
         ...defaultHookReturn,
-        toggleCompletion
+        toggleCompletion,
       };
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
-    
+
     await waitFor(() => {
       const container = screen.getByRole('checkbox').closest('div');
       expect(container).toHaveAttribute('data-animating', 'true');
@@ -279,52 +279,46 @@ describe('CompletionCheckbox Component', () => {
 
     // Fast-forward timers to end animation
     vi.advanceTimersByTime(600);
-    
+
     await waitFor(() => {
       const container = screen.getByRole('checkbox').closest('div');
       expect(container).toHaveAttribute('data-animating', 'false');
     });
-    
+
     vi.useRealTimers();
   });
 
   it('handles toggle completion errors gracefully', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const mockToggleCompletion = vi.fn().mockRejectedValue(new Error('Network error'));
-    
+
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
-    
+
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith('Failed to toggle completion:', expect.any(Error));
     });
-    
+
     consoleSpy.mockRestore();
   });
 
   it('uses current date when no date prop provided', () => {
     const { habitId, habitName, habitColor } = defaultProps;
-    
-    render(
-      <CompletionCheckbox 
-        habitId={habitId}
-        habitName={habitName}
-        habitColor={habitColor}
-      />
-    );
-    
+
+    render(<CompletionCheckbox habitId={habitId} habitName={habitName} habitColor={habitColor} />);
+
     const today = new Date().toISOString().split('T')[0];
     expect(mockUseCompletion).toHaveBeenCalledWith(
       expect.objectContaining({
         habitId,
-        date: today
+        date: today,
       })
     );
   });
@@ -333,22 +327,22 @@ describe('CompletionCheckbox Component', () => {
     const mockToggleCompletion = vi.fn().mockResolvedValue({});
     mockUseCompletion.mockReturnValue({
       ...defaultHookReturn,
-      toggleCompletion: mockToggleCompletion
+      toggleCompletion: mockToggleCompletion,
     });
 
     const mockStopPropagation = vi.fn();
     const mockPreventDefault = vi.fn();
 
     render(<CompletionCheckbox {...defaultProps} />);
-    
+
     const checkbox = screen.getByRole('checkbox');
     const clickEvent = {
       preventDefault: mockPreventDefault,
-      stopPropagation: mockStopPropagation
+      stopPropagation: mockStopPropagation,
     } as any;
-    
+
     fireEvent.click(checkbox, clickEvent);
-    
+
     expect(mockPreventDefault).toHaveBeenCalled();
     expect(mockStopPropagation).toHaveBeenCalled();
   });

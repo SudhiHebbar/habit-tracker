@@ -19,7 +19,7 @@ const COLOR_PALETTE: ColorOption[] = [
   { hex: '#D946EF', name: 'Fuchsia', category: 'primary' },
   { hex: '#EC4899', name: 'Pink', category: 'primary' },
   { hex: '#EF4444', name: 'Red', category: 'primary' },
-  
+
   // Secondary colors
   { hex: '#F97316', name: 'Orange', category: 'secondary' },
   { hex: '#EAB308', name: 'Yellow', category: 'secondary' },
@@ -27,7 +27,7 @@ const COLOR_PALETTE: ColorOption[] = [
   { hex: '#10B981', name: 'Emerald', category: 'secondary' },
   { hex: '#06B6D4', name: 'Cyan', category: 'secondary' },
   { hex: '#3B82F6', name: 'Blue', category: 'secondary' },
-  
+
   // Accent colors
   { hex: '#84CC16', name: 'Lime', category: 'accent' },
   { hex: '#F59E0B', name: 'Amber', category: 'accent' },
@@ -35,7 +35,7 @@ const COLOR_PALETTE: ColorOption[] = [
   { hex: '#0EA5E9', name: 'Sky', category: 'accent' },
   { hex: '#6366F1', name: 'Indigo Light', category: 'accent' },
   { hex: '#8B5CF6', name: 'Violet Light', category: 'accent' },
-  
+
   // Neutral colors
   { hex: '#64748B', name: 'Slate', category: 'neutral' },
   { hex: '#6B7280', name: 'Gray', category: 'neutral' },
@@ -50,7 +50,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   onColorSelect,
   className = '',
   disabled = false,
-  size = 'medium'
+  size = 'medium',
 }) => {
   const handleColorClick = (color: string) => {
     if (!disabled) {
@@ -65,25 +65,28 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
     }
   };
 
-  const groupedColors = COLOR_PALETTE.reduce((acc, color) => {
-    if (!acc[color.category]) {
-      acc[color.category] = [];
-    }
-    acc[color.category].push(color);
-    return acc;
-  }, {} as Record<string, ColorOption[]>);
+  const groupedColors = COLOR_PALETTE.reduce(
+    (acc, color) => {
+      if (!acc[color.category]) {
+        acc[color.category] = [];
+      }
+      acc[color.category].push(color);
+      return acc;
+    },
+    {} as Record<string, ColorOption[]>
+  );
 
   return (
     <div className={`${styles.colorPicker} ${styles[size]} ${className}`}>
       <div className={styles.selectedColor}>
-        <div 
+        <div
           className={styles.selectedSwatch}
           style={{ backgroundColor: selectedColor }}
           aria-label={`Selected color: ${selectedColor}`}
         />
         <span className={styles.selectedValue}>{selectedColor}</span>
       </div>
-      
+
       <div className={styles.colorGrid}>
         {Object.entries(groupedColors).map(([category, colors]) => (
           <div key={category} className={styles.colorCategory}>
@@ -91,10 +94,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </h4>
             <div className={styles.categoryColors}>
-              {colors.map((color) => (
+              {colors.map(color => (
                 <button
                   key={color.hex}
-                  type="button"
+                  type='button'
                   className={`
                     ${styles.colorSwatch}
                     ${selectedColor === color.hex ? styles.selected : ''}
@@ -102,23 +105,23 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
                   `}
                   style={{ backgroundColor: color.hex }}
                   onClick={() => handleColorClick(color.hex)}
-                  onKeyDown={(e) => handleKeyDown(e, color.hex)}
+                  onKeyDown={e => handleKeyDown(e, color.hex)}
                   disabled={disabled}
                   title={`${color.name} (${color.hex})`}
                   aria-label={`Select ${color.name} color (${color.hex})`}
                   aria-pressed={selectedColor === color.hex}
                 >
                   {selectedColor === color.hex && (
-                    <svg 
-                      className={styles.checkIcon} 
-                      viewBox="0 0 20 20" 
-                      fill="currentColor"
-                      aria-hidden="true"
+                    <svg
+                      className={styles.checkIcon}
+                      viewBox='0 0 20 20'
+                      fill='currentColor'
+                      aria-hidden='true'
                     >
-                      <path 
-                        fillRule="evenodd" 
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
-                        clipRule="evenodd" 
+                      <path
+                        fillRule='evenodd'
+                        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                        clipRule='evenodd'
                       />
                     </svg>
                   )}

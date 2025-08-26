@@ -22,7 +22,7 @@ export function usePreloadData<T>(
     delay = 0,
     onIdle = true,
     onIntersection = false,
-    rootMargin = '50px'
+    rootMargin = '50px',
   } = options;
 
   const isPreloading = useRef(false);
@@ -106,7 +106,7 @@ export function usePreloadData<T>(
     document.body.appendChild(target);
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting) {
           preload();
           observer.disconnect();
@@ -128,6 +128,6 @@ export function usePreloadData<T>(
   return {
     preload,
     isPreloading: isPreloading.current,
-    preloadedData: preloadedData.current
+    preloadedData: preloadedData.current,
   };
 }

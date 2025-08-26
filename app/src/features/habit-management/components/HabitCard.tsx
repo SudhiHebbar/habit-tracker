@@ -1,6 +1,7 @@
 import React from 'react';
 import { CompletionCheckbox } from '../../habit-completion/components/CompletionCheckbox';
 import { useCompletion } from '../../habit-completion/hooks/useCompletion';
+import { LazyHabitHistory } from '../../dashboard/components/LazyHabitHistory';
 import type { Habit } from '../types/habit.types';
 import styles from './HabitCard.module.css';
 
@@ -11,6 +12,7 @@ interface HabitCardProps {
   onToggleComplete?: (habit: Habit) => void;
   isCompleted?: boolean;
   showStats?: boolean;
+  showHistory?: boolean;
   completionDate?: string; // Date for which to track completion (YYYY-MM-DD)
   className?: string;
 }
@@ -22,21 +24,17 @@ export const HabitCard: React.FC<HabitCardProps> = ({
   onToggleComplete,
   isCompleted = false,
   showStats = true,
+  showHistory = false,
   completionDate,
-  className = ''
+  className = '',
 }) => {
   const currentDate = completionDate || new Date().toISOString().split('T')[0];
-  
+
   // Get real-time completion data
-  const {
-    stats,
-    currentStreak,
-    longestStreak,
-    completionRate
-  } = useCompletion({
+  const { stats, currentStreak, longestStreak, completionRate } = useCompletion({
     habitId: habit.id,
     date: currentDate,
-    autoFetch: showStats
+    autoFetch: showStats,
   });
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -61,7 +59,7 @@ export const HabitCard: React.FC<HabitCardProps> = ({
   };
 
   return (
-    <div 
+    <div
       className={`${styles.habitCard} ${isCompleted ? styles.completed : ''} ${!habit.isActive ? styles.inactive : ''} ${className}`}
       style={{ '--habit-color': habit.color } as React.CSSProperties}
     >
@@ -75,8 +73,8 @@ export const HabitCard: React.FC<HabitCardProps> = ({
               habitName={habit.name}
               habitColor={habit.color}
               date={completionDate || new Date().toISOString().split('T')[0]}
-              size="large"
-              showStreak={true}
+              size='large'
+              showStreak
               onToggle={() => {
                 // Optional: Handle completion state change
               }}
@@ -87,11 +85,11 @@ export const HabitCard: React.FC<HabitCardProps> = ({
             <button
               className={`${styles.actionButton} ${styles.editButton}`}
               onClick={handleEditClick}
-              title="Edit habit"
-              aria-label="Edit habit"
+              title='Edit habit'
+              aria-label='Edit habit'
             >
-              <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
-                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              <svg viewBox='0 0 20 20' fill='currentColor' className={styles.icon}>
+                <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z' />
               </svg>
             </button>
           )}
@@ -99,14 +97,14 @@ export const HabitCard: React.FC<HabitCardProps> = ({
             <button
               className={`${styles.actionButton} ${styles.deleteButton}`}
               onClick={handleDeleteClick}
-              title="Delete habit"
-              aria-label="Delete habit"
+              title='Delete habit'
+              aria-label='Delete habit'
             >
-              <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
-                <path 
-                  fillRule="evenodd" 
-                  d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z" 
-                  clipRule="evenodd" 
+              <svg viewBox='0 0 20 20' fill='currentColor' className={styles.icon}>
+                <path
+                  fillRule='evenodd'
+                  d='M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z'
+                  clipRule='evenodd'
                 />
               </svg>
             </button>
@@ -126,13 +124,9 @@ export const HabitCard: React.FC<HabitCardProps> = ({
           <div className={styles.titleContent}>
             <h3 className={styles.habitName}>
               {habit.name}
-              {!habit.isActive && (
-                <span className={styles.inactiveLabel}> (Inactive)</span>
-              )}
+              {!habit.isActive && <span className={styles.inactiveLabel}> (Inactive)</span>}
             </h3>
-            {habit.description && (
-              <p className={styles.habitDescription}>{habit.description}</p>
-            )}
+            {habit.description && <p className={styles.habitDescription}>{habit.description}</p>}
           </div>
         </div>
 
@@ -159,11 +153,11 @@ export const HabitCard: React.FC<HabitCardProps> = ({
                 <span className={styles.statLabel}>Best Streak</span>
               </div>
             </div>
-            
+
             <div className={styles.statGroup}>
               <div className={styles.stat}>
                 <span className={styles.statValue}>
-                  {stats ? (stats.totalCompletions || 0) : (habit.completionsThisWeek || 0)}
+                  {stats ? stats.totalCompletions || 0 : habit.completionsThisWeek || 0}
                 </span>
                 <span className={styles.statLabel}>Total Done</span>
               </div>
@@ -178,21 +172,29 @@ export const HabitCard: React.FC<HabitCardProps> = ({
         )}
 
         {/* Last completion */}
-        {habit.lastCompletedDate && (
+        {habit.lastCompletedDate && !showHistory && (
           <div className={styles.lastCompletion}>
             <span className={styles.lastCompletionLabel}>Last completed:</span>
-            <span className={styles.lastCompletionDate}>
-              {formatDate(habit.lastCompletedDate)}
-            </span>
+            <span className={styles.lastCompletionDate}>{formatDate(habit.lastCompletedDate)}</span>
+          </div>
+        )}
+
+        {/* Lazy-loaded completion history */}
+        {showHistory && (
+          <div className={styles.historySection}>
+            <LazyHabitHistory
+              habitId={habit.id}
+              habitName={habit.name}
+              days={30}
+              className={styles.habitHistory}
+            />
           </div>
         )}
       </div>
 
       {/* Footer with creation date */}
       <div className={styles.footer}>
-        <span className={styles.createdDate}>
-          Created {formatDate(habit.createdAt)}
-        </span>
+        <span className={styles.createdDate}>Created {formatDate(habit.createdAt)}</span>
       </div>
     </div>
   );

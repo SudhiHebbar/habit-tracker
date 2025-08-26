@@ -14,7 +14,7 @@ const mockTrackers: Tracker[] = [
     updatedAt: '2024-01-01T00:00:00Z',
     isActive: true,
     displayOrder: 0,
-    habitCount: 5
+    habitCount: 5,
   },
   {
     id: 2,
@@ -26,8 +26,8 @@ const mockTrackers: Tracker[] = [
     updatedAt: '2024-01-02T00:00:00Z',
     isActive: true,
     displayOrder: 1,
-    habitCount: 3
-  }
+    habitCount: 3,
+  },
 ];
 
 describe('TrackerSelector Component', () => {
@@ -44,7 +44,7 @@ describe('TrackerSelector Component', () => {
         trackers={mockTrackers}
         selectedTracker={null}
         onSelect={mockOnSelect}
-        placeholder="Choose a tracker"
+        placeholder='Choose a tracker'
       />
     );
 
@@ -65,11 +65,7 @@ describe('TrackerSelector Component', () => {
 
   it('opens dropdown when clicked', () => {
     render(
-      <TrackerSelector
-        trackers={mockTrackers}
-        selectedTracker={null}
-        onSelect={mockOnSelect}
-      />
+      <TrackerSelector trackers={mockTrackers} selectedTracker={null} onSelect={mockOnSelect} />
     );
 
     const selector = screen.getByRole('button');
@@ -81,11 +77,7 @@ describe('TrackerSelector Component', () => {
 
   it('calls onSelect when tracker is chosen', () => {
     render(
-      <TrackerSelector
-        trackers={mockTrackers}
-        selectedTracker={null}
-        onSelect={mockOnSelect}
-      />
+      <TrackerSelector trackers={mockTrackers} selectedTracker={null} onSelect={mockOnSelect} />
     );
 
     const selector = screen.getByRole('button');
@@ -99,12 +91,7 @@ describe('TrackerSelector Component', () => {
 
   it('shows loading state', () => {
     render(
-      <TrackerSelector
-        trackers={[]}
-        selectedTracker={null}
-        onSelect={mockOnSelect}
-        isLoading={true}
-      />
+      <TrackerSelector trackers={[]} selectedTracker={null} onSelect={mockOnSelect} isLoading />
     );
 
     expect(screen.getByText(/loading/i)).toBeInTheDocument();

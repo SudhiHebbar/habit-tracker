@@ -12,11 +12,11 @@ interface HabitDeletionExampleProps {
 
 export const HabitDeletionExample: React.FC<HabitDeletionExampleProps> = ({
   habit,
-  onRefreshHabits
+  onRefreshHabits,
 }) => {
   // Delete dialog state
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  
+
   // Undo toast state
   const [deletedHabit, setDeletedHabit] = useState<Habit | null>(null);
   const [showUndoToast, setShowUndoToast] = useState(false);
@@ -29,16 +29,16 @@ export const HabitDeletionExample: React.FC<HabitDeletionExampleProps> = ({
     setIsDeleteDialogOpen(false);
   };
 
-  const handleHabitDeleted = (habitId: number) => {
+  const handleHabitDeleted = (_habitId: number) => {
     // Close the delete dialog
     setIsDeleteDialogOpen(false);
-    
+
     // Show the undo toast
     if (habit) {
       setDeletedHabit(habit);
       setShowUndoToast(true);
     }
-    
+
     // Refresh the habits list
     onRefreshHabits();
   };
@@ -47,7 +47,7 @@ export const HabitDeletionExample: React.FC<HabitDeletionExampleProps> = ({
     console.log('Habit restored:', restoredHabit);
     setShowUndoToast(false);
     setDeletedHabit(null);
-    
+
     // Refresh the habits list to show the restored habit
     onRefreshHabits();
   };
@@ -67,7 +67,7 @@ export const HabitDeletionExample: React.FC<HabitDeletionExampleProps> = ({
     <>
       {/* Example delete button */}
       {habit && (
-        <button 
+        <button
           onClick={handleDeleteClick}
           style={{
             background: '#dc2626',
@@ -75,7 +75,7 @@ export const HabitDeletionExample: React.FC<HabitDeletionExampleProps> = ({
             border: 'none',
             padding: '8px 16px',
             borderRadius: '6px',
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}
         >
           Delete {habit.name}

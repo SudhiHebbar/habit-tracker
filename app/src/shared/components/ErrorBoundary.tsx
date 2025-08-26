@@ -31,7 +31,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // You can log the error to an error reporting service here
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
-    
+
     this.setState({
       error,
       errorInfo,
@@ -63,7 +63,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             <p className={styles.errorMessage}>
               We apologize for the inconvenience. An unexpected error occurred.
             </p>
-            
+
             {import.meta.env.DEV && this.state.error && (
               <details className={styles.errorDetails}>
                 <summary className={styles.errorSummary}>Error Details</summary>
@@ -73,19 +73,15 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                 </pre>
               </details>
             )}
-            
+
             <div className={styles.errorActions}>
-              <button
-                className={styles.retryButton}
-                onClick={this.resetError}
-                type="button"
-              >
+              <button className={styles.retryButton} onClick={this.resetError} type='button'>
                 Try Again
               </button>
               <button
                 className={styles.reloadButton}
                 onClick={() => window.location.reload()}
-                type="button"
+                type='button'
               >
                 Reload Page
               </button>

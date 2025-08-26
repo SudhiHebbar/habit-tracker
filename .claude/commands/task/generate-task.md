@@ -16,6 +16,8 @@ The AI agent only gets the context you are appending to the PRP and training dat
 
 ## Research Process
 
+During the research process, create clear tasks and spawn as many agents and subagents as needed using the batch tools. The deeper research we do here the better the outcome will be. we optminize for chance of success and not for speed.
+
 1. **Codebase Analysis**
    - Search for similar features/patterns in the codebase (if provided)
    - Identify the existing features and understand what changes are required to ensure existing features work as-is

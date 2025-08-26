@@ -16,9 +16,7 @@ export const corsConfig = {
     credentials: true,
   },
   production: {
-    allowedOrigins: [
-      import.meta.env.VITE_FRONTEND_URL || 'https://your-domain.com',
-    ],
+    allowedOrigins: [import.meta.env.VITE_FRONTEND_URL || 'https://your-domain.com'],
     allowedMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -61,26 +59,19 @@ export const withCorsHeaders = (headers: Record<string, string> = {}): Record<st
 /**
  * Handle preflight CORS request
  */
-export const handlePreflightRequest = (
-  method: string,
-  headers: string[]
-): boolean => {
+export const handlePreflightRequest = (method: string, headers: string[]): boolean => {
   const config = getCorsConfig();
-  
+
   const isMethodAllowed = config.allowedMethods.includes(method.toUpperCase());
-  const areHeadersAllowed = headers.every(header => 
-    config.allowedHeaders.includes(header)
-  );
-  
+  const areHeadersAllowed = headers.every(header => config.allowedHeaders.includes(header));
+
   return isMethodAllowed && areHeadersAllowed;
 };
 
 /**
  * Create fetch options with CORS configuration
  */
-export const createCorsRequestOptions = (
-  options: RequestInit = {}
-): RequestInit => {
+export const createCorsRequestOptions = (options: RequestInit = {}): RequestInit => {
   return {
     ...options,
     mode: 'cors' as RequestMode,

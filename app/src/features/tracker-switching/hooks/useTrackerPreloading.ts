@@ -14,11 +14,7 @@ export function useTrackerPreloading(
   activeTrackerId: number | null,
   options: PreloadingOptions = {}
 ) {
-  const {
-    enabled = true,
-    maxConcurrent = 3,
-    priorityStrategy = 'recent'
-  } = options;
+  const { enabled = true, maxConcurrent = 3, priorityStrategy = 'recent' } = options;
 
   const preloadTracker = useCallback(async (trackerId: number) => {
     // Skip if already cached
@@ -34,17 +30,20 @@ export function useTrackerPreloading(
     }
   }, []);
 
-  const preloadMultiple = useCallback(async (trackerIds: number[]) => {
-    // Limit concurrent requests
-    const chunks: number[][] = [];
-    for (let i = 0; i < trackerIds.length; i += maxConcurrent) {
-      chunks.push(trackerIds.slice(i, i + maxConcurrent));
-    }
+  const preloadMultiple = useCallback(
+    async (trackerIds: number[]) => {
+      // Limit concurrent requests
+      const chunks: number[][] = [];
+      for (let i = 0; i < trackerIds.length; i += maxConcurrent) {
+        chunks.push(trackerIds.slice(i, i + maxConcurrent));
+      }
 
-    for (const chunk of chunks) {
-      await Promise.all(chunk.map(id => preloadTracker(id)));
-    }
-  }, [maxConcurrent, preloadTracker]);
+      for (const chunk of chunks) {
+        await Promise.all(chunk.map(id => preloadTracker(id)));
+      }
+    },
+    [maxConcurrent, preloadTracker]
+  );
 
   const getPreloadPriority = useCallback(() => {
     const trackerIds: number[] = [];
@@ -57,7 +56,9 @@ export function useTrackerPreloading(
       case 'recent':
         // Sort by last accessed time
         const sortedByRecent = [...trackerSummaries]
-          .sort((a, b) => new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime())
+          .sort(
+            (a, b) => new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime()
+          )
           .slice(0, 5)
           .map(t => t.id);
         trackerIds.push(...sortedByRecent);
@@ -136,12 +137,15 @@ export function useTrackerPreloading(
       return;
     }
 
-    const idleCallbackId = requestIdleCallback(() => {
-      const trackerIds = getPreloadPriority();
-      if (trackerIds.length > 0) {
-        preloadMultiple(trackerIds);
-      }
-    }, { timeout: 5000 });
+    const idleCallbackId = requestIdleCallback(
+      () => {
+        const trackerIds = getPreloadPriority();
+        if (trackerIds.length > 0) {
+          preloadMultiple(trackerIds);
+        }
+      },
+      { timeout: 5000 }
+    );
 
     return () => {
       if ('cancelIdleCallback' in window) {
@@ -153,6 +157,6 @@ export function useTrackerPreloading(
   return {
     preloadTracker,
     preloadMultiple,
-    getPreloadPriority
+    getPreloadPriority,
   };
 }

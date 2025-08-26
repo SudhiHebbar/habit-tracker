@@ -46,11 +46,11 @@
   .dashboard {
     padding: var(--spacing-4);
   }
-  
+
   .habitGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .dashboardStats {
     grid-template-columns: 1fr;
   }

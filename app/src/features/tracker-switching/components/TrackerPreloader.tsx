@@ -15,17 +15,13 @@ export const TrackerPreloader: React.FC<TrackerPreloaderProps> = ({
   activeTrackerId,
   strategy = 'recent',
   enabled = true,
-  maxConcurrent = 3
+  maxConcurrent = 3,
 }) => {
-  const { preloadMultiple, getPreloadPriority } = useTrackerPreloading(
-    trackers,
-    activeTrackerId,
-    {
-      enabled,
-      maxConcurrent,
-      priorityStrategy: strategy
-    }
-  );
+  const { preloadMultiple, getPreloadPriority } = useTrackerPreloading(trackers, activeTrackerId, {
+    enabled,
+    maxConcurrent,
+    priorityStrategy: strategy,
+  });
 
   // Preload on mount and when trackers change
   useEffect(() => {
