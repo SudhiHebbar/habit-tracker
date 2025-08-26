@@ -54,6 +54,7 @@ export const COMMON_BACKGROUNDS = {
  * Color Contrast Calculator Class
  */
 export class ContrastCalculator {
+  private static _alternativeColorCache = new Map<string, string[]>();
   /**
    * Calculate relative luminance of a color
    * Based on WCAG 2.1 formula
@@ -185,14 +186,18 @@ export class ContrastCalculator {
       }
     }
 
-    // Suggest alternative colors from the palette
-    const alternativeColors = ColorSystem.getPopularColors()
-      .map(colorOption => colorOption.hex)
-      .filter(hex => {
-        const altContrast = this.getContrastRatio(hex, background);
-        return altContrast >= WCAG_STANDARDS.AA_NORMAL;
-      })
-      .slice(0, 5);
+    // Suggest alternative colors from the palette, with caching per background color
+    let alternativeColors: string[] | undefined = this._alternativeColorCache.get(background);
+    if (!alternativeColors) {
+      alternativeColors = ColorSystem.getPopularColors()
+        .map(colorOption => colorOption.hex)
+        .filter(hex => {
+          const altContrast = this.getContrastRatio(hex, background);
+          return altContrast >= WCAG_STANDARDS.AA_NORMAL;
+        })
+        .slice(0, 5);
+      this._alternativeColorCache.set(background, alternativeColors);
+    }
 
     if (alternativeColors.length > 0) {
       recommendations.alternativeColors = alternativeColors;
