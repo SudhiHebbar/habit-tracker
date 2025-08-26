@@ -174,8 +174,8 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
             <button
               type="button"
               className={styles.recommendationColor}
-              style={{ backgroundColor: recommendations.lighterVariant }}
-              onClick={() => handleBackgroundChange(recommendations.lighterVariant!)}
+              style={{ color: recommendations.lighterVariant }}
+              onClick={() => handleForegroundChange(recommendations.lighterVariant!)}
               title={`Use lighter variant: ${recommendations.lighterVariant}`}
             >
               {recommendations.lighterVariant}
