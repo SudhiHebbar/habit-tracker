@@ -78,16 +78,17 @@ dotnet ef database update --project HabitTracker.Infrastructure --startup-projec
 ### Frontend Architecture (app/)
 - **src/features/**: Feature modules using vertical slice architecture
   - Each feature has: components/, hooks/, services/, types/
-  - Pages: dashboard/, habits/, settings/, home/, 404/
+  - Key features: dashboard/, habits/, habit-management/, habit-completion/, animations/
+  - animations/: Comprehensive animation system with Framer Motion integration
 - **src/shared/**: Shared utilities and components
-  - components/: Reusable UI components with tests
+  - components/: Reusable UI components with tests (Layout/, Navigation/, Typography/, transitions/)
   - services/: API integration services (api.ts, authService.ts, etc.)
   - types/: TypeScript type definitions
   - utils/: Helper functions (cors.ts, env.ts, navigation.ts)
-- **styles/**: Global styles and CSS modules
+- **src/styles/**: Global styles and CSS modules
   - global/: Reset, themes, variables, grid system
-  - features/: Feature-specific styles
-  - shared/: Component styles
+  - features/: Feature-specific styles including animations/
+  - shared/: Component styles with accessibility-first animations
 
 ### Backend Architecture (server/)
 - **HabitTracker.Api**: Web API layer with controllers and middleware
@@ -102,15 +103,18 @@ dotnet ef database update --project HabitTracker.Infrastructure --startup-projec
 - Use CSS Modules for component styling (.module.css files)
 - Import aliases: @/, @features/, @shared/, @styles/
 - Functional components with TypeScript interfaces for props
-- React Testing Library for component tests
+- React Testing Library for component tests with Vitest
 - API integration through centralized services in shared/services/
+- Framer Motion for animations with comprehensive accessibility support
+- Vertical slice architecture: each feature contains components/, hooks/, services/, types/
 
 ### Backend
 - Repository pattern with Unit of Work
-- Clean Architecture principles
+- Clean Architecture principles (Api → Application → Domain → Infrastructure)
 - Entity Framework Core with SQL Server
-- Fluent API for entity configuration
+- Fluent API for entity configuration in Infrastructure layer
 - xUnit for testing with FluentAssertions
+- AutoMapper for DTOs with comprehensive validation using FluentValidation
 
 ## API Integration
 
@@ -192,6 +196,30 @@ Copy `app/.env.example` to `app/.env.local` and configure:
 - **Backend specific test**: `cd server && dotnet test --filter "FullyQualifiedName~[TestClassName]"`
 - **Single backend test method**: `cd server && dotnet test --filter "Method~[MethodName]"`
 
+## Animation System Architecture
+
+The application includes a comprehensive animation system built with Framer Motion:
+
+### Animation Features
+- **AnimatedCheckbox**: Smooth check/uncheck with celebration effects
+- **CompletionCelebration**: Configurable celebration system (confetti, sparkle, pulse, bounce, glow)
+- **PageTransition**: Route transitions with multiple animation types
+- **SkeletonLoader**: Loading state animations for different components
+- **MicroInteractions**: Ripple effects, hover states, press animations
+- **SwipeHandler**: Gesture-based interactions for mobile
+
+### Animation Hooks
+- **useAnimation**: Central animation control with motion preference detection
+- **useMotionPreference**: Accessibility-first motion detection (prefers-reduced-motion)
+- **usePerformanceMonitor**: Real-time FPS monitoring and performance optimization
+- **useGesture**: Touch and gesture handling for mobile interactions
+
+### Animation Configuration
+- Comprehensive timing system: instant (0ms), fast (150ms), normal (300ms), slow (500ms), glacial (1000ms)
+- Spring configurations: default, wobbly, stiff, slow, molasses
+- Extensive easing functions with cubic bezier curves
+- Accessibility fallbacks for reduced motion preferences
+
 ## Important Notes
 
 - Frontend uses Vite for fast development and hot module replacement
@@ -201,6 +229,7 @@ Copy `app/.env.example` to `app/.env.local` and configure:
 - Authentication is planned but not yet implemented
 - CSS Modules are configured with scoped naming: `[name]__[local]___[hash:base64:5]`
 - Import aliases configured: @/, @features/, @shared/, @styles/
-- Cypress E2E tests available for workflow testing
+- Playwright E2E tests for animation behavior validation
 - React Testing Library with Vitest for unit/component testing
 - FluentAssertions used for .NET test assertions
+- Animation system follows WCAG accessibility guidelines with comprehensive motion preference support
