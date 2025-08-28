@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container } from '../../../shared/components/Layout/Container';
+import { SkeletonHabitCard } from '../../animations/components/SkeletonLoader';
 import { DashboardHeader } from './DashboardHeader';
 import { TodayHeader } from './TodayHeader';
 import { ProgressOverview } from './ProgressOverview';

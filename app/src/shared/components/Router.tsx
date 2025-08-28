@@ -14,6 +14,9 @@ const DashboardPage = lazy(() => import('../../features/dashboard/DashboardPage'
 const HabitsPage = lazy(() => import('../../features/habits/HabitsPage'));
 const SettingsPage = lazy(() => import('../../features/settings/SettingsPage'));
 const NotFoundPage = lazy(() => import('../../features/404/NotFoundPage'));
+const AnimationDemo = lazy(() => import('../../features/animations/examples/AnimationDemo'));
+const SimpleAnimationTest = lazy(() => import('../../features/animations/examples/SimpleAnimationTest'));
+const LiveIntegrationTest = lazy(() => import('../../features/animations/examples/LiveIntegrationTest'));
 
 /**
  * Loading fallback component for lazy loaded pages
@@ -53,6 +56,11 @@ const Router = () => {
 
               {/* Settings route */}
               <Route path='/settings' element={<SettingsPage />} />
+
+              {/* Animation Demo routes */}
+              <Route path='/demo/animations' element={<AnimationDemo />} />
+              <Route path='/demo/simple' element={<SimpleAnimationTest />} />
+              <Route path='/demo/live' element={<LiveIntegrationTest />} />
 
               {/* 404 and catch-all routes */}
               <Route path='/404' element={<NotFoundPage />} />

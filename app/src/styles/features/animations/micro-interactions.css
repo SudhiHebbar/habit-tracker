@@ -1,0 +1,260 @@
+/* Micro-interaction Animation Styles */
+
+.micro-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.micro-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.micro-press {
+  transition: transform 0.15s ease-in-out;
+}
+
+.micro-press:active {
+  transform: scale(0.95);
+}
+
+.micro-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.micro-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out;
+}
+
+.micro-ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+.micro-focus {
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.micro-focus:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  transform: scale(1.02);
+}
+
+/* Button micro-interactions */
+.button-micro {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-micro:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button-micro:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Card micro-interactions */
+.card-micro {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card-micro:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Input micro-interactions */
+.input-micro {
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.input-micro:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-micro:invalid {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Checkbox micro-interactions */
+.checkbox-micro {
+  transition: transform 0.1s ease-in-out;
+}
+
+.checkbox-micro:hover {
+  transform: scale(1.1);
+}
+
+.checkbox-micro:active {
+  transform: scale(0.95);
+}
+
+/* Icon micro-interactions */
+.icon-micro {
+  transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.icon-micro:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Tooltip micro-interactions */
+.tooltip-micro {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.tooltip-trigger:hover .tooltip-micro {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Tab micro-interactions */
+.tab-micro {
+  position: relative;
+  transition: color 0.2s ease-in-out;
+}
+
+.tab-micro::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #3b82f6;
+  transition: width 0.3s ease-in-out;
+}
+
+.tab-micro:hover::after,
+.tab-micro.active::after {
+  width: 100%;
+}
+
+/* Loading button micro-interactions */
+.loading-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease-in-out;
+}
+
+.loading-button.loading::after {
+  animation: loading-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Gesture feedback */
+.gesture-feedback {
+  position: relative;
+}
+
+.gesture-feedback::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease-out, height 0.3s ease-out;
+}
+
+.gesture-feedback.active::before {
+  width: 200px;
+  height: 200px;
+}
+
+/* Reduced motion alternatives */
+@media (prefers-reduced-motion: reduce) {
+  .micro-hover,
+  .micro-press,
+  .micro-focus,
+  .button-micro,
+  .card-micro,
+  .input-micro,
+  .checkbox-micro,
+  .icon-micro,
+  .tooltip-micro,
+  .tab-micro,
+  .loading-button,
+  .gesture-feedback {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .micro-hover:hover,
+  .button-micro:hover,
+  .card-micro:hover,
+  .checkbox-micro:hover,
+  .icon-micro:hover {
+    transform: none !important;
+  }
+
+  .micro-ripple::after,
+  .loading-button::after,
+  .gesture-feedback::before {
+    display: none !important;
+  }
+
+  .tooltip-micro {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .micro-focus:focus {
+    box-shadow: 0 0 0 3px #000;
+  }
+
+  .input-micro:focus {
+    border-color: #000;
+    box-shadow: 0 0 0 3px #000;
+  }
+}

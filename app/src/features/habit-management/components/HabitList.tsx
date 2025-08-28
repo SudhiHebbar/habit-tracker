@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import type { Habit, HabitFilter, HabitSortOption } from '../types/habit.types';
 import HabitCard from './HabitCard';
 import HabitCalendarCard from './HabitCalendarCard';
+import { SkeletonHabitCard } from '../../animations/components/SkeletonLoader';
 // import { BulkEditModal } from './BulkEditModal'; // Temporarily disabled for bulk edit functionality
 import styles from './HabitList.module.css';
 
@@ -165,8 +166,12 @@ export const HabitList: React.FC<HabitListProps> = ({
     return (
       <div className={`${styles.habitList} ${className}`}>
         <div className={styles.loading}>
-          <div className={styles.spinner} />
-          <span>Loading habits...</span>
+          <div className={styles.skeletonGrid}>
+            {Array.from({ length: 4 }, (_, i) => (
+              <SkeletonHabitCard key={i} />
+            ))}
+          </div>
+          <span className={styles.loadingText}>Loading habits...</span>
         </div>
       </div>
     );

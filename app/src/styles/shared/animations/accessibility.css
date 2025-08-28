@@ -1,0 +1,313 @@
+/* Accessibility-First Animation Styles */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  /* Disable all animations and transitions */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Specific animation overrides */
+  .animate-fade-in,
+  .animate-fade-out,
+  .animate-slide-in,
+  .animate-slide-out,
+  .animate-scale-in,
+  .animate-scale-out,
+  .animate-rotate,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
+  }
+
+  /* Remove transform-based animations */
+  .transform-animate {
+    transform: none !important;
+  }
+
+  /* Ensure content is immediately visible */
+  .fade-content,
+  .slide-content,
+  .scale-content {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  /* Ensure focus indicators are visible */
+  .focus-ring:focus {
+    outline: 3px solid;
+    outline-offset: 2px;
+  }
+
+  /* High contrast animations */
+  .high-contrast-animation {
+    animation-timing-function: step-end;
+  }
+
+  /* Remove subtle animations that may not be visible */
+  .subtle-fade,
+  .subtle-scale {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Vestibular disorder considerations */
+.safe-animation {
+  /* Avoid animations that might trigger vestibular disorders */
+  animation-timing-function: ease-in-out;
+  animation-duration: 200ms;
+  transform-origin: center;
+}
+
+.no-parallax {
+  /* Disable parallax effects */
+  transform: none !important;
+}
+
+.no-auto-play {
+  /* Prevent auto-playing animations */
+  animation-play-state: paused;
+}
+
+.no-auto-play:hover,
+.no-auto-play:focus {
+  animation-play-state: running;
+}
+
+/* Seizure-safe animations */
+.seizure-safe {
+  /* Avoid rapid flashing */
+  animation-duration: 500ms;
+  animation-timing-function: ease-in-out;
+}
+
+.no-flash {
+  /* Disable flashing animations */
+  animation: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .seizure-safe {
+    /* Ensure flashing doesn't exceed 3 times per second */
+    animation-iteration-count: 3;
+    animation-duration: 1s;
+  }
+}
+
+/* Screen reader friendly animations */
+.sr-only-animate {
+  /* Hidden from screen readers during animation */
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.sr-announce {
+  /* Announce animation state to screen readers */
+  speak: auto;
+}
+
+.sr-announce[aria-live="polite"] {
+  /* Polite announcements for non-critical animations */
+}
+
+.sr-announce[aria-live="assertive"] {
+  /* Assertive announcements for important state changes */
+}
+
+/* Focus management during animations */
+.focus-trap {
+  /* Trap focus during modal animations */
+  contain: focus;
+}
+
+.focus-preserve {
+  /* Preserve focus during animations */
+  outline: none;
+}
+
+.focus-preserve:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Cognitive load reduction */
+.simple-animation {
+  /* Simple, predictable animations */
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+
+.meaningful-animation {
+  /* Animations that convey meaning */
+  animation-delay: 100ms; /* Brief delay to ensure content is processed */
+}
+
+/* User control over animations */
+.animation-controls {
+  /* Container for animation control buttons */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.pause-animations {
+  /* Button to pause all animations */
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pause-animations:hover {
+  background: #e0e0e0;
+}
+
+/* Animation state classes for user control */
+.animations-paused * {
+  animation-play-state: paused !important;
+  transition-duration: 0ms !important;
+}
+
+.animations-slow * {
+  animation-duration: calc(var(--animation-duration, 300ms) * 2) !important;
+  transition-duration: calc(var(--transition-duration, 300ms) * 2) !important;
+}
+
+/* Respect system preferences */
+@media (prefers-reduced-transparency: reduce) {
+  .transparent-animation {
+    opacity: 1 !important;
+  }
+  
+  .fade-animation {
+    animation: none !important;
+  }
+}
+
+/* Color blindness considerations */
+.colorblind-safe {
+  /* Don't rely solely on color for animation states */
+  position: relative;
+}
+
+.colorblind-safe::after {
+  /* Add patterns or shapes to indicate state */
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M0 0h8v8H0z' fill='%23000'/%3E%3C/svg%3E");
+}
+
+/* Keyboard navigation friendly animations */
+.keyboard-friendly {
+  /* Ensure animations don't interfere with keyboard navigation */
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+}
+
+.keyboard-focus {
+  /* Clear focus indication during animations */
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Animation loading states with accessibility */
+.a11y-loading {
+  /* Accessible loading animation */
+  position: relative;
+}
+
+.a11y-loading::after {
+  content: 'Loading...';
+  position: absolute;
+  left: -9999px;
+  speak: literal-punctuation;
+}
+
+.a11y-loading[aria-busy="true"] {
+  /* Indicate busy state to assistive technology */
+}
+
+/* Safe animation defaults */
+.safe-defaults {
+  /* Safe animation defaults for accessibility */
+  animation-duration: 200ms;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+  transform-origin: center center;
+}
+
+/* Emergency stop for all animations */
+.stop-all-animations * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+/* Progressive enhancement for animations */
+.no-js .js-only-animation {
+  /* Hide animations when JavaScript is disabled */
+  display: none;
+}
+
+.js .js-only-animation {
+  /* Show animations when JavaScript is available */
+  display: block;
+}
+
+/* Media query combinations for comprehensive accessibility */
+@media (prefers-reduced-motion: reduce), (prefers-contrast: high) {
+  .complex-animation {
+    animation: none !important;
+    transition: border-color 100ms ease-in-out, background-color 100ms ease-in-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (prefers-reduced-transparency: reduce) {
+  .fade-complex {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Debug accessibility features */
+.debug-a11y {
+  /* Development utility to visualize accessible animations */
+  outline: 2px dashed orange;
+}
+
+.debug-a11y::before {
+  content: 'A11Y';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  background: orange;
+  color: black;
+  padding: 2px 4px;
+  font-size: 10px;
+  font-weight: bold;
+}

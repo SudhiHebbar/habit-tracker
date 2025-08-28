@@ -5,3 +5,14 @@
 @import './global/reset.css';
 @import './global/themes.css';
 @import './global/grid.css';
+
+/* Import shared animation styles */
+@import './shared/animations/base-animations.css';
+@import './shared/animations/accessibility.css';
+@import './shared/animations/performance-optimized.css';
+
+/* Import feature-specific animation styles */
+@import './features/animations/completion-animations.css';
+@import './features/animations/page-transitions.css';
+@import './features/animations/loading-states.css';
+@import './features/animations/micro-interactions.css';
