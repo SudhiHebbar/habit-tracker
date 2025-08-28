@@ -1,0 +1,57 @@
+.container {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.swipeContent {
+  position: relative;
+  width: 100%;
+  cursor: grab;
+  will-change: transform;
+}
+
+.swipeContent:active {
+  cursor: grabbing;
+}
+
+.indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.arrow {
+  display: inline-block;
+  font-size: 2rem;
+  color: rgba(0, 0, 0, 0.3);
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow {
+    animation: none;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swipeContent {
+    cursor: default;
+  }
+}

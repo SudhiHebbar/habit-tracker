@@ -1,0 +1,289 @@
+/* Performance-Optimized Animation Styles */
+
+/* Hardware acceleration utilities */
+.hardware-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+.gpu-layer {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Optimized transform animations */
+.transform-gpu {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.transform-smooth {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* Composite layer promotion */
+.composite-layer {
+  will-change: transform, opacity;
+  isolation: isolate;
+}
+
+/* 60fps guaranteed animations */
+.smooth-60fps {
+  will-change: transform;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Memory-efficient animations */
+.memory-efficient {
+  contain: layout style paint;
+}
+
+.memory-efficient-strict {
+  contain: strict;
+}
+
+/* High-performance transitions */
+.perf-transition-transform {
+  transition-property: transform;
+  will-change: transform;
+}
+
+.perf-transition-opacity {
+  transition-property: opacity;
+  will-change: opacity;
+}
+
+.perf-transition-transform-opacity {
+  transition-property: transform, opacity;
+  will-change: transform, opacity;
+}
+
+/* Optimized keyframe animations */
+@keyframes perf-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes perf-slide-up {
+  from {
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes perf-scale-in {
+  from {
+    transform: scale3d(0.9, 0.9, 1);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes perf-rotate {
+  from {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  to {
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
+
+/* Performance-optimized animation classes */
+.perf-fade-in {
+  animation: perf-fade-in 300ms ease-out;
+  will-change: opacity;
+}
+
+.perf-slide-up {
+  animation: perf-slide-up 300ms ease-out;
+  will-change: transform;
+}
+
+.perf-scale-in {
+  animation: perf-scale-in 300ms ease-out;
+  will-change: transform;
+}
+
+.perf-rotate {
+  animation: perf-rotate 1s linear infinite;
+  will-change: transform;
+}
+
+/* Scroll performance */
+.smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.contain-scroll {
+  contain: layout style paint;
+  overscroll-behavior: contain;
+}
+
+/* Animation performance monitoring classes */
+.monitor-performance {
+  /* This class can be used by JavaScript to monitor animation performance */
+  --animation-start-time: 0;
+  --animation-frame-count: 0;
+}
+
+/* Reduced complexity animations for low-end devices */
+@media (prefers-reduced-motion: no-preference) and (max-width: 768px) {
+  .mobile-optimized {
+    animation-duration: 200ms;
+    transition-duration: 200ms;
+  }
+}
+
+/* Battery-saving animations */
+@media (prefers-reduced-motion: no-preference) and (max-width: 480px) {
+  .battery-saver {
+    animation-duration: 150ms;
+    transition-duration: 150ms;
+    animation-iteration-count: 1;
+  }
+}
+
+/* High refresh rate display optimizations */
+@media (min-resolution: 120dpi) {
+  .high-refresh {
+    animation-duration: 250ms;
+    transition-duration: 250ms;
+  }
+}
+
+/* CPU-intensive animation fallbacks */
+.cpu-fallback {
+  /* Fallback for complex animations on low-performance devices */
+  animation-duration: 100ms;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+}
+
+/* Memory cleanup utilities */
+.cleanup-after-animation {
+  /* Remove will-change after animation completes to free GPU memory */
+  animation-fill-mode: forwards;
+}
+
+.cleanup-after-animation:not(.animating) {
+  will-change: auto;
+}
+
+/* Performance hints for browsers */
+.hint-composite {
+  /* Hint to browser that this element will be composited */
+  transform: translateZ(0);
+  opacity: 0.99;
+}
+
+.hint-no-composite {
+  /* Hint to browser to avoid compositing this element */
+  transform: none;
+  will-change: auto;
+}
+
+/* Animation performance classes with automatic cleanup */
+.auto-cleanup-fade {
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+  will-change: opacity;
+}
+
+.auto-cleanup-fade.animate {
+  opacity: 1;
+}
+
+.auto-cleanup-fade.animate-complete {
+  will-change: auto;
+}
+
+.auto-cleanup-transform {
+  transform: translateY(20px);
+  transition: transform 300ms ease-out;
+  will-change: transform;
+}
+
+.auto-cleanup-transform.animate {
+  transform: translateY(0);
+}
+
+.auto-cleanup-transform.animate-complete {
+  will-change: auto;
+}
+
+/* Intersection observer performance hints */
+.lazy-animate {
+  /* For elements that animate when they come into view */
+  will-change: auto;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.lazy-animate.in-view {
+  will-change: opacity, transform;
+  animation: perf-fade-in 400ms ease-out, perf-slide-up 400ms ease-out;
+  animation-fill-mode: forwards;
+}
+
+.lazy-animate.animation-complete {
+  will-change: auto;
+}
+
+/* Debug performance utilities */
+.debug-paint {
+  /* Visualize paint areas during development */
+  outline: 1px solid red;
+}
+
+.debug-composite {
+  /* Visualize composite layers during development */
+  box-shadow: 0 0 0 1px blue;
+}
+
+/* Reduced motion performance */
+@media (prefers-reduced-motion: reduce) {
+  .hardware-accelerated,
+  .gpu-layer,
+  .transform-gpu,
+  .composite-layer,
+  .smooth-60fps {
+    will-change: auto !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .perf-fade-in,
+  .perf-slide-up,
+  .perf-scale-in,
+  .perf-rotate {
+    animation: none !important;
+  }
+
+  .auto-cleanup-fade,
+  .auto-cleanup-transform {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .lazy-animate {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

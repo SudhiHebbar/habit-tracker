@@ -192,6 +192,21 @@
   color: var(--color-text-secondary);
 }
 
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 1rem;
+}
+
+.loadingText {
+  color: var(--color-text-tertiary);
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
 .spinner {
   width: 2rem;
   height: 2rem;

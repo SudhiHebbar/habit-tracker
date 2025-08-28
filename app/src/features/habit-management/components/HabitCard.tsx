@@ -74,7 +74,18 @@ export const HabitCard: React.FC<HabitCardProps> = ({
   return (
     <div
       className={`${styles.habitCard} ${isCompleted ? styles.completed : ''} ${!habit.isActive ? styles.inactive : ''} ${className}`}
-      style={{ '--habit-color': habit.color } as React.CSSProperties}
+      style={{ 
+        '--habit-color': habit.color,
+        transition: 'all 0.2s ease-in-out',
+      } as React.CSSProperties}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-2px) scale(1.01)';
+        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.1)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0) scale(1)';
+        e.currentTarget.style.boxShadow = 'none';
+      }}
     >
       {/* Header with color bar and actions */}
       <div className={styles.header}>

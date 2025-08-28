@@ -1,0 +1,83 @@
+.container {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rippleContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.ripple {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.rippleWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.rippleEffect {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.hoverScale {
+  display: inline-block;
+  transition: transform 0.2s ease-in-out;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.pressAnimation {
+  display: inline-block;
+  transition: transform 0.15s ease-in-out;
+  will-change: transform;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container,
+  .hoverScale,
+  .pressAnimation {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .ripple,
+  .rippleEffect {
+    display: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hoverScale:hover {
+    transform: none;
+  }
+}

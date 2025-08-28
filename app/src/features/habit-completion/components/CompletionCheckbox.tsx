@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useCompletion } from '../hooks/useCompletion';
+import { CompletionCelebration } from '../../animations/components/CompletionCelebration';
 import styles from './CompletionCheckbox.module.css';
 
 interface CompletionCheckboxProps {
@@ -24,6 +25,7 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
   className,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const { isCompleted, isOptimistic, isToggling, currentStreak, toggleCompletion } = useCompletion({
     habitId,
@@ -36,6 +38,12 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
       // Trigger success animation
       setIsAnimating(true);
       setTimeout(() => setIsAnimating(false), 600);
+
+      // Trigger celebration effects for completion (not uncomplete)
+      if (completion.isCompleted) {
+        setShowCelebration(true);
+        setTimeout(() => setShowCelebration(false), 3000); // Show celebration for 3 seconds
+      }
     },
   });
 
@@ -112,6 +120,16 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
           <span className={styles.streakIcon}>🔥</span>
           <span className={styles.streakCount}>{currentStreak}</span>
         </div>
+      )}
+
+      {/* Celebration Effects */}
+      {showCelebration && (
+        <CompletionCelebration
+          type="confetti"
+          color={habitColor}
+          onComplete={() => setShowCelebration(false)}
+          duration={2500}
+        />
       )}
     </div>
   );
