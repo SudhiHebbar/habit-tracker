@@ -93,8 +93,17 @@ export function useCompletion({
         const result = await completionApi.getCompletionStatus(habitId, date, forceRefresh);
         setStatus(result);
       } catch (err) {
+        console.error('Failed to fetch completion status for habit', habitId, ':', err);
+        // Set default status instead of failing completely
+        setStatus({
+          habitId,
+          date,
+          isCompleted: false,
+          currentStreak: 0,
+          longestStreak: 0,
+          lastCompletedDate: null,
+        });
         setError(err as Error);
-        console.error('Failed to fetch completion status:', err);
       } finally {
         setIsLoadingStatus(false);
       }
@@ -112,7 +121,17 @@ export function useCompletion({
         const result = await completionApi.getCompletionStats(habitId, forceRefresh);
         setStats(result);
       } catch (err) {
-        console.error('Failed to fetch completion stats:', err);
+        console.error('Failed to fetch completion stats for habit', habitId, ':', err);
+        // Set default stats instead of failing completely
+        setStats({
+          totalCompletions: 0,
+          completionRate: 0,
+          averageCompletionsPerWeek: 0,
+          averageCompletionsPerMonth: 0,
+          totalDaysActive: 0,
+          firstCompletionDate: null,
+          lastCompletionDate: null,
+        });
       } finally {
         setIsLoadingStats(false);
       }

@@ -3,6 +3,16 @@
  * Manages the comprehensive icon collection with categorization, search, and metadata
  */
 
+// Legacy icon ID mapping for backward compatibility
+const LEGACY_ICON_MAPPING: Record<string, string> = {
+  'water': 'water-drop',
+  'exercise': 'dumbbell',
+  'meditation': 'yoga',
+  'moon': 'sleep',
+  'heart-pulse': 'heart',  // In case heart-pulse was used
+  // Add any other legacy mappings as needed
+};
+
 export interface IconOption {
   id: string;
   name: string;
@@ -504,6 +514,19 @@ export class IconLibrary {
    */
   static getIconById(id: string): IconOption | undefined {
     return ICON_LIBRARY.find(icon => icon.id === id);
+  }
+
+  /**
+   * Get icon SVG by ID (for display components)
+   * Includes backward compatibility for legacy icon IDs
+   */
+  static getIconSvgById(id: string): string | null {
+    // First, check if this is a legacy icon ID and map it
+    const mappedId = LEGACY_ICON_MAPPING[id] || id;
+    
+    // Then look for the icon with the mapped ID
+    const icon = ICON_LIBRARY.find(icon => icon.id === mappedId);
+    return icon ? icon.svg : null;
   }
 
   /**

@@ -68,6 +68,11 @@ builder.Services.AddScoped<IHabitEditingService, HabitEditingService>();
 builder.Services.AddScoped<IHabitDeletionService, HabitDeletionService>();
 builder.Services.AddScoped<IHabitCompletionService, HabitCompletionService>();
 
+// Configure Streak Services
+builder.Services.AddScoped<IStreakCalculationService, StreakCalculationService>();
+builder.Services.AddScoped<IStreakAnalyticsService, StreakAnalyticsService>();
+builder.Services.AddScoped<IStreakMilestoneService, StreakMilestoneService>();
+
 // Add Memory Cache for performance optimization
 builder.Services.AddMemoryCache();
 

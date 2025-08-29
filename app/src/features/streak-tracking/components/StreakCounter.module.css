@@ -1,0 +1,344 @@
+/* StreakCounter Component Styles */
+.streakCounter {
+  --streak-color: #4CAF50;
+  --bg-color: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease-in-out;
+}
+
+.streakCounter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.streakCounter.compact {
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Main Display */
+.mainDisplay {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.streakValue {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--streak-color);
+  line-height: 1;
+  min-width: 3ch;
+  text-align: center;
+  display: inline-block;
+}
+
+.compact .number {
+  font-size: 2rem;
+}
+
+.unit {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.streakInfo {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.habitName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.motivationalMessage {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Secondary Info */
+.secondaryInfo {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.longestStreak {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.longestStreak .label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.longestStreak .value {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Progress Bar */
+.progressContainer {
+  margin-top: 0.5rem;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.remainingDays {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--border-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.progressBar {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--streak-color);
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out;
+  position: relative;
+}
+
+.progressFill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  animation: shimmer 1.5s infinite;
+}
+
+.progressText {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+/* Milestones */
+.milestones {
+  margin-top: 1rem;
+}
+
+.milestonesLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.milestonesList {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.milestoneButton {
+  background: var(--streak-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.milestoneButton:hover {
+  background: color-mix(in srgb, var(--streak-color) 80%, black);
+  transform: scale(1.05);
+}
+
+.milestoneButton:active {
+  transform: scale(0.95);
+}
+
+.moreMilestones {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Risk Warning */
+.riskWarning {
+  background: linear-gradient(135deg, #fef3c7, #fbbf24);
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #92400e;
+  text-align: center;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Compact mode adjustments */
+.compact .mainDisplay {
+  margin-bottom: 0.5rem;
+}
+
+.compact .secondaryInfo {
+  padding-top: 0.5rem;
+}
+
+.compact .progressContainer {
+  margin-top: 0.25rem;
+}
+
+.compact .milestones {
+  margin-top: 0.5rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .streakCounter {
+    --bg-color: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --border-color: #374151;
+  }
+  
+  .remainingDays {
+    background: #374151;
+    color: #d1d5db;
+  }
+  
+  .progressBar {
+    background: #374151;
+  }
+  
+  .riskWarning {
+    background: linear-gradient(135deg, #451a03, #92400e);
+    border-color: #d97706;
+    color: #fbbf24;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .streakCounter {
+    padding: 1rem;
+  }
+  
+  .mainDisplay {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .streakValue {
+    align-self: center;
+  }
+  
+  .number {
+    font-size: 2.5rem;
+  }
+  
+  .progressHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .streakCounter {
+    border-width: 2px;
+    border-color: currentColor;
+  }
+  
+  .progressFill {
+    border: 1px solid currentColor;
+  }
+  
+  .milestoneButton {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .streakCounter,
+  .progressFill,
+  .milestoneButton {
+    transition: none;
+  }
+  
+  .progressFill::after {
+    animation: none;
+  }
+}

@@ -1,0 +1,357 @@
+/* StreakRiskWarning Component Styles */
+.riskWarning {
+  --warning-color: #f59e0b;
+  --bg-color: #fffbeb;
+  --border-color: #f59e0b;
+  --text-primary: #92400e;
+  --text-secondary: #b45309;
+  
+  background: var(--bg-color);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.riskWarning::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--warning-color);
+}
+
+/* Severity levels */
+.info {
+  --warning-color: #10b981;
+  --bg-color: #ecfdf5;
+  --border-color: #10b981;
+  --text-primary: #065f46;
+  --text-secondary: #047857;
+}
+
+.warning {
+  --warning-color: #f59e0b;
+  --bg-color: #fffbeb;
+  --border-color: #f59e0b;
+  --text-primary: #92400e;
+  --text-secondary: #b45309;
+}
+
+.critical {
+  --warning-color: #ef4444;
+  --bg-color: #fef2f2;
+  --border-color: #ef4444;
+  --text-primary: #991b1b;
+  --text-secondary: #dc2626;
+  animation: criticalPulse 2s ease-in-out infinite;
+}
+
+/* Header */
+.warningHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.warningIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.warningContent {
+  flex-grow: 1;
+}
+
+.warningTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.warningMessage {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  font-weight: 500;
+}
+
+.timeMessage {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Streak info */
+.streakInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.streakValue {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.streakNumber {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.streakLabel {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bestStreak {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.actionButton {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  min-width: max-content;
+}
+
+.completeButton {
+  background: var(--warning-color);
+  color: white;
+  border-color: var(--warning-color);
+}
+
+.completeButton:hover {
+  background: color-mix(in srgb, var(--warning-color) 90%, black);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.remindButton {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.remindButton:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.dismissButton {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+
+.dismissButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+/* Urgency indicator */
+.urgencyIndicator {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.urgencyBar {
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.urgencyFill {
+  height: 100%;
+  background: var(--warning-color);
+  border-radius: 2px;
+}
+
+.urgencyText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* Compact variant */
+.compact {
+  padding: 0.75rem;
+}
+
+.compact .warningHeader {
+  margin-bottom: 0.5rem;
+}
+
+.compact .warningTitle {
+  font-size: 0.875rem;
+}
+
+.compact .warningMessage {
+  font-size: 0.75rem;
+}
+
+.compact .actions {
+  gap: 0.25rem;
+}
+
+.compact .actionButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+/* Animations */
+@keyframes criticalPulse {
+  0%, 100% {
+    border-color: var(--warning-color);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--warning-color) 80%, white);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .info {
+    --bg-color: #064e3b;
+    --text-primary: #a7f3d0;
+    --text-secondary: #6ee7b7;
+  }
+  
+  .warning {
+    --bg-color: #451a03;
+    --text-primary: #fbbf24;
+    --text-secondary: #f59e0b;
+  }
+  
+  .critical {
+    --bg-color: #7f1d1d;
+    --text-primary: #fca5a5;
+    --text-secondary: #f87171;
+  }
+  
+  .streakInfo {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .remindButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .dismissButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .riskWarning {
+    border-width: 3px;
+  }
+  
+  .actionButton {
+    border-width: 2px;
+  }
+  
+  .completeButton {
+    background: var(--text-primary);
+    color: var(--bg-color);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .critical {
+    animation: none;
+  }
+  
+  .actionButton {
+    transition: none;
+  }
+  
+  .actionButton:hover {
+    transform: none;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .riskWarning {
+    padding: 0.75rem;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .actionButton {
+    justify-self: stretch;
+    text-align: center;
+  }
+  
+  .streakInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .riskWarning {
+    border: 2px solid black !important;
+    background: white !important;
+    color: black !important;
+  }
+  
+  .actions {
+    display: none;
+  }
+}
