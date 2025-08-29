@@ -1,0 +1,142 @@
+/**
+ * TouchOptimized Components Styles
+ */
+
+/* TouchTarget */
+.touchTarget {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.touchTarget:active {
+  transform: scale(0.98);
+}
+
+/* SwipeGesture */
+.swipeGesture {
+  touch-action: pan-y pan-x;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* PullToRefresh */
+.pullToRefresh {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.pullIndicator {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--color-gray-300);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+}
+
+.spinner.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.content {
+  position: relative;
+  z-index: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* LongPress */
+.longPress {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.longPress.pressed {
+  transform: scale(0.98);
+  opacity: 0.8;
+}
+
+/* DoubleTap */
+.doubleTap {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Ripple Effect */
+.rippleContainer {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: ripple var(--duration-slow) ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .touchTarget,
+  .longPress,
+  .spinner,
+  .ripple {
+    transition: none;
+    animation: none;
+  }
+  
+  .touchTarget:active,
+  .longPress.pressed {
+    transform: none;
+  }
+}

@@ -1,0 +1,232 @@
+/**
+ * FlexibleSidebar Component Styles
+ */
+
+/* Sidebar Base */
+.sidebar {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: var(--sidebar-width, 280px);
+  background: var(--color-surface);
+  z-index: var(--z-index-fixed);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+/* Sidebar Positions */
+.sidebar.left {
+  left: 0;
+  transform: translateX(-100%);
+  border-right: 1px solid var(--color-gray-200);
+}
+
+.sidebar.right {
+  right: 0;
+  transform: translateX(100%);
+  border-left: 1px solid var(--color-gray-200);
+}
+
+/* Sidebar States */
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* Sidebar Modes */
+.sidebar.persistent {
+  position: relative;
+  transform: none;
+  box-shadow: none;
+  border: none;
+  height: auto;
+  flex: none;
+}
+
+.sidebar.persistent.left {
+  border-right: 1px solid var(--color-gray-200);
+}
+
+.sidebar.persistent.right {
+  border-left: 1px solid var(--color-gray-200);
+}
+
+.sidebar.overlay {
+  position: fixed;
+  z-index: var(--z-index-modal);
+}
+
+.sidebar.push {
+  position: relative;
+  z-index: auto;
+}
+
+/* Close Button */
+.closeButton {
+  position: absolute;
+  top: var(--spacing-3);
+  right: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--color-gray-100);
+  color: var(--color-gray-600);
+  cursor: pointer;
+  border-radius: var(--border-radius-base);
+  transition: all var(--duration-fast) var(--ease-out);
+  z-index: 1;
+}
+
+.closeButton:hover {
+  background: var(--color-gray-200);
+  color: var(--color-gray-800);
+}
+
+.closeButton:active {
+  background: var(--color-gray-300);
+  transform: scale(0.95);
+}
+
+.closeButton:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.sidebar.right .closeButton {
+  right: auto;
+  left: var(--spacing-3);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--spacing-4);
+}
+
+/* Sidebar with close button adjustment */
+.sidebar:has(.closeButton) .content {
+  padding-top: calc(var(--spacing-4) + 48px);
+}
+
+/* Mobile specific styles */
+@media (max-width: 768px) {
+  .sidebar {
+    width: min(var(--sidebar-width, 280px), 85vw);
+  }
+  
+  .sidebar.overlay {
+    box-shadow: var(--shadow-xl);
+  }
+  
+  .content {
+    padding: var(--spacing-3);
+  }
+  
+  .sidebar:has(.closeButton) .content {
+    padding-top: calc(var(--spacing-3) + 48px);
+  }
+}
+
+/* Tablet specific styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: min(var(--sidebar-width, 280px), 60vw);
+  }
+}
+
+/* Desktop specific styles */
+@media (min-width: 1025px) {
+  .sidebar.persistent {
+    position: static;
+    box-shadow: none;
+  }
+  
+  .sidebar.persistent .closeButton {
+    display: none;
+  }
+}
+
+/* Touch optimization */
+@media (hover: none) and (pointer: coarse) {
+  .closeButton:hover {
+    background: var(--color-gray-100);
+    color: var(--color-gray-600);
+  }
+  
+  .closeButton:active {
+    background: var(--color-gray-200);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+  
+  .closeButton {
+    transition: none;
+  }
+  
+  .closeButton:active {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .sidebar.left {
+    border-right-width: 2px;
+    border-color: var(--color-gray-900);
+  }
+  
+  .sidebar.right {
+    border-left-width: 2px;
+    border-color: var(--color-gray-900);
+  }
+  
+  .closeButton {
+    border: 2px solid var(--color-gray-600);
+  }
+  
+  .closeButton:focus {
+    outline-width: 3px;
+  }
+}
+
+/* Dark theme */
+[data-theme="dark"] .sidebar {
+  background: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .closeButton {
+  background: var(--color-gray-700);
+  color: var(--color-gray-300);
+}
+
+[data-theme="dark"] .closeButton:hover {
+  background: var(--color-gray-600);
+  color: var(--color-white);
+}
+
+[data-theme="dark"] .closeButton:active {
+  background: var(--color-gray-500);
+}
+
+/* Safe area support for mobile devices */
+@supports (padding: env(safe-area-inset-left)) {
+  .sidebar.left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .sidebar.right {
+    padding-right: env(safe-area-inset-right);
+  }
+}

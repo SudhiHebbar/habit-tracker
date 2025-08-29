@@ -1,0 +1,90 @@
+/**
+ * Touch Target Guidelines
+ * Ensures minimum 44px touch targets for accessibility
+ */
+
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.touch-target-large {
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.touch-target-small {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+/* Button specific touch targets */
+button.touch-target,
+.button.touch-target {
+  position: relative;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius-base);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+button.touch-target:hover,
+.button.touch-target:hover {
+  background: var(--color-primary-hover);
+}
+
+button.touch-target:active,
+.button.touch-target:active {
+  transform: scale(0.98);
+}
+
+/* Link touch targets */
+a.touch-target {
+  text-decoration: none;
+  color: var(--color-primary);
+  border-radius: var(--border-radius-base);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+a.touch-target:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+/* Touch optimization for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .touch-target {
+    min-width: 48px;
+    min-height: 48px;
+  }
+  
+  button.touch-target:hover,
+  .button.touch-target:hover,
+  a.touch-target:hover {
+    background: inherit;
+    color: inherit;
+  }
+}
+
+/* Accessibility focus indicators */
+.touch-target:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Disabled state */
+.touch-target:disabled,
+.touch-target[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

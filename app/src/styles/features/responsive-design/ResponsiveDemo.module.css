@@ -1,0 +1,398 @@
+/**
+ * ResponsiveDemo Component Styles
+ */
+
+/* Main Container */
+.demoContainer {
+  padding: var(--spacing-4) 0;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: var(--font-size-2xl);
+  color: var(--color-gray-900);
+}
+
+.headerControls {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.perfButton {
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.perfButton:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Sections */
+.section {
+  margin-bottom: var(--spacing-8);
+  padding: var(--spacing-6);
+  background: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.section h2 {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-xl);
+  color: var(--color-gray-800);
+}
+
+.section h3 {
+  margin: var(--spacing-6) 0 var(--spacing-3) 0;
+  font-size: var(--font-size-lg);
+  color: var(--color-gray-700);
+}
+
+/* Device Info Grid */
+.deviceInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+.infoCard {
+  padding: var(--spacing-3);
+  background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-sm);
+}
+
+/* Layout Showcase */
+.layoutShowcase {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.gridItem {
+  padding: var(--spacing-4);
+  border-radius: var(--border-radius-base);
+  color: var(--color-white);
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.gridItem h4 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-base);
+}
+
+.gridItem p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.flexItem {
+  flex: 1;
+  padding: var(--spacing-4);
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: var(--border-radius-base);
+  text-align: center;
+  font-weight: var(--font-weight-medium);
+}
+
+.stackItem {
+  padding: var(--spacing-3);
+  background: var(--color-secondary-light);
+  color: var(--color-secondary-dark);
+  border-radius: var(--border-radius-base);
+  text-align: center;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Interaction Components */
+.interactionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.interactionCard {
+  padding: var(--spacing-4);
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.interactionCard:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.interactionCard:active {
+  transform: scale(0.98);
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.interactionCard h4 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-base);
+  color: var(--color-gray-900);
+}
+
+.interactionCard p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+}
+
+.interactionCard:hover h4,
+.interactionCard:hover p {
+  color: var(--color-primary-dark);
+}
+
+.interactionCard:active h4,
+.interactionCard:active p {
+  color: var(--color-white);
+}
+
+/* Interaction Log */
+.interactionLog {
+  background: var(--color-gray-50);
+  border-radius: var(--border-radius-base);
+  padding: var(--spacing-4);
+  max-height: 300px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.emptyLog {
+  text-align: center;
+  color: var(--color-gray-500);
+  font-style: italic;
+  margin: 0;
+}
+
+.logItem {
+  padding: var(--spacing-2);
+  border-bottom: 1px solid var(--color-gray-200);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-mono);
+  color: var(--color-gray-700);
+}
+
+.logItem:last-child {
+  border-bottom: none;
+}
+
+/* Modal Content */
+.modalContent {
+  padding: var(--spacing-2);
+}
+
+.modalContent p {
+  margin-bottom: var(--spacing-4);
+  line-height: var(--line-height-relaxed);
+}
+
+.modalContent ul {
+  margin: var(--spacing-4) 0;
+  padding-left: var(--spacing-5);
+}
+
+.modalContent li {
+  margin-bottom: var(--spacing-2);
+}
+
+.modalActions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  margin-top: var(--spacing-6);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.modalActions button {
+  padding: var(--spacing-2) var(--spacing-4);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-base);
+  background: var(--color-white);
+  color: var(--color-gray-700);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.modalActions button:first-child {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.modalActions button:hover {
+  background: var(--color-gray-100);
+}
+
+.modalActions button:first-child:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .demoContainer {
+    padding: var(--spacing-3) 0;
+  }
+  
+  .section {
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-6);
+  }
+  
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .deviceInfoGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .interactionGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .interactionCard {
+    min-height: 80px;
+  }
+  
+  .modalActions {
+    flex-direction: column-reverse;
+  }
+  
+  .modalActions button {
+    width: 100%;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .deviceInfoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .interactionGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .interactionCard:hover {
+    border-color: var(--color-gray-200);
+    background: var(--color-white);
+  }
+  
+  .interactionCard:hover h4,
+  .interactionCard:hover p {
+    color: inherit;
+  }
+  
+  .perfButton:hover {
+    background: var(--color-primary);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .interactionCard,
+  .perfButton {
+    transition: none;
+  }
+  
+  .interactionCard:active {
+    transform: none;
+  }
+}
+
+/* Dark theme */
+[data-theme="dark"] .section {
+  background: var(--color-gray-800);
+}
+
+[data-theme="dark"] .header h1 {
+  color: var(--color-white);
+}
+
+[data-theme="dark"] .section h2,
+[data-theme="dark"] .section h3 {
+  color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .infoCard {
+  background: var(--color-gray-700);
+  border-color: var(--color-gray-600);
+  color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .interactionCard {
+  background: var(--color-gray-700);
+  border-color: var(--color-gray-600);
+}
+
+[data-theme="dark"] .interactionCard h4 {
+  color: var(--color-white);
+}
+
+[data-theme="dark"] .interactionCard p {
+  color: var(--color-gray-300);
+}
+
+[data-theme="dark"] .interactionLog {
+  background: var(--color-gray-900);
+}
+
+[data-theme="dark"] .logItem {
+  border-color: var(--color-gray-700);
+  color: var(--color-gray-300);
+}
+
+[data-theme="dark"] .modalContent {
+  color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .modalActions {
+  border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .modalActions button {
+  background: var(--color-gray-700);
+  color: var(--color-gray-200);
+  border-color: var(--color-gray-600);
+}
+
+[data-theme="dark"] .modalActions button:hover {
+  background: var(--color-gray-600);
+}
