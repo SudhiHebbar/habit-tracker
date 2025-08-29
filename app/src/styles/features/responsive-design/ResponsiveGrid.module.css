@@ -1,0 +1,54 @@
+/**
+ * ResponsiveGrid and Layout Components Styles
+ */
+
+/* Grid */
+.grid {
+  display: grid;
+  width: 100%;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Flex */
+.flex {
+  display: flex;
+}
+
+/* Stack */
+.stack {
+  display: flex;
+}
+
+.stack.vertical {
+  flex-direction: column;
+}
+
+.stack.horizontal {
+  flex-direction: row;
+}
+
+.stack.withDivider .divider {
+  background: var(--color-gray-200);
+  flex-shrink: 0;
+}
+
+.stack.vertical .divider {
+  height: 1px;
+  width: 100%;
+}
+
+.stack.horizontal .divider {
+  width: 1px;
+  height: 100%;
+}
+
+/* Dark theme */
+[data-theme="dark"] .stack.withDivider .divider {
+  background: var(--color-gray-700);
+}

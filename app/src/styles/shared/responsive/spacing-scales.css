@@ -1,0 +1,97 @@
+/**
+ * Responsive Spacing Scales
+ */
+
+/* Mobile spacing (base) */
+.space-xs { --space: 2px; }
+.space-sm { --space: 4px; }
+.space-md { --space: 8px; }
+.space-lg { --space: 16px; }
+.space-xl { --space: 24px; }
+.space-2xl { --space: 32px; }
+
+/* Padding utilities */
+.p-xs { padding: 2px; }
+.p-sm { padding: 4px; }
+.p-md { padding: 8px; }
+.p-lg { padding: 16px; }
+.p-xl { padding: 24px; }
+.p-2xl { padding: 32px; }
+
+/* Margin utilities */
+.m-xs { margin: 2px; }
+.m-sm { margin: 4px; }
+.m-md { margin: 8px; }
+.m-lg { margin: 16px; }
+.m-xl { margin: 24px; }
+.m-2xl { margin: 32px; }
+
+/* Gap utilities */
+.gap-xs { gap: 2px; }
+.gap-sm { gap: 4px; }
+.gap-md { gap: 8px; }
+.gap-lg { gap: 16px; }
+.gap-xl { gap: 24px; }
+.gap-2xl { gap: 32px; }
+
+/* Tablet spacing adjustments */
+@media (min-width: 768px) {
+  .space-xs { --space: 4px; }
+  .space-sm { --space: 6px; }
+  .space-md { --space: 12px; }
+  .space-lg { --space: 20px; }
+  .space-xl { --space: 28px; }
+  .space-2xl { --space: 40px; }
+
+  .p-xs { padding: 4px; }
+  .p-sm { padding: 6px; }
+  .p-md { padding: 12px; }
+  .p-lg { padding: 20px; }
+  .p-xl { padding: 28px; }
+  .p-2xl { padding: 40px; }
+
+  .m-xs { margin: 4px; }
+  .m-sm { margin: 6px; }
+  .m-md { margin: 12px; }
+  .m-lg { margin: 20px; }
+  .m-xl { margin: 28px; }
+  .m-2xl { margin: 40px; }
+
+  .gap-xs { gap: 4px; }
+  .gap-sm { gap: 6px; }
+  .gap-md { gap: 12px; }
+  .gap-lg { gap: 20px; }
+  .gap-xl { gap: 28px; }
+  .gap-2xl { gap: 40px; }
+}
+
+/* Desktop spacing */
+@media (min-width: 1024px) {
+  .space-xs { --space: 4px; }
+  .space-sm { --space: 8px; }
+  .space-md { --space: 16px; }
+  .space-lg { --space: 24px; }
+  .space-xl { --space: 32px; }
+  .space-2xl { --space: 48px; }
+
+  .p-xs { padding: 4px; }
+  .p-sm { padding: 8px; }
+  .p-md { padding: 16px; }
+  .p-lg { padding: 24px; }
+  .p-xl { padding: 32px; }
+  .p-2xl { padding: 48px; }
+
+  .m-xs { margin: 4px; }
+  .m-sm { margin: 8px; }
+  .m-md { margin: 16px; }
+  .m-lg { margin: 24px; }
+  .m-xl { margin: 32px; }
+  .m-2xl { margin: 48px; }
+
+  .gap-xs { gap: 4px; }
+  .gap-sm { gap: 8px; }
+  .gap-md { gap: 16px; }
+  .gap-lg { gap: 24px; }
+  .gap-xl { gap: 32px; }
+  .gap-2xl { gap: 48px; }
+}

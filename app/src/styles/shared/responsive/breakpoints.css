@@ -1,0 +1,53 @@
+/**
+ * Responsive Breakpoints Utilities
+ */
+
+/* Responsive visibility utilities */
+.show-mobile { display: block; }
+.show-tablet { display: none; }
+.show-desktop { display: none; }
+.show-wide { display: none; }
+
+.hide-mobile { display: none; }
+.hide-tablet { display: block; }
+.hide-desktop { display: block; }
+.hide-wide { display: block; }
+
+/* Tablet breakpoint */
+@media (min-width: 768px) {
+  .show-mobile { display: none; }
+  .show-tablet { display: block; }
+  .show-desktop { display: none; }
+  .show-wide { display: none; }
+
+  .hide-mobile { display: block; }
+  .hide-tablet { display: none; }
+  .hide-desktop { display: block; }
+  .hide-wide { display: block; }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1024px) {
+  .show-mobile { display: none; }
+  .show-tablet { display: none; }
+  .show-desktop { display: block; }
+  .show-wide { display: none; }
+
+  .hide-mobile { display: block; }
+  .hide-tablet { display: block; }
+  .hide-desktop { display: none; }
+  .hide-wide { display: block; }
+}
+
+/* Wide breakpoint */
+@media (min-width: 1440px) {
+  .show-mobile { display: none; }
+  .show-tablet { display: none; }
+  .show-desktop { display: none; }
+  .show-wide { display: block; }
+
+  .hide-mobile { display: block; }
+  .hide-tablet { display: block; }
+  .hide-desktop { display: block; }
+  .hide-wide { display: none; }
+}
