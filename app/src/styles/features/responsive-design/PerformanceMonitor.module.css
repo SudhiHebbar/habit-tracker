@@ -1,0 +1,387 @@
+/**
+ * PerformanceMonitor Component Styles
+ */
+
+/* Main Container */
+.performanceMonitor {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-index-modal);
+  min-width: 320px;
+  max-width: 400px;
+  max-height: 80vh;
+  font-size: var(--font-size-sm);
+  overflow: hidden;
+  animation: slideInRight var(--duration-normal) var(--ease-out);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.titleSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
+  margin: 0;
+}
+
+.overallScore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 24px;
+  border-radius: 12px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+.overallScore.good {
+  background: var(--color-success);
+}
+
+.overallScore.warning {
+  background: var(--color-warning);
+}
+
+.overallScore.critical {
+  background: var(--color-error);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.collapseButton,
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-xs);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.collapseButton:hover,
+.closeButton:hover {
+  background: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+/* Content */
+.content {
+  max-height: 60vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section {
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-3);
+}
+
+.metricCard {
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--border-radius-base);
+  background: var(--color-white);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.metricCard.good {
+  border-color: var(--color-success);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.metricCard.warning {
+  border-color: var(--color-warning);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.metricCard.critical {
+  border-color: var(--color-error);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+}
+
+.metricName {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-600);
+}
+
+.metricStatus {
+  font-size: 8px;
+}
+
+.metricStatus.good {
+  color: var(--color-success);
+}
+
+.metricStatus.warning {
+  color: var(--color-warning);
+}
+
+.metricStatus.critical {
+  color: var(--color-error);
+}
+
+.metricValue {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-2);
+}
+
+.metricUnit {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray-500);
+  margin-left: var(--spacing-1);
+}
+
+.metricChart {
+  height: 24px;
+  width: 100%;
+}
+
+.miniChart {
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+}
+
+.miniChart polyline.good {
+  stroke: var(--color-success);
+}
+
+.miniChart polyline.warning {
+  stroke: var(--color-warning);
+}
+
+.miniChart polyline.critical {
+  stroke: var(--color-error);
+}
+
+/* Device Info */
+.deviceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.infoLabel {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-600);
+}
+
+.infoValue {
+  color: var(--color-gray-900);
+  font-family: var(--font-family-mono);
+}
+
+/* Config Grid */
+.configGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-2);
+}
+
+.configItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.configLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-600);
+}
+
+.configValue {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-900);
+  font-family: var(--font-family-mono);
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .performanceMonitor {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    min-width: auto;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .metricCard {
+    padding: var(--spacing-2);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .performanceMonitor {
+    animation: none;
+  }
+  
+  .metricCard,
+  .collapseButton,
+  .closeButton {
+    transition: none;
+  }
+}
+
+/* Dark theme */
+[data-theme="dark"] .performanceMonitor {
+  background: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .header {
+  background: var(--color-gray-900);
+  border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .title {
+  color: var(--color-white);
+}
+
+[data-theme="dark"] .section {
+  border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .sectionTitle {
+  color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .metricCard {
+  background: var(--color-gray-900);
+  border-color: var(--color-gray-700);
+}
+
+[data-theme="dark"] .metricCard.good {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme="dark"] .metricCard.warning {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+[data-theme="dark"] .metricCard.critical {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+[data-theme="dark"] .metricName {
+  color: var(--color-gray-400);
+}
+
+[data-theme="dark"] .metricValue {
+  color: var(--color-white);
+}
+
+[data-theme="dark"] .metricUnit {
+  color: var(--color-gray-500);
+}
+
+[data-theme="dark"] .infoLabel {
+  color: var(--color-gray-400);
+}
+
+[data-theme="dark"] .infoValue {
+  color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .configLabel {
+  color: var(--color-gray-400);
+}
+
+[data-theme="dark"] .configValue {
+  color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .collapseButton,
+[data-theme="dark"] .closeButton {
+  color: var(--color-gray-400);
+}
+
+[data-theme="dark"] .collapseButton:hover,
+[data-theme="dark"] .closeButton:hover {
+  background: var(--color-gray-700);
+  color: var(--color-gray-200);
+}

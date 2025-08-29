@@ -20,6 +20,8 @@ export {
   DoubleTap, 
   RippleEffect 
 } from './components/TouchOptimized';
+export { default as PerformanceMonitor } from './components/PerformanceMonitor';
+export { default as ResponsiveDemo } from './components/ResponsiveDemo';
 
 // Hooks
 export { 
