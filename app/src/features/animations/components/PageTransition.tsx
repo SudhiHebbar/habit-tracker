@@ -39,7 +39,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
 
     const baseTransition = {
       duration: duration / 1000,
-      ease: [0.43, 0.13, 0.23, 0.96],
+      ease: [0.43, 0.13, 0.23, 0.96] as const,
     };
 
     switch (type) {
@@ -169,10 +169,10 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
           preserveHeight && styles.preserveHeight,
           className
         )}
-        style={{
-          transformStyle: type === 'flip' ? 'preserve-3d' : undefined,
-          perspective: type === 'flip' ? 1000 : undefined,
-        }}
+        style={type === 'flip' ? {
+          transformStyle: 'preserve-3d' as const,
+          perspective: 1000,
+        } : {}}
       >
         {children}
       </motion.div>

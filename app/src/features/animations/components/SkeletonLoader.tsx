@@ -58,7 +58,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
       backgroundPosition: ['200% 0', '-200% 0'],
       transition: {
         duration: shimmerDuration,
-        ease: 'easeInOut',
+        ease: 'easeInOut' as const,
         repeat: Infinity,
       },
     },

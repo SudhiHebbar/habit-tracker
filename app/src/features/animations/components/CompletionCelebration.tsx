@@ -156,7 +156,7 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
       opacity: [0, 1, 0],
       transition: {
         duration: duration / 1000,
-        ease: 'easeInOut',
+        ease: 'easeInOut' as const,
         times: [0, 0.3, 1],
       },
     },
@@ -172,7 +172,7 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
       scale: [0, 1.1, 1],
       transition: {
         duration: duration / 1000,
-        ease: 'easeOut',
+        ease: 'easeOut' as const,
         times: [0, 0.4, 1],
       },
     },

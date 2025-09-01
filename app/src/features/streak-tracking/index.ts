@@ -6,6 +6,10 @@ export { streakApi, streakQueryKeys } from './services/streakApi';
 export { StreakCalculator } from './services/streakCalculator';
 export { MilestoneDetector } from './services/milestoneDetector';
 
+// Import services for local use
+import { StreakCalculator } from './services/streakCalculator';
+import { MilestoneDetector } from './services/milestoneDetector';
+
 // Hooks
 export { 
   useStreakCalculation, 
