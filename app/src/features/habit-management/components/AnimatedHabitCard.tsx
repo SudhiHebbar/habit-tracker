@@ -4,16 +4,9 @@ import { AnimatedCheckbox, CompletionCelebration, MicroInteraction, HoverScale }
 import { SwipeHandler } from '@shared/components/interactions/SwipeHandler';
 import { useAnimation } from '@features/animations/hooks/useAnimation';
 import { LazyHabitHistory } from '../../dashboard/components/LazyHabitHistory';
+import { IconLibrary } from '../../visual-customization/services/iconLibrary';
 import type { Habit } from '../types/habit.types';
 import styles from './HabitCard.module.css';
-
-const HABIT_ICONS: Record<string, string> = {
-  'heart': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
-  'water': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2C20 10.48 17.33 6.55 12 2z"/></svg>',
-  'dumbbell': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71 3.43 9.14 7 5.57 15.57 14.14 12 17.71 13.43 19.14 14.86 17.71 16.29 19.14 18.43 17 19.86 18.43 21.29 17l-1.43-1.43L22 13.43z"/></svg>',
-  'running': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg>',
-  'book': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>',
-};
 
 interface AnimatedHabitCardProps {
   habit: Habit;
@@ -178,10 +171,35 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
           {habit.icon && (
             <HoverScale scale={1.1} className={styles.iconContainer}>
               <div className={styles.habitIcon}>
-                <div 
-                  dangerouslySetInnerHTML={{ __html: HABIT_ICONS[habit.icon] || '' }}
-                  style={{ width: '24px', height: '24px', color: habit.color }}
-                />
+                {(() => {
+                  const iconSvg = IconLibrary.getIconSvgById(habit.icon);
+                  
+                  if (iconSvg) {
+                    return (
+                      <div 
+                        style={{ 
+                          width: '24px', 
+                          height: '24px', 
+                          color: habit.color,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                        dangerouslySetInnerHTML={{ __html: iconSvg }}
+                      />
+                    );
+                  }
+                  
+                  // Fallback - colored circle without text
+                  return (
+                    <div style={{
+                      width: '24px',
+                      height: '24px',
+                      backgroundColor: habit.color,
+                      borderRadius: '50%'
+                    }} />
+                  );
+                })()}
               </div>
             </HoverScale>
           )}

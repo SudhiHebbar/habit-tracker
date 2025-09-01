@@ -1015,10 +1015,12 @@ namespace HabitTracker.Infrastructure.Repositories
                     query = query.Where(hc => hc.CompletionDate.Date <= dayOfWeekEndDateTime);
                 }
 
-                return await query
+                // EF Core can't translate DayOfWeek directly, so we'll get all data and group in memory
+                var Completions = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
+                
+                return Completions
                     .GroupBy(hc => hc.CompletionDate.DayOfWeek)
-                    .ToDictionaryAsync(g => g.Key, g => g.Count(), cancellationToken)
-                    .ConfigureAwait(false);
+                    .ToDictionary(g => g.Key, g => g.Count());
             }
             catch (Exception ex)
             {
