@@ -1,6 +1,6 @@
 /**
  * ResponsiveLayout Component
- * 
+ *
  * Main responsive layout orchestrator that manages different
  * layouts based on device type and screen size
  */
@@ -54,18 +54,12 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
     if (isMobile) {
       return (
         <div className={`${styles.mobileLayout} ${className}`}>
-          {header && (
-            <header className={styles.mobileHeader}>
-              {header}
-            </header>
-          )}
-          
-          <main className={styles.mobileContent}>
-            {children}
-          </main>
-          
+          {header && <header className={styles.mobileHeader}>{header}</header>}
+
+          <main className={styles.mobileContent}>{children}</main>
+
           {showNavigation && navigationLayout === 'bottom' && (
-            <MobileNavigation items={navigationItems} position="bottom" />
+            <MobileNavigation items={navigationItems} position='bottom' />
           )}
         </div>
       );
@@ -113,11 +107,7 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   ]);
 
   return (
-    <div
-      className={styles.responsiveLayout}
-      data-breakpoint={current}
-      data-touch={hasTouch}
-    >
+    <div className={styles.responsiveLayout} data-breakpoint={current} data-touch={hasTouch}>
       {layout}
     </div>
   );

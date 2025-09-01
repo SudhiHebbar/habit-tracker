@@ -1,6 +1,6 @@
 /**
  * DesktopLayout Component
- * 
+ *
  * Desktop-optimized layout with persistent sidebar and multi-column support
  */
 
@@ -53,7 +53,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
   // Build navigation for sidebar
   const sidebarContent = useMemo(() => {
     if (sidebar) return sidebar;
-    
+
     if (showNavigation && navigationItems.length > 0) {
       return (
         <nav className={styles.sidebarNav}>
@@ -63,23 +63,15 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
                 <a
                   href={item.path}
                   className={styles.navLink}
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault();
                     // Handle navigation
                   }}
                 >
-                  {item.icon && (
-                    <span className={styles.navIcon}>
-                      {item.icon}
-                    </span>
-                  )}
-                  <span className={styles.navLabel}>
-                    {item.label}
-                  </span>
+                  {item.icon && <span className={styles.navIcon}>{item.icon}</span>}
+                  <span className={styles.navLabel}>{item.label}</span>
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className={styles.badge}>
-                      {item.badge > 99 ? '99+' : item.badge}
-                    </span>
+                    <span className={styles.badge}>{item.badge > 99 ? '99+' : item.badge}</span>
                   )}
                 </a>
               </li>
@@ -88,7 +80,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
         </nav>
       );
     }
-    
+
     return null;
   }, [sidebar, showNavigation, navigationItems]);
 
@@ -99,17 +91,17 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
         ${styles[sidebarPosition]}
         ${className}
       `}
-      style={{
-        '--max-width': typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
-        '--sidebar-width': typeof sidebarWidth === 'number' ? `${sidebarWidth}px` : sidebarWidth,
-      } as React.CSSProperties}
+      style={
+        {
+          '--max-width': typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
+          '--sidebar-width': typeof sidebarWidth === 'number' ? `${sidebarWidth}px` : sidebarWidth,
+        } as React.CSSProperties
+      }
     >
       {/* Header */}
       {header && (
         <header className={styles.header}>
-          <div className={styles.headerContainer}>
-            {header}
-          </div>
+          <div className={styles.headerContainer}>{header}</div>
         </header>
       )}
 
@@ -119,9 +111,9 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
           {/* Sidebar */}
           {sidebarContent && (
             <FlexibleSidebar
-              isOpen={true}
+              isOpen
               position={sidebarPosition}
-              mode="persistent"
+              mode='persistent'
               width={sidebarWidth}
               className={styles.sidebar}
             >
@@ -131,9 +123,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
 
           {/* Main content */}
           <main className={styles.main}>
-            <div className={styles.content}>
-              {children}
-            </div>
+            <div className={styles.content}>{children}</div>
           </main>
         </div>
       </div>
@@ -141,9 +131,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
       {/* Footer */}
       {footer && (
         <footer className={styles.footer}>
-          <div className={styles.footerContainer}>
-            {footer}
-          </div>
+          <div className={styles.footerContainer}>{footer}</div>
         </footer>
       )}
     </div>

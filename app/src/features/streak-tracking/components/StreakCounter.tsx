@@ -8,7 +8,7 @@ import styles from './StreakCounter.module.css';
 export const StreakCounter: React.FC<StreakCounterProps> = ({
   streak,
   options = {},
-  onMilestoneClick
+  onMilestoneClick,
 }) => {
   const {
     showCurrentOnly = false,
@@ -16,7 +16,7 @@ export const StreakCounter: React.FC<StreakCounterProps> = ({
     showProgress = true,
     showMilestones = true,
     compact = false,
-    animated = true
+    animated = true,
   } = options;
 
   // Calculate milestone progress
@@ -25,88 +25,86 @@ export const StreakCounter: React.FC<StreakCounterProps> = ({
   }, [streak.currentStreak]);
 
   // Get visual indicators
-  const streakColor = useMemo(() => 
-    StreakCalculator.getStreakColor(streak.currentStreak), 
+  const streakColor = useMemo(
+    () => StreakCalculator.getStreakColor(streak.currentStreak),
     [streak.currentStreak]
   );
 
-  const streakEmoji = useMemo(() => 
-    StreakCalculator.getStreakEmoji(streak.currentStreak), 
+  const streakEmoji = useMemo(
+    () => StreakCalculator.getStreakEmoji(streak.currentStreak),
     [streak.currentStreak]
   );
 
-  const motivationalMessage = useMemo(() => 
-    StreakCalculator.getMotivationalMessage(streak.currentStreak), 
+  const motivationalMessage = useMemo(
+    () => StreakCalculator.getMotivationalMessage(streak.currentStreak),
     [streak.currentStreak]
   );
 
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
       transition: {
         duration: 0.3,
-        ease: "easeOut"
-      }
+        ease: 'easeOut',
+      },
     },
-    exit: { opacity: 0, scale: 0.9 }
+    exit: { opacity: 0, scale: 0.9 },
   };
 
   const numberVariants = {
     initial: { scale: 0.8, opacity: 0 },
-    animate: { 
-      scale: 1, 
+    animate: {
+      scale: 1,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
-        damping: 25
-      }
+        damping: 25,
+      },
     },
-    exit: { scale: 1.2, opacity: 0 }
+    exit: { scale: 1.2, opacity: 0 },
   };
 
   const progressVariants = {
     initial: { width: 0 },
-    animate: { 
+    animate: {
       width: `${milestoneProgress.progressPercentage}%`,
       transition: {
         duration: 1,
-        ease: "easeInOut"
-      }
-    }
+        ease: 'easeInOut',
+      },
+    },
   };
 
   return (
     <motion.div
       className={`${styles.streakCounter} ${compact ? styles.compact : ''}`}
       variants={animated ? containerVariants : undefined}
-      initial={animated ? "hidden" : undefined}
-      animate={animated ? "visible" : undefined}
-      exit={animated ? "exit" : undefined}
+      initial={animated ? 'hidden' : undefined}
+      animate={animated ? 'visible' : undefined}
+      exit={animated ? 'exit' : undefined}
       style={{ '--streak-color': streakColor } as React.CSSProperties}
     >
       {/* Main streak display */}
       <div className={styles.mainDisplay}>
         <div className={styles.streakValue}>
           <span className={styles.emoji}>{streakEmoji}</span>
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode='wait'>
             <motion.span
               key={streak.currentStreak}
               className={styles.number}
               variants={animated ? numberVariants : undefined}
-              initial={animated ? "initial" : undefined}
-              animate={animated ? "animate" : undefined}
-              exit={animated ? "exit" : undefined}
+              initial={animated ? 'initial' : undefined}
+              animate={animated ? 'animate' : undefined}
+              exit={animated ? 'exit' : undefined}
             >
               {streak.currentStreak}
             </motion.span>
           </AnimatePresence>
-          <span className={styles.unit}>
-            {streak.currentStreak === 1 ? 'day' : 'days'}
-          </span>
+          <span className={styles.unit}>{streak.currentStreak === 1 ? 'day' : 'days'}</span>
         </div>
 
         {!compact && (
@@ -143,11 +141,11 @@ export const StreakCounter: React.FC<StreakCounterProps> = ({
                 <motion.div
                   className={styles.progressFill}
                   variants={animated ? progressVariants : undefined}
-                  initial={animated ? "initial" : undefined}
-                  animate={animated ? "animate" : undefined}
+                  initial={animated ? 'initial' : undefined}
+                  animate={animated ? 'animate' : undefined}
                   style={{
                     backgroundColor: streakColor,
-                    width: animated ? undefined : `${milestoneProgress.progressPercentage}%`
+                    width: animated ? undefined : `${milestoneProgress.progressPercentage}%`,
                   }}
                 />
               </div>

@@ -58,60 +58,66 @@ export const useGesture = (options: UseGestureOptions = {}) => {
   const longPressTimer = useRef<ReturnType<typeof setTimeout>>();
   const elementRef = useRef<HTMLElement | null>(null);
 
-  const handleStart = useCallback((e: TouchEvent | MouseEvent) => {
-    const point = 'touches' in e ? e.touches[0] : e;
-    startX.current = point.clientX;
-    startY.current = point.clientY;
-    startTime.current = Date.now();
+  const handleStart = useCallback(
+    (e: TouchEvent | MouseEvent) => {
+      const point = 'touches' in e ? e.touches[0] : e;
+      startX.current = point.clientX;
+      startY.current = point.clientY;
+      startTime.current = Date.now();
 
-    setGestureState(prev => ({
-      ...prev,
-      isDragging: true,
-      deltaX: 0,
-      deltaY: 0,
-    }));
+      setGestureState(prev => ({
+        ...prev,
+        isDragging: true,
+        deltaX: 0,
+        deltaY: 0,
+      }));
 
-    if (onDragStart) {
-      onDragStart();
-    }
+      if (onDragStart) {
+        onDragStart();
+      }
 
-    longPressTimer.current = setTimeout(() => {
-      if (onLongPress) {
-        onLongPress();
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
+      longPressTimer.current = setTimeout(() => {
+        if (onLongPress) {
+          onLongPress();
+          if ('vibrate' in navigator) {
+            navigator.vibrate(50);
+          }
+        }
+      }, longPressDuration);
+    },
+    [longPressDuration, onDragStart, onLongPress]
+  );
+
+  const handleMove = useCallback(
+    (e: TouchEvent | MouseEvent) => {
+      if (!gestureState.isDragging) return;
+
+      const point = 'touches' in e ? e.touches[0] : e;
+      const deltaX = point.clientX - startX.current;
+      const deltaY = point.clientY - startY.current;
+
+      setGestureState(prev => ({
+        ...prev,
+        deltaX,
+        deltaY,
+        isSwipingLeft: deltaX < -swipeThreshold,
+        isSwipingRight: deltaX > swipeThreshold,
+        isSwipingUp: deltaY < -swipeThreshold,
+        isSwipingDown: deltaY > swipeThreshold,
+      }));
+
+      if (onDrag) {
+        onDrag(deltaX, deltaY);
+      }
+
+      if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
+        if (longPressTimer.current) {
+          clearTimeout(longPressTimer.current);
         }
       }
-    }, longPressDuration);
-  }, [longPressDuration, onDragStart, onLongPress]);
-
-  const handleMove = useCallback((e: TouchEvent | MouseEvent) => {
-    if (!gestureState.isDragging) return;
-
-    const point = 'touches' in e ? e.touches[0] : e;
-    const deltaX = point.clientX - startX.current;
-    const deltaY = point.clientY - startY.current;
-
-    setGestureState(prev => ({
-      ...prev,
-      deltaX,
-      deltaY,
-      isSwipingLeft: deltaX < -swipeThreshold,
-      isSwipingRight: deltaX > swipeThreshold,
-      isSwipingUp: deltaY < -swipeThreshold,
-      isSwipingDown: deltaY > swipeThreshold,
-    }));
-
-    if (onDrag) {
-      onDrag(deltaX, deltaY);
-    }
-
-    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-      if (longPressTimer.current) {
-        clearTimeout(longPressTimer.current);
-      }
-    }
-  }, [gestureState.isDragging, swipeThreshold, onDrag]);
+    },
+    [gestureState.isDragging, swipeThreshold, onDrag]
+  );
 
   const handleEnd = useCallback(() => {
     if (longPressTimer.current) {
@@ -122,9 +128,8 @@ export const useGesture = (options: UseGestureOptions = {}) => {
 
     const endTime = Date.now();
     const duration = endTime - startTime.current;
-    const velocity = Math.sqrt(
-      Math.pow(gestureState.deltaX, 2) + Math.pow(gestureState.deltaY, 2)
-    ) / duration;
+    const velocity =
+      Math.sqrt(Math.pow(gestureState.deltaX, 2) + Math.pow(gestureState.deltaY, 2)) / duration;
 
     const absX = Math.abs(gestureState.deltaX);
     const absY = Math.abs(gestureState.deltaY);
@@ -176,27 +181,30 @@ export const useGesture = (options: UseGestureOptions = {}) => {
     onDragEnd,
   ]);
 
-  const bind = useCallback((element: HTMLElement | null) => {
-    if (elementRef.current) {
-      elementRef.current.removeEventListener('touchstart', handleStart as EventListener);
-      elementRef.current.removeEventListener('touchmove', handleMove as EventListener);
-      elementRef.current.removeEventListener('touchend', handleEnd as EventListener);
-      elementRef.current.removeEventListener('mousedown', handleStart as EventListener);
-      elementRef.current.removeEventListener('mousemove', handleMove as EventListener);
-      elementRef.current.removeEventListener('mouseup', handleEnd as EventListener);
-    }
+  const bind = useCallback(
+    (element: HTMLElement | null) => {
+      if (elementRef.current) {
+        elementRef.current.removeEventListener('touchstart', handleStart as EventListener);
+        elementRef.current.removeEventListener('touchmove', handleMove as EventListener);
+        elementRef.current.removeEventListener('touchend', handleEnd as EventListener);
+        elementRef.current.removeEventListener('mousedown', handleStart as EventListener);
+        elementRef.current.removeEventListener('mousemove', handleMove as EventListener);
+        elementRef.current.removeEventListener('mouseup', handleEnd as EventListener);
+      }
 
-    if (element) {
-      element.addEventListener('touchstart', handleStart as EventListener, { passive: true });
-      element.addEventListener('touchmove', handleMove as EventListener, { passive: true });
-      element.addEventListener('touchend', handleEnd as EventListener, { passive: true });
-      element.addEventListener('mousedown', handleStart as EventListener);
-      element.addEventListener('mousemove', handleMove as EventListener);
-      element.addEventListener('mouseup', handleEnd as EventListener);
-    }
+      if (element) {
+        element.addEventListener('touchstart', handleStart as EventListener, { passive: true });
+        element.addEventListener('touchmove', handleMove as EventListener, { passive: true });
+        element.addEventListener('touchend', handleEnd as EventListener, { passive: true });
+        element.addEventListener('mousedown', handleStart as EventListener);
+        element.addEventListener('mousemove', handleMove as EventListener);
+        element.addEventListener('mouseup', handleEnd as EventListener);
+      }
 
-    elementRef.current = element;
-  }, [handleStart, handleMove, handleEnd]);
+      elementRef.current = element;
+    },
+    [handleStart, handleMove, handleEnd]
+  );
 
   useEffect(() => {
     return () => {
@@ -212,15 +220,16 @@ export const useGesture = (options: UseGestureOptions = {}) => {
   return {
     bind,
     gestureState,
-    reset: () => setGestureState({
-      isDragging: false,
-      isSwipingLeft: false,
-      isSwipingRight: false,
-      isSwipingUp: false,
-      isSwipingDown: false,
-      deltaX: 0,
-      deltaY: 0,
-      velocity: 0,
-    }),
+    reset: () =>
+      setGestureState({
+        isDragging: false,
+        isSwipingLeft: false,
+        isSwipingRight: false,
+        isSwipingUp: false,
+        isSwipingDown: false,
+        deltaX: 0,
+        deltaY: 0,
+        velocity: 0,
+      }),
   };
 };

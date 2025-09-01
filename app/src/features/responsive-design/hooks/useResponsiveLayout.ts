@@ -1,17 +1,17 @@
 /**
  * useResponsiveLayout Hook
- * 
+ *
  * React hook for managing responsive layouts and configurations
  */
 
 import { useMemo } from 'react';
-import { 
-  ResponsiveLayout, 
+import {
+  ResponsiveLayout,
   NavigationLayout,
   GridConfig,
   FlexConfig,
   StackConfig,
-  ContainerConfig
+  ContainerConfig,
 } from '../types/responsive.types';
 import { useBreakpoint } from './useBreakpoint';
 import { useDeviceDetection } from './useDeviceDetection';
@@ -90,81 +90,103 @@ export function useResponsiveLayout(
   const { hasTouch } = useDeviceDetection();
 
   // Merge custom layouts with defaults
-  const layouts = useMemo(() => ({
-    ...DEFAULT_LAYOUTS,
-    ...options.customLayouts,
-  }), [options.customLayouts]);
+  const layouts = useMemo(
+    () => ({
+      ...DEFAULT_LAYOUTS,
+      ...options.customLayouts,
+    }),
+    [options.customLayouts]
+  );
 
-  const navLayouts = useMemo(() => ({
-    ...DEFAULT_NAV_LAYOUTS,
-    ...options.customNavLayouts,
-  }), [options.customNavLayouts]);
+  const navLayouts = useMemo(
+    () => ({
+      ...DEFAULT_NAV_LAYOUTS,
+      ...options.customNavLayouts,
+    }),
+    [options.customNavLayouts]
+  );
 
   // Get current layout configuration
   const layout = useMemo(() => layouts[current], [layouts, current]);
   const navigationLayout = useMemo(() => navLayouts[current], [navLayouts, current]);
 
   // Grid configuration factory
-  const getGridConfig = useMemo(() => (override?: Partial<GridConfig>): GridConfig => {
-    const baseConfig: GridConfig = {
-      columns: layout.columns,
-      gap: layout.gutter,
-      alignItems: 'stretch',
-      justifyItems: 'stretch',
-    };
+  const getGridConfig = useMemo(
+    () =>
+      (override?: Partial<GridConfig>): GridConfig => {
+        const baseConfig: GridConfig = {
+          columns: layout.columns,
+          gap: layout.gutter,
+          alignItems: 'stretch',
+          justifyItems: 'stretch',
+        };
 
-    // Add responsive adjustments
-    if (current === 'mobile') {
-      baseConfig.columns = 1;
-      baseConfig.gap = 12;
-    } else if (current === 'tablet') {
-      baseConfig.columns = override?.columns ?? 2;
-    }
+        // Add responsive adjustments
+        if (current === 'mobile') {
+          baseConfig.columns = 1;
+          baseConfig.gap = 12;
+        } else if (current === 'tablet') {
+          baseConfig.columns = override?.columns ?? 2;
+        }
 
-    return { ...baseConfig, ...override };
-  }, [layout, current]);
+        return { ...baseConfig, ...override };
+      },
+    [layout, current]
+  );
 
   // Flex configuration factory
-  const getFlexConfig = useMemo(() => (override?: Partial<FlexConfig>): FlexConfig => {
-    const baseConfig: FlexConfig = {
-      direction: current === 'mobile' ? 'column' : 'row',
-      wrap: 'wrap',
-      justifyContent: 'start',
-      alignItems: 'center',
-      gap: layout.gutter,
-    };
+  const getFlexConfig = useMemo(
+    () =>
+      (override?: Partial<FlexConfig>): FlexConfig => {
+        const baseConfig: FlexConfig = {
+          direction: current === 'mobile' ? 'column' : 'row',
+          wrap: 'wrap',
+          justifyContent: 'start',
+          alignItems: 'center',
+          gap: layout.gutter,
+        };
 
-    return { ...baseConfig, ...override };
-  }, [layout, current]);
+        return { ...baseConfig, ...override };
+      },
+    [layout, current]
+  );
 
   // Stack configuration factory
-  const getStackConfig = useMemo(() => (override?: Partial<StackConfig>): StackConfig => {
-    const baseConfig: StackConfig = {
-      direction: 'vertical',
-      spacing: layout.gutter,
-      divider: false,
-      align: 'stretch',
-      wrap: false,
-    };
+  const getStackConfig = useMemo(
+    () =>
+      (override?: Partial<StackConfig>): StackConfig => {
+        const baseConfig: StackConfig = {
+          direction: 'vertical',
+          spacing: layout.gutter,
+          divider: false,
+          align: 'stretch',
+          wrap: false,
+        };
 
-    // Mobile adjustments
-    if (current === 'mobile') {
-      baseConfig.spacing = 12;
-    }
+        // Mobile adjustments
+        if (current === 'mobile') {
+          baseConfig.spacing = 12;
+        }
 
-    return { ...baseConfig, ...override };
-  }, [layout, current]);
+        return { ...baseConfig, ...override };
+      },
+    [layout, current]
+  );
 
   // Container configuration factory
-  const getContainerConfig = useMemo(() => (override?: Partial<ContainerConfig>): ContainerConfig => {
-    const baseConfig: ContainerConfig = {
-      maxWidth: layout.maxWidth,
-      padding: layout.containerPadding,
-      center: true,
-    };
+  const getContainerConfig = useMemo(
+    () =>
+      (override?: Partial<ContainerConfig>): ContainerConfig => {
+        const baseConfig: ContainerConfig = {
+          maxWidth: layout.maxWidth,
+          padding: layout.containerPadding,
+          center: true,
+        };
 
-    return { ...baseConfig, ...override };
-  }, [layout]);
+        return { ...baseConfig, ...override };
+      },
+    [layout]
+  );
 
   return {
     layout,
@@ -188,7 +210,7 @@ export function useAdaptiveContent(): {
   useThreeColumn: boolean;
 } {
   const { current } = useBreakpoint();
-  
+
   return useMemo(() => {
     switch (current) {
       case 'mobile':
@@ -252,7 +274,7 @@ export function useResponsiveSpacing(): {
   xxl: number;
 } {
   const { current } = useBreakpoint();
-  
+
   return useMemo(() => {
     const baseSpacing = {
       xs: 4,
@@ -304,7 +326,7 @@ export function useResponsiveFontSize(): {
   xxxl: string;
 } {
   const { current } = useBreakpoint();
-  
+
   return useMemo(() => {
     const baseSizes = {
       xs: '0.75rem',

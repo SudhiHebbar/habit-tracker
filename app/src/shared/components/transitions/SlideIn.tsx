@@ -44,8 +44,8 @@ export const SlideIn: React.FC<SlideInProps> = ({
     <motion.div
       initial={{ ...getInitialPosition(), opacity: 0 }}
       animate={{ x: 0, y: 0, opacity: 1 }}
-      transition={{ 
-        duration: duration / 1000, 
+      transition={{
+        duration: duration / 1000,
         delay: delay / 1000,
         ease: [0.43, 0.13, 0.23, 0.96],
       }}

@@ -57,15 +57,15 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
     if (!iconData) {
       return (
         <div className={`${styles.placeholderIcon} ${className || ''}`}>
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          <svg viewBox='0 0 24 24' fill='currentColor'>
+            <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' />
           </svg>
         </div>
       );
     }
 
     return (
-      <div 
+      <div
         className={`${styles.iconDisplay} ${className || ''}`}
         style={{ color }}
         dangerouslySetInnerHTML={{ __html: iconData.svg }}
@@ -86,20 +86,20 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
           </div>
         </div>
         <div className={styles.progressBar}>
-          <div 
+          <div
             className={styles.progressFill}
-            style={{ 
+            style={{
               backgroundColor: color,
-              width: '70%' 
+              width: '70%',
             }}
           />
         </div>
         <div className={styles.completionButton} style={{ backgroundColor: color }}>
-          <svg viewBox="0 0 20 20" fill="currentColor" style={{ color: textColor }}>
+          <svg viewBox='0 0 20 20' fill='currentColor' style={{ color: textColor }}>
             <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
+              fillRule='evenodd'
+              d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+              clipRule='evenodd'
             />
           </svg>
         </div>
@@ -135,11 +135,11 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
   const renderCardPreview = () => (
     <div className={styles.cardPreview}>
       <h4 className={styles.contextTitle}>Card View</h4>
-      <div 
+      <div
         className={styles.compactCard}
-        style={{ 
+        style={{
           backgroundColor: color,
-          color: textColor 
+          color: textColor,
         }}
       >
         <div className={styles.cardContent}>
@@ -151,12 +151,12 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
         </div>
         <div className={styles.cardProgress}>
           <div className={styles.cardProgressTrack}>
-            <div 
+            <div
               className={styles.cardProgressFill}
-              style={{ 
+              style={{
                 backgroundColor: textColor,
                 opacity: 0.3,
-                width: '70%' 
+                width: '70%',
               }}
             />
           </div>
@@ -182,15 +182,21 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
         <div className={styles.detailBody}>
           <div className={styles.detailStats}>
             <div className={styles.stat}>
-              <span className={styles.statValue} style={{ color }}>7</span>
+              <span className={styles.statValue} style={{ color }}>
+                7
+              </span>
               <span className={styles.statLabel}>Current Streak</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue} style={{ color }}>85%</span>
+              <span className={styles.statValue} style={{ color }}>
+                85%
+              </span>
               <span className={styles.statLabel}>This Month</span>
             </div>
             <div className={styles.stat}>
-              <span className={styles.statValue} style={{ color }}>23</span>
+              <span className={styles.statValue} style={{ color }}>
+                23
+              </span>
               <span className={styles.statLabel}>Total Days</span>
             </div>
           </div>
@@ -213,31 +219,37 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
               <span className={styles.ratio}>
                 {accessibilityInfo.onWhite.contrast.ratio.toFixed(1)}:1
               </span>
-              <span className={`${styles.grade} ${styles[accessibilityInfo.onWhite.contrast.wcagAA ? 'pass' : 'fail']}`}>
+              <span
+                className={`${styles.grade} ${styles[accessibilityInfo.onWhite.contrast.wcagAA ? 'pass' : 'fail']}`}
+              >
                 {accessibilityInfo.onWhite.contrast.grade}
               </span>
             </div>
           </div>
-          
+
           <div className={styles.accessibilityItem}>
             <span className={styles.accessibilityLabel}>On Light:</span>
             <div className={styles.accessibilityBadge}>
               <span className={styles.ratio}>
                 {accessibilityInfo.onLight.contrast.ratio.toFixed(1)}:1
               </span>
-              <span className={`${styles.grade} ${styles[accessibilityInfo.onLight.contrast.wcagAA ? 'pass' : 'fail']}`}>
+              <span
+                className={`${styles.grade} ${styles[accessibilityInfo.onLight.contrast.wcagAA ? 'pass' : 'fail']}`}
+              >
                 {accessibilityInfo.onLight.contrast.grade}
               </span>
             </div>
           </div>
-          
+
           <div className={styles.accessibilityItem}>
             <span className={styles.accessibilityLabel}>On Dark:</span>
             <div className={styles.accessibilityBadge}>
               <span className={styles.ratio}>
                 {accessibilityInfo.onDark.contrast.ratio.toFixed(1)}:1
               </span>
-              <span className={`${styles.grade} ${styles[accessibilityInfo.onDark.contrast.wcagAA ? 'pass' : 'fail']}`}>
+              <span
+                className={`${styles.grade} ${styles[accessibilityInfo.onDark.contrast.wcagAA ? 'pass' : 'fail']}`}
+              >
                 {accessibilityInfo.onDark.contrast.grade}
               </span>
             </div>
@@ -257,7 +269,7 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
           {colorInfo && <span className={styles.colorName}>{colorInfo.name}</span>}
         </div>
       </div>
-      
+
       {icon && (
         <div className={styles.iconInfo}>
           <div className={styles.iconPreview} style={{ color }}>
@@ -273,7 +285,9 @@ export const CustomizationPreview: React.FC<CustomizationPreviewProps> = ({
   );
 
   return (
-    <div className={`${styles.customizationPreview} ${styles[size]} ${className} ${animated ? styles.animated : ''}`}>
+    <div
+      className={`${styles.customizationPreview} ${styles[size]} ${className} ${animated ? styles.animated : ''}`}
+    >
       <div className={styles.previewHeader}>
         <h3 className={styles.previewTitle}>Preview</h3>
         {renderCustomizationInfo()}

@@ -1,6 +1,6 @@
 /**
  * Breakpoint Manager Service
- * 
+ *
  * Manages responsive breakpoints and provides utilities for
  * detecting and responding to breakpoint changes
  */
@@ -15,16 +15,16 @@ export const MEDIA_QUERIES = {
   tablet: `(min-width: ${BREAKPOINTS.tablet}px) and (max-width: ${BREAKPOINTS.desktop - 1}px)`,
   desktop: `(min-width: ${BREAKPOINTS.desktop}px) and (max-width: ${BREAKPOINTS.wide - 1}px)`,
   wide: `(min-width: ${BREAKPOINTS.wide}px)`,
-  
+
   // Utility queries
   mobileAndTablet: `(max-width: ${BREAKPOINTS.desktop - 1}px)`,
   tabletAndUp: `(min-width: ${BREAKPOINTS.tablet}px)`,
   desktopAndUp: `(min-width: ${BREAKPOINTS.desktop}px)`,
-  
+
   // Orientation queries
   portrait: '(orientation: portrait)',
   landscape: '(orientation: landscape)',
-  
+
   // Feature queries
   touch: '(hover: none) and (pointer: coarse)',
   hover: '(hover: hover) and (pointer: fine)',
@@ -57,9 +57,9 @@ class BreakpointManager {
     Object.entries(MEDIA_QUERIES).forEach(([key, query]) => {
       const mql = window.matchMedia(query);
       this.mediaQueryLists.set(key, mql);
-      
+
       // Add change listener
-      mql.addEventListener('change', (e) => {
+      mql.addEventListener('change', e => {
         this.notifyListeners(key, e.matches);
       });
     });
@@ -73,7 +73,7 @@ class BreakpointManager {
    */
   private updateCurrentBreakpoint(): void {
     const width = window.innerWidth;
-    
+
     if (width < BREAKPOINTS.tablet) {
       this.currentBreakpoint = 'mobile';
     } else if (width < BREAKPOINTS.desktop) {
@@ -93,7 +93,7 @@ class BreakpointManager {
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
     }
-    
+
     this.resizeTimeout = setTimeout(() => {
       this.updateViewportSize();
       this.updateCurrentBreakpoint();
@@ -108,7 +108,7 @@ class BreakpointManager {
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     this.viewportSize = {
       width,
       height,
@@ -178,13 +178,13 @@ class BreakpointManager {
     if (!this.listeners.has(query)) {
       this.listeners.set(query, new Set());
     }
-    
+
     const listeners = this.listeners.get(query)!;
     listeners.add(callback);
-    
+
     // Call immediately with current state
     callback(this.matches(query));
-    
+
     // Return unsubscribe function
     return () => {
       listeners.delete(callback);
@@ -216,16 +216,16 @@ class BreakpointManager {
   }): T | undefined {
     const breakpointValue = values[this.currentBreakpoint];
     if (breakpointValue !== undefined) return breakpointValue;
-    
+
     // Fallback to smaller breakpoints
     const breakpointOrder: Breakpoint[] = ['wide', 'desktop', 'tablet', 'mobile'];
     const currentIndex = breakpointOrder.indexOf(this.currentBreakpoint);
-    
+
     for (let i = currentIndex + 1; i < breakpointOrder.length; i++) {
       const fallbackValue = values[breakpointOrder[i] as Breakpoint];
       if (fallbackValue !== undefined) return fallbackValue;
     }
-    
+
     return values.default;
   }
 
@@ -236,11 +236,11 @@ class BreakpointManager {
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', this.handleResize);
     }
-    
+
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
     }
-    
+
     this.listeners.clear();
     this.mediaQueryLists.clear();
   }
@@ -255,8 +255,12 @@ export const getViewportSize = () => breakpointManager.getViewportSize();
 export const matchesQuery = (query: keyof typeof MEDIA_QUERIES) => breakpointManager.matches(query);
 export const isAtLeast = (breakpoint: Breakpoint) => breakpointManager.isAtLeast(breakpoint);
 export const isAtMost = (breakpoint: Breakpoint) => breakpointManager.isAtMost(breakpoint);
-export const isBetween = (min: Breakpoint, max: Breakpoint) => breakpointManager.isBetween(min, max);
-export const subscribeToQuery = (query: keyof typeof MEDIA_QUERIES, callback: (matches: boolean) => void) => 
-  breakpointManager.subscribe(query, callback);
-export const getResponsiveValue = <T>(values: Parameters<typeof breakpointManager.getResponsiveValue<T>>[0]) => 
-  breakpointManager.getResponsiveValue(values);
+export const isBetween = (min: Breakpoint, max: Breakpoint) =>
+  breakpointManager.isBetween(min, max);
+export const subscribeToQuery = (
+  query: keyof typeof MEDIA_QUERIES,
+  callback: (matches: boolean) => void
+) => breakpointManager.subscribe(query, callback);
+export const getResponsiveValue = <T>(
+  values: Parameters<typeof breakpointManager.getResponsiveValue<T>>[0]
+) => breakpointManager.getResponsiveValue(values);

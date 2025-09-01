@@ -123,7 +123,7 @@ export function useDashboardProgress({
     activeHabits.forEach(habit => {
       // Check optimistic update first
       const optimisticUpdate = optimisticUpdates.get(habit.id);
-      
+
       let isCompletedToday = false;
       if (optimisticUpdate) {
         isCompletedToday = optimisticUpdate.isCompleted;

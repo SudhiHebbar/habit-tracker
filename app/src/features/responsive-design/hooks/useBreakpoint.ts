@@ -1,13 +1,13 @@
 /**
  * useBreakpoint Hook
- * 
+ *
  * React hook for responsive breakpoint detection and management
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Breakpoint, ViewportSize } from '../types/responsive.types';
-import { 
-  breakpointManager, 
+import {
+  breakpointManager,
   MEDIA_QUERIES,
   getCurrentBreakpoint,
   getViewportSize,
@@ -16,7 +16,7 @@ import {
   isBetween,
   matchesQuery,
   subscribeToQuery,
-  getResponsiveValue
+  getResponsiveValue,
 } from '../services/breakpointManager';
 
 /**
@@ -58,8 +58,8 @@ export function useBreakpoint(): UseBreakpointReturn {
 
     // Subscribe to all breakpoint queries
     const unsubscribers: (() => void)[] = [];
-    
-    ['mobile', 'tablet', 'desktop', 'wide'].forEach((breakpoint) => {
+
+    ['mobile', 'tablet', 'desktop', 'wide'].forEach(breakpoint => {
       const unsubscribe = subscribeToQuery(
         breakpoint as keyof typeof MEDIA_QUERIES,
         updateBreakpoint
@@ -99,15 +99,12 @@ export function useBreakpoint(): UseBreakpointReturn {
     return matchesQuery(query);
   }, []);
 
-  const getValue = useCallback(<T,>(values: {
-    mobile?: T;
-    tablet?: T;
-    desktop?: T;
-    wide?: T;
-    default?: T;
-  }) => {
-    return getResponsiveValue(values);
-  }, []);
+  const getValue = useCallback(
+    <T>(values: { mobile?: T; tablet?: T; desktop?: T; wide?: T; default?: T }) => {
+      return getResponsiveValue(values);
+    },
+    []
+  );
 
   return {
     current,
@@ -127,12 +124,9 @@ export function useBreakpoint(): UseBreakpointReturn {
 /**
  * Hook for conditional rendering based on breakpoints
  */
-export function useResponsiveVisibility(
-  showOn?: Breakpoint[],
-  hideOn?: Breakpoint[]
-): boolean {
+export function useResponsiveVisibility(showOn?: Breakpoint[], hideOn?: Breakpoint[]): boolean {
   const { current } = useBreakpoint();
-  
+
   return useMemo(() => {
     if (hideOn?.includes(current)) return false;
     if (showOn && !showOn.includes(current)) return false;
@@ -162,9 +156,8 @@ export function useMediaQuery(query: keyof typeof MEDIA_QUERIES | string): boole
 
   useEffect(() => {
     // Check if it's a predefined query or custom
-    const mediaQuery = query in MEDIA_QUERIES 
-      ? MEDIA_QUERIES[query as keyof typeof MEDIA_QUERIES]
-      : query;
+    const mediaQuery =
+      query in MEDIA_QUERIES ? MEDIA_QUERIES[query as keyof typeof MEDIA_QUERIES] : query;
 
     const mediaQueryList = window.matchMedia(mediaQuery);
     setMatches(mediaQueryList.matches);
@@ -183,15 +176,13 @@ export function useMediaQuery(query: keyof typeof MEDIA_QUERIES | string): boole
 /**
  * Hook for responsive class names
  */
-export function useResponsiveClassName(
-  classNames: {
-    mobile?: string;
-    tablet?: string;
-    desktop?: string;
-    wide?: string;
-    default?: string;
-  }
-): string {
+export function useResponsiveClassName(classNames: {
+  mobile?: string;
+  tablet?: string;
+  desktop?: string;
+  wide?: string;
+  default?: string;
+}): string {
   const value = useResponsiveValue(classNames);
   return value ?? '';
 }
@@ -199,15 +190,13 @@ export function useResponsiveClassName(
 /**
  * Hook for responsive styles
  */
-export function useResponsiveStyle(
-  styles: {
-    mobile?: React.CSSProperties;
-    tablet?: React.CSSProperties;
-    desktop?: React.CSSProperties;
-    wide?: React.CSSProperties;
-    default?: React.CSSProperties;
-  }
-): React.CSSProperties {
+export function useResponsiveStyle(styles: {
+  mobile?: React.CSSProperties;
+  tablet?: React.CSSProperties;
+  desktop?: React.CSSProperties;
+  wide?: React.CSSProperties;
+  default?: React.CSSProperties;
+}): React.CSSProperties {
   const value = useResponsiveValue(styles);
   return value ?? {};
 }

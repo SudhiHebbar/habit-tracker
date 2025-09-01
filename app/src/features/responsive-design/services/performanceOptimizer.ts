@@ -1,6 +1,6 @@
 /**
  * Performance Optimizer Service
- * 
+ *
  * Optimizes performance for different device types and capabilities
  * with adaptive strategies based on device constraints
  */
@@ -87,7 +87,7 @@ class PerformanceOptimizer {
 
     // Paint timing observer
     try {
-      const paintObserver = new PerformanceObserver((entries) => {
+      const paintObserver = new PerformanceObserver(entries => {
         for (const entry of entries.getEntries()) {
           if (entry.name === 'first-contentful-paint') {
             this.metrics.renderTime = entry.startTime;
@@ -102,7 +102,7 @@ class PerformanceOptimizer {
 
     // Resource timing observer
     try {
-      const resourceObserver = new PerformanceObserver((entries) => {
+      const resourceObserver = new PerformanceObserver(entries => {
         const resources = entries.getEntries();
         if (resources.length > 0) {
           const avgDuration = resources.reduce((sum, r) => sum + r.duration, 0) / resources.length;
@@ -126,19 +126,19 @@ class PerformanceOptimizer {
       if (this.lastFrameTime > 0) {
         const delta = timestamp - this.lastFrameTime;
         const fps = 1000 / delta;
-        
+
         this.fpsHistory.push(fps);
         if (this.fpsHistory.length > 60) {
           this.fpsHistory.shift();
         }
-        
+
         this.frameCount++;
         if (this.frameCount % 60 === 0) {
           this.metrics.fps = this.fpsHistory.reduce((a, b) => a + b, 0) / this.fpsHistory.length;
           this.checkPerformance();
         }
       }
-      
+
       this.lastFrameTime = timestamp;
       this.rafId = requestAnimationFrame(measureFPS);
     };
@@ -151,12 +151,12 @@ class PerformanceOptimizer {
    */
   private checkPerformance(): void {
     const fps = this.metrics.fps ?? 60;
-    
+
     // If FPS drops below 30, enable low power mode
     if (fps < 30 && !this.config.lowPowerMode) {
       this.enableLowPowerMode();
     }
-    
+
     // If FPS is consistently good, disable low power mode
     if (fps > 50 && this.config.lowPowerMode) {
       this.disableLowPowerMode();
@@ -172,11 +172,13 @@ class PerformanceOptimizer {
     this.config.enableVirtualization = true;
     this.config.throttleResize = 300;
     this.config.debounceScroll = 200;
-    
+
     // Dispatch event for components to react
-    window.dispatchEvent(new CustomEvent('performancemode', { 
-      detail: { lowPower: true } 
-    }));
+    window.dispatchEvent(
+      new CustomEvent('performancemode', {
+        detail: { lowPower: true },
+      })
+    );
   }
 
   /**
@@ -185,11 +187,13 @@ class PerformanceOptimizer {
   private disableLowPowerMode(): void {
     const deviceType = deviceDetector.getDeviceType();
     this.config = this.getDefaultConfig();
-    
+
     // Dispatch event for components to react
-    window.dispatchEvent(new CustomEvent('performancemode', { 
-      detail: { lowPower: false } 
-    }));
+    window.dispatchEvent(
+      new CustomEvent('performancemode', {
+        detail: { lowPower: false },
+      })
+    );
   }
 
   /**
@@ -261,16 +265,19 @@ class PerformanceOptimizer {
 
     return (...args: Parameters<T>) => {
       const currentTime = Date.now();
-      
+
       if (currentTime - lastExecTime > throttleDelay) {
         func(...args);
         lastExecTime = currentTime;
       } else {
         if (timeoutId) clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          func(...args);
-          lastExecTime = Date.now();
-        }, throttleDelay - (currentTime - lastExecTime));
+        timeoutId = setTimeout(
+          () => {
+            func(...args);
+            lastExecTime = Date.now();
+          },
+          throttleDelay - (currentTime - lastExecTime)
+        );
       }
     };
   }
@@ -294,14 +301,11 @@ class PerformanceOptimizer {
   /**
    * Request idle callback with fallback
    */
-  requestIdleCallback(
-    callback: () => void,
-    options?: { timeout?: number }
-  ): number {
+  requestIdleCallback(callback: () => void, options?: { timeout?: number }): number {
     if ('requestIdleCallback' in window) {
       return (window as any).requestIdleCallback(callback, options);
     }
-    
+
     // Fallback to setTimeout
     return window.setTimeout(callback, options?.timeout ?? 1);
   }
@@ -320,14 +324,10 @@ class PerformanceOptimizer {
   /**
    * Optimize image loading
    */
-  getOptimizedImageSrc(
-    src: string,
-    width: number,
-    format?: 'webp' | 'avif' | 'auto'
-  ): string {
+  getOptimizedImageSrc(src: string, width: number, format?: 'webp' | 'avif' | 'auto'): string {
     const dpr = window.devicePixelRatio || 1;
     const optimalWidth = Math.round(width * dpr);
-    
+
     // This would integrate with an image optimization service
     // For now, return the original source
     return src;
@@ -340,7 +340,7 @@ class PerformanceOptimizer {
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
     }
-    
+
     this.observers.forEach(observer => observer.disconnect());
     this.observers.clear();
   }
@@ -357,13 +357,15 @@ export const shouldVirtualize = () => performanceOptimizer.shouldVirtualize();
 export const getResizeThrottle = () => performanceOptimizer.getResizeThrottle();
 export const getScrollDebounce = () => performanceOptimizer.getScrollDebounce();
 export const isLowPowerMode = () => performanceOptimizer.isLowPowerMode();
-export const throttle = <T extends (...args: any[]) => any>(func: T, delay?: number) => 
+export const throttle = <T extends (...args: any[]) => any>(func: T, delay?: number) =>
   performanceOptimizer.throttle(func, delay);
-export const debounce = <T extends (...args: any[]) => any>(func: T, delay?: number) => 
+export const debounce = <T extends (...args: any[]) => any>(func: T, delay?: number) =>
   performanceOptimizer.debounce(func, delay);
-export const requestIdleCallback = (callback: () => void, options?: { timeout?: number }) => 
+export const requestIdleCallback = (callback: () => void, options?: { timeout?: number }) =>
   performanceOptimizer.requestIdleCallback(callback, options);
-export const cancelIdleCallback = (id: number) => 
-  performanceOptimizer.cancelIdleCallback(id);
-export const getOptimizedImageSrc = (src: string, width: number, format?: 'webp' | 'avif' | 'auto') => 
-  performanceOptimizer.getOptimizedImageSrc(src, width, format);
+export const cancelIdleCallback = (id: number) => performanceOptimizer.cancelIdleCallback(id);
+export const getOptimizedImageSrc = (
+  src: string,
+  width: number,
+  format?: 'webp' | 'avif' | 'auto'
+) => performanceOptimizer.getOptimizedImageSrc(src, width, format);

@@ -1,6 +1,6 @@
 /**
  * PerformanceMonitor Component
- * 
+ *
  * Real-time performance monitoring dashboard for responsive design
  */
 
@@ -46,7 +46,7 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   const { current, viewport } = useBreakpoint();
   const { deviceType, capabilities } = useDeviceDetection();
   const { width, height, aspectRatio } = useViewportSize();
-  
+
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -87,38 +87,40 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   // Update metrics from performance optimizer
   const updateMetrics = useCallback(() => {
     const currentMetrics = getPerformanceMetrics();
-    
-    setMetrics(prev => prev.map(metric => {
-      let newValue = metric.value;
-      
-      // Get actual values from performance service
-      switch (metric.name) {
-        case 'FPS':
-          newValue = currentMetrics.fps ?? 60;
-          break;
-        case 'Memory':
-          newValue = currentMetrics.memory ?? 0;
-          break;
-        case 'Load Time':
-          newValue = currentMetrics.loadTime ?? 0;
-          break;
-        case 'Network Latency':
-          newValue = currentMetrics.networkLatency ?? 0;
-          break;
-      }
-      
-      // Update history
-      const newHistory = [...metric.history, newValue];
-      if (newHistory.length > maxHistoryLength) {
-        newHistory.shift();
-      }
-      
-      return {
-        ...metric,
-        value: newValue,
-        history: newHistory,
-      };
-    }));
+
+    setMetrics(prev =>
+      prev.map(metric => {
+        let newValue = metric.value;
+
+        // Get actual values from performance service
+        switch (metric.name) {
+          case 'FPS':
+            newValue = currentMetrics.fps ?? 60;
+            break;
+          case 'Memory':
+            newValue = currentMetrics.memory ?? 0;
+            break;
+          case 'Load Time':
+            newValue = currentMetrics.loadTime ?? 0;
+            break;
+          case 'Network Latency':
+            newValue = currentMetrics.networkLatency ?? 0;
+            break;
+        }
+
+        // Update history
+        const newHistory = [...metric.history, newValue];
+        if (newHistory.length > maxHistoryLength) {
+          newHistory.shift();
+        }
+
+        return {
+          ...metric,
+          value: newValue,
+          history: newHistory,
+        };
+      })
+    );
   }, [maxHistoryLength]);
 
   // Initialize and start monitoring
@@ -131,38 +133,47 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   }, [isOpen, initializeMetrics, updateMetrics, updateInterval]);
 
   // Get performance status
-  const getMetricStatus = useCallback((metric: PerformanceMetric): 'good' | 'warning' | 'critical' => {
-    if (metric.value >= metric.threshold.critical) return 'critical';
-    if (metric.value >= metric.threshold.warning) return 'warning';
-    return 'good';
-  }, []);
+  const getMetricStatus = useCallback(
+    (metric: PerformanceMetric): 'good' | 'warning' | 'critical' => {
+      if (metric.value >= metric.threshold.critical) return 'critical';
+      if (metric.value >= metric.threshold.warning) return 'warning';
+      return 'good';
+    },
+    []
+  );
 
   // Calculate overall performance score
   const overallScore = useMemo(() => {
     if (metrics.length === 0) return 100;
-    
+
     const scores = metrics.map(metric => {
       const status = getMetricStatus(metric);
       switch (status) {
-        case 'critical': return 0;
-        case 'warning': return 50;
-        default: return 100;
+        case 'critical':
+          return 0;
+        case 'warning':
+          return 50;
+        default:
+          return 100;
       }
     });
-    
+
     return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
   }, [metrics, getMetricStatus]);
 
   // Device info summary
-  const deviceInfo = useMemo(() => ({
-    breakpoint: current,
-    deviceType,
-    hasTouch: capabilities?.touch ?? false,
-    viewport: `${width}×${height}`,
-    aspectRatio: aspectRatio.toFixed(2),
-    pixelRatio: capabilities?.devicePixelRatio ?? 1,
-    networkSpeed: capabilities?.networkSpeed ?? 'unknown',
-  }), [current, deviceType, capabilities, width, height, aspectRatio]);
+  const deviceInfo = useMemo(
+    () => ({
+      breakpoint: current,
+      deviceType,
+      hasTouch: capabilities?.touch ?? false,
+      viewport: `${width}×${height}`,
+      aspectRatio: aspectRatio.toFixed(2),
+      pixelRatio: capabilities?.devicePixelRatio ?? 1,
+      networkSpeed: capabilities?.networkSpeed ?? 'unknown',
+    }),
+    [current, deviceType, capabilities, width, height, aspectRatio]
+  );
 
   if (!isOpen) return null;
 
@@ -172,11 +183,13 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
       <div className={styles.header}>
         <div className={styles.titleSection}>
           <h3 className={styles.title}>Performance Monitor</h3>
-          <div className={`${styles.overallScore} ${styles[overallScore >= 80 ? 'good' : overallScore >= 50 ? 'warning' : 'critical']}`}>
+          <div
+            className={`${styles.overallScore} ${styles[overallScore >= 80 ? 'good' : overallScore >= 50 ? 'warning' : 'critical']}`}
+          >
             {overallScore}%
           </div>
         </div>
-        
+
         <div className={styles.controls}>
           <button
             className={styles.collapseButton}
@@ -185,11 +198,7 @@ const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           >
             {isCollapsed ? '▲' : '▼'}
           </button>
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Close"
-          >
+          <button className={styles.closeButton} onClick={onClose} aria-label='Close'>
             ✕
           </button>
         </div>
@@ -278,20 +287,22 @@ const MiniChart: React.FC<{
   status: 'good' | 'warning' | 'critical';
 }> = ({ data, status }) => {
   const maxValue = Math.max(...data, 1);
-  const points = data.map((value, index) => {
-    const x = (index / (data.length - 1)) * 100;
-    const y = 100 - (value / maxValue) * 100;
-    return `${x},${y}`;
-  }).join(' ');
+  const points = data
+    .map((value, index) => {
+      const x = (index / (data.length - 1)) * 100;
+      const y = 100 - (value / maxValue) * 100;
+      return `${x},${y}`;
+    })
+    .join(' ');
 
   return (
-    <svg className={styles.miniChart} viewBox="0 0 100 100" preserveAspectRatio="none">
+    <svg className={styles.miniChart} viewBox='0 0 100 100' preserveAspectRatio='none'>
       {data.length > 1 && (
         <polyline
           points={points}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
           className={styles[status]}
         />
       )}
@@ -304,7 +315,7 @@ const MiniChart: React.FC<{
  */
 const PerformanceConfig: React.FC = () => {
   const config = getPerformanceConfig();
-  
+
   return (
     <div className={styles.configGrid}>
       <div className={styles.configItem}>

@@ -30,16 +30,16 @@ export type {
   // Color types
   ColorOption,
   ColorCategory,
-  
+
   // Icon types
   IconOption,
   IconCategory,
   IconCategoryInfo,
-  
+
   // Contrast types
   ContrastResult,
   ColorAccessibilityInfo,
-  
+
   // Customization types
   HabitCustomization,
   CustomizationPreset,
@@ -47,29 +47,29 @@ export type {
   CustomizationPreferences,
   CustomizationValidation,
   CustomizationConfig,
-  
+
   // Component prop types
   BaseCustomizationProps,
   ColorSelectionProps,
   IconSelectionProps,
   PreviewProps,
-  
+
   // Hook return types
   UseColorPaletteReturn,
   UseIconLibraryReturn,
   UseCustomizationPreviewReturn,
   UseColorContrastReturn,
   UseCustomizationHistoryReturn,
-  
+
   // Theme and accessibility types
   ColorTheme,
   AccessibilitySettings,
-  
+
   // Error types
   CustomizationErrorData,
   AccessibilityErrorData,
   ValidationErrorData,
-  
+
   // Utility types
   CustomizationComponent,
   CustomizationSize,
@@ -107,7 +107,7 @@ export const VISUAL_CUSTOMIZATION_FEATURE = {
   description: 'Comprehensive visual customization system for habit personalization',
   components: [
     'ColorPalette',
-    'ColorPicker', 
+    'ColorPicker',
     'ColorContrastIndicator',
     'IconLibrary',
     'IconSelector',
@@ -118,11 +118,7 @@ export const VISUAL_CUSTOMIZATION_FEATURE = {
     'IconDisplay',
     'PreviewCard',
   ],
-  services: [
-    'ColorSystem',
-    'ContrastCalculator', 
-    'IconLibrary',
-  ],
+  services: ['ColorSystem', 'ContrastCalculator', 'IconLibrary'],
   features: {
     colorCustomization: {
       enabled: true,
@@ -168,24 +164,24 @@ export const VISUAL_CUSTOMIZATION_FEATURE = {
 export const QuickCustomization = {
   // Popular colors for quick selection
   popularColors: () => ColorSystem.getPopularColors() || [],
-  
+
   // Popular icons for quick selection
   popularIcons: () => IconLibrary.getPopularIcons() || [],
-  
+
   // Get suggestions for a habit category
   getHabitSuggestions: (category: string) => ({
     colors: ColorSystem.getColorsForHabitCategory(category) || [],
     icons: IconLibrary.getIconSuggestionsForHabit(category) || [],
   }),
-  
+
   // Validate customization quickly
-  validateCustomization: (color: string, backgroundColor: string = '#FFFFFF') => 
+  validateCustomization: (color: string, backgroundColor: string = '#FFFFFF') =>
     ContrastCalculator.analyzeContrast(color, backgroundColor),
-  
+
   // Get accessible color alternatives
-  getAccessibleAlternatives: (color: string, background: string = '#FFFFFF') => 
+  getAccessibleAlternatives: (color: string, background: string = '#FFFFFF') =>
     ContrastCalculator.generateRecommendations(color, background),
-  
+
   // Quick search across colors and icons
   search: (query: string) => ({
     colors: ColorSystem.searchColors(query) || [],

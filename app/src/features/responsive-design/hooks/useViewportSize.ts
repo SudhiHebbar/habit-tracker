@@ -1,6 +1,6 @@
 /**
  * useViewportSize Hook
- * 
+ *
  * React hook for tracking viewport dimensions and orientation
  */
 
@@ -34,7 +34,7 @@ interface UseViewportSizeReturn extends ViewportSize {
  */
 export function useViewportSize(options: UseViewportSizeOptions = {}): UseViewportSizeReturn {
   const { throttleDelay = 100, includeScrollbar = false } = options;
-  
+
   const [viewport, setViewport] = useState<ViewportSize | null>(getViewportSize());
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export function useViewportSize(options: UseViewportSizeOptions = {}): UseViewpo
     }
 
     const aspectRatio = viewport.width / viewport.height;
-    
+
     return {
       isPortrait: viewport.orientation === 'portrait',
       isLandscape: viewport.orientation === 'landscape',
@@ -128,14 +128,14 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>(): {
     top: 0,
     left: 0,
   });
-  
+
   const ref = React.useRef<T>(null);
 
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect;
         const { top, left } = entry.target.getBoundingClientRect();
@@ -175,7 +175,7 @@ export function useScrollPosition(options: { throttleDelay?: number } = {}): {
   scrollDirection: 'up' | 'down' | null;
 } {
   const { throttleDelay = 100 } = options;
-  
+
   const [scrollPosition, setScrollPosition] = useState({
     x: 0,
     y: 0,
@@ -190,14 +190,14 @@ export function useScrollPosition(options: { throttleDelay?: number } = {}): {
     const updateScrollPosition = () => {
       const currentScrollY = window.scrollY;
       const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
-      
+
       setScrollPosition({
         x: window.scrollX,
         y: currentScrollY,
         isScrolling: true,
         scrollDirection,
       });
-      
+
       lastScrollY = currentScrollY;
 
       // Reset scrolling state after delay
@@ -239,7 +239,7 @@ export function useSafeAreaInsets(): {
   useEffect(() => {
     const updateInsets = () => {
       const computedStyle = getComputedStyle(document.documentElement);
-      
+
       setInsets({
         top: parseInt(computedStyle.getPropertyValue('--sat') || '0', 10),
         right: parseInt(computedStyle.getPropertyValue('--sar') || '0', 10),
@@ -288,7 +288,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLDivElement>(
     isIntersecting: false,
     intersectionRatio: 0,
   });
-  
+
   const ref = React.useRef<T>(null);
 
   useEffect(() => {
@@ -296,7 +296,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLDivElement>(
     if (!element) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         const [entry] = entries;
         setIntersection({
           isIntersecting: entry.isIntersecting,

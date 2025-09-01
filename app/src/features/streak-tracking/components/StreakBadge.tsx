@@ -8,7 +8,7 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({
   streak,
   size = 'medium',
   variant = 'current',
-  animated = true
+  animated = true,
 }) => {
   // Determine which streak value to display
   const displayStreak = useMemo(() => {
@@ -46,18 +46,18 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({
       scale: 1,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 500,
-        damping: 30
-      }
+        damping: 30,
+      },
     },
     hover: {
       scale: 1.05,
-      transition: { duration: 0.2 }
+      transition: { duration: 0.2 },
     },
     tap: {
-      scale: 0.95
-    }
+      scale: 0.95,
+    },
   };
 
   const pulseVariants = {
@@ -66,22 +66,20 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: 'easeInOut',
+      },
+    },
   };
 
   // Render single streak badge
   const renderStreakBadge = (value: number, label?: string, isSecondary?: boolean) => (
-    <div 
+    <div
       className={`${styles.streakValue} ${isSecondary ? styles.secondary : ''}`}
       style={{ '--streak-color': streakColor } as React.CSSProperties}
     >
       <span className={styles.emoji}>{streakEmoji}</span>
       <span className={styles.number}>{value}</span>
-      <span className={styles.unit}>
-        {value === 1 ? 'day' : 'days'}
-      </span>
+      <span className={styles.unit}>{value === 1 ? 'day' : 'days'}</span>
       {label && <span className={styles.label}>{label}</span>}
     </div>
   );
@@ -91,12 +89,9 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({
       return (
         <div className={styles.bothValues}>
           {renderStreakBadge(displayStreak.current, 'current')}
-          {displayStreak.longest > displayStreak.current && (
-            <div className={styles.divider}>|</div>
-          )}
-          {displayStreak.longest > displayStreak.current && 
-            renderStreakBadge(displayStreak.longest, 'best', true)
-          }
+          {displayStreak.longest > displayStreak.current && <div className={styles.divider}>|</div>}
+          {displayStreak.longest > displayStreak.current &&
+            renderStreakBadge(displayStreak.longest, 'best', true)}
         </div>
       );
     }
@@ -113,14 +108,14 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({
     <motion.div
       className={`${styles.streakBadge} ${styles[size]} ${styles[variant]}`}
       variants={animated ? badgeVariants : undefined}
-      initial={animated ? "initial" : undefined}
-      animate={animated ? (shouldPulse ? "pulse" : "animate") : undefined}
-      whileHover={animated ? "hover" : undefined}
-      whileTap={animated ? "tap" : undefined}
+      initial={animated ? 'initial' : undefined}
+      animate={animated ? (shouldPulse ? 'pulse' : 'animate') : undefined}
+      whileHover={animated ? 'hover' : undefined}
+      whileTap={animated ? 'tap' : undefined}
       style={{ '--streak-color': streakColor } as React.CSSProperties}
     >
       {badgeContent()}
-      
+
       {/* Category indicator */}
       <div className={styles.categoryIndicator}>
         <span className={styles.categoryText}>{category}</span>
@@ -141,9 +136,7 @@ export const StreakBadge: React.FC<StreakBadgeProps> = ({
       {/* Milestone indicator */}
       {streak.achievedMilestones.length > 0 && (
         <div className={styles.milestoneIndicator}>
-          <span className={styles.milestoneCount}>
-            {streak.achievedMilestones.length}
-          </span>
+          <span className={styles.milestoneCount}>{streak.achievedMilestones.length}</span>
           <span className={styles.milestoneIcon}>🏆</span>
         </div>
       )}

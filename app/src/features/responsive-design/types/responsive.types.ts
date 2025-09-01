@@ -1,6 +1,6 @@
 /**
  * Responsive Design Type Definitions
- * 
+ *
  * Comprehensive type definitions for responsive design system
  * including breakpoints, devices, layouts, and responsive behavior
  */
@@ -147,12 +147,14 @@ export interface ContainerConfig {
 /**
  * Responsive value type (different values for different breakpoints)
  */
-export type ResponsiveValue<T> = T | {
-  mobile?: T;
-  tablet?: T;
-  desktop?: T;
-  wide?: T;
-};
+export type ResponsiveValue<T> =
+  | T
+  | {
+      mobile?: T;
+      tablet?: T;
+      desktop?: T;
+      wide?: T;
+    };
 
 /**
  * Typography scale for responsive design

@@ -8,14 +8,14 @@ import styles from './StreakCelebration.module.css';
 export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
   milestone,
   onComplete,
-  autoTrigger = true
+  autoTrigger = true,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [celebrationTriggered, setCelebrationTriggered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const { triggerCelebration } = useCompletionCelebration();
-  
+
   // Get milestone reward information
   const reward = MilestoneDetector.getMilestoneReward(milestone.milestoneValue);
   const config = MilestoneDetector.getMilestoneConfig(milestone.milestoneValue);
@@ -25,7 +25,7 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
     if (autoTrigger && milestone.isNew && !celebrationTriggered) {
       setIsVisible(true);
       setCelebrationTriggered(true);
-      
+
       // Trigger the actual celebration animation
       setTimeout(() => {
         if (containerRef.current) {
@@ -43,11 +43,14 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
   // Auto-close after celebration
   useEffect(() => {
     if (isVisible) {
-      const timer = setTimeout(() => {
-        setIsVisible(false);
-        onComplete?.();
-      }, milestone.milestoneValue >= 100 ? 8000 : 6000);
-      
+      const timer = setTimeout(
+        () => {
+          setIsVisible(false);
+          onComplete?.();
+        },
+        milestone.milestoneValue >= 100 ? 8000 : 6000
+      );
+
       return () => clearTimeout(timer);
     }
   }, [isVisible, milestone.milestoneValue, onComplete]);
@@ -67,39 +70,39 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
   // Animation variants
   const overlayVariants = {
     hidden: { opacity: 0 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     },
-    exit: { 
+    exit: {
       opacity: 0,
-      transition: { duration: 0.5 }
-    }
+      transition: { duration: 0.5 },
+    },
   };
 
   const modalVariants = {
-    hidden: { 
+    hidden: {
       scale: 0.8,
       opacity: 0,
-      y: 50
+      y: 50,
     },
-    visible: { 
+    visible: {
       scale: 1,
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
         damping: 25,
-        delay: 0.1
-      }
+        delay: 0.1,
+      },
     },
-    exit: { 
+    exit: {
       scale: 0.9,
       opacity: 0,
       y: -50,
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   };
 
   const badgeVariants = {
@@ -108,12 +111,12 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
       scale: 1,
       rotate: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 400,
         damping: 25,
-        delay: 0.5
-      }
-    }
+        delay: 0.5,
+      },
+    },
   };
 
   const textVariants = {
@@ -123,9 +126,9 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
       y: 0,
       transition: {
         delay: 0.8,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const buttonVariants = {
@@ -135,10 +138,10 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
       scale: 1,
       transition: {
         delay: 1.2,
-        type: "spring",
-        stiffness: 300
-      }
-    }
+        type: 'spring',
+        stiffness: 300,
+      },
+    },
   };
 
   if (!isVisible) return null;
@@ -148,16 +151,16 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
       <motion.div
         className={styles.celebrationOverlay}
         variants={overlayVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
+        initial='hidden'
+        animate='visible'
+        exit='exit'
         onClick={() => setIsVisible(false)}
       >
         <motion.div
           ref={containerRef}
           className={`${styles.celebrationModal} ${styles[milestone.badgeType]}`}
           variants={modalVariants}
-          onClick={(e) => e.stopPropagation()}
+          onClick={e => e.stopPropagation()}
           style={{ '--celebration-color': reward.color } as React.CSSProperties}
         >
           {/* Animated background effects */}
@@ -190,26 +193,16 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
           {/* Main content */}
           <div className={styles.celebrationContent}>
             {/* Badge/Icon */}
-            <motion.div
-              className={styles.celebrationBadge}
-              variants={badgeVariants}
-            >
-              <div className={styles.badgeIcon}>
-                {reward.icon}
-              </div>
-              <div className={styles.badgeNumber}>
-                {milestone.milestoneValue}
-              </div>
+            <motion.div className={styles.celebrationBadge} variants={badgeVariants}>
+              <div className={styles.badgeIcon}>{reward.icon}</div>
+              <div className={styles.badgeNumber}>{milestone.milestoneValue}</div>
               <div className={styles.badgeLabel}>
                 {milestone.milestoneValue === 1 ? 'DAY' : 'DAYS'}
               </div>
             </motion.div>
 
             {/* Text content */}
-            <motion.div
-              className={styles.celebrationText}
-              variants={textVariants}
-            >
+            <motion.div className={styles.celebrationText} variants={textVariants}>
               <motion.h2 className={styles.celebrationTitle} variants={textVariants}>
                 {reward.title}
               </motion.h2>
@@ -225,20 +218,11 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
             </motion.div>
 
             {/* Action buttons */}
-            <motion.div
-              className={styles.celebrationActions}
-              variants={buttonVariants}
-            >
-              <button
-                className={styles.celebrateButton}
-                onClick={handleManualTrigger}
-              >
+            <motion.div className={styles.celebrationActions} variants={buttonVariants}>
+              <button className={styles.celebrateButton} onClick={handleManualTrigger}>
                 🎉 Celebrate Again!
               </button>
-              <button
-                className={styles.continueButton}
-                onClick={() => setIsVisible(false)}
-              >
+              <button className={styles.continueButton} onClick={() => setIsVisible(false)}>
                 Continue
               </button>
             </motion.div>
@@ -255,7 +239,7 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
               className={styles.specialIndicator}
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.5, type: "spring" }}
+              transition={{ delay: 1.5, type: 'spring' }}
             >
               ✨ SPECIAL MILESTONE ✨
             </motion.div>
@@ -264,9 +248,7 @@ export const StreakCelebration: React.FC<StreakCelebrationProps> = ({
           {/* Progress indicator for next milestone */}
           <div className={styles.nextMilestone}>
             <span>Next milestone: </span>
-            <strong>
-              {MilestoneDetector.getNextMilestone(milestone.milestoneValue)} days
-            </strong>
+            <strong>{MilestoneDetector.getNextMilestone(milestone.milestoneValue)} days</strong>
           </div>
         </motion.div>
       </motion.div>

@@ -1,6 +1,6 @@
 /**
  * AdaptiveModal Component
- * 
+ *
  * Modal that adapts its presentation based on device type
  * Bottom sheet on mobile, centered modal on desktop
  */
@@ -52,16 +52,14 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
   const presentationStyle = isMobile ? 'bottomSheet' : isTablet ? 'drawer' : 'modal';
 
   // Handle swipe to close (mobile only)
-  const { ref: swipeRef, bind: swipeBind } = useSwipe<HTMLDivElement>(
-    (direction) => {
-      if (!swipeToClose || !isMobile) return;
-      
-      if (direction === 'down') {
-        triggerHaptic();
-        onClose();
-      }
+  const { ref: swipeRef, bind: swipeBind } = useSwipe<HTMLDivElement>(direction => {
+    if (!swipeToClose || !isMobile) return;
+
+    if (direction === 'down') {
+      triggerHaptic();
+      onClose();
     }
-  );
+  });
 
   // Handle escape key
   useEffect(() => {
@@ -82,7 +80,7 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
     if (isOpen) {
       // Store current focus
       previousFocusRef.current = document.activeElement as HTMLElement;
-      
+
       // Focus modal
       setTimeout(() => {
         const firstFocusable = modalRef.current?.querySelector<HTMLElement>(
@@ -102,12 +100,12 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
       const originalOverflow = document.body.style.overflow;
       const originalPaddingRight = document.body.style.paddingRight;
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-      
+
       document.body.style.overflow = 'hidden';
       if (scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
-      
+
       return () => {
         document.body.style.overflow = originalOverflow;
         document.body.style.paddingRight = originalPaddingRight;
@@ -116,11 +114,14 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
   }, [isOpen]);
 
   // Handle overlay click
-  const handleOverlayClick = useCallback((e: React.MouseEvent) => {
-    if (closeOnOverlay && e.target === e.currentTarget) {
-      onClose();
-    }
-  }, [closeOnOverlay, onClose]);
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (closeOnOverlay && e.target === e.currentTarget) {
+        onClose();
+      }
+    },
+    [closeOnOverlay, onClose]
+  );
 
   if (!isOpen) return null;
 
@@ -133,8 +134,8 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
         ${className}
       `}
       onClick={handleOverlayClick}
-      role="dialog"
-      aria-modal="true"
+      role='dialog'
+      aria-modal='true'
       aria-labelledby={title ? 'modal-title' : undefined}
     >
       <div
@@ -153,28 +154,24 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
         {(title || showCloseButton) && (
           <div className={styles.header}>
             {title && (
-              <h2 id="modal-title" className={styles.title}>
+              <h2 id='modal-title' className={styles.title}>
                 {title}
               </h2>
             )}
             {showCloseButton && (
-              <button
-                className={styles.closeButton}
-                onClick={onClose}
-                aria-label="Close modal"
-              >
+              <button className={styles.closeButton} onClick={onClose} aria-label='Close modal'>
                 <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
                 >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1='18' y1='6' x2='6' y2='18' />
+                  <line x1='6' y1='6' x2='18' y2='18' />
                 </svg>
               </button>
             )}
@@ -182,9 +179,7 @@ const AdaptiveModal: React.FC<AdaptiveModalProps> = ({
         )}
 
         {/* Content */}
-        <div className={styles.content}>
-          {children}
-        </div>
+        <div className={styles.content}>{children}</div>
       </div>
     </div>
   );
@@ -200,11 +195,7 @@ export const ModalFooter: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className = '' }) => {
-  return (
-    <div className={`${styles.footer} ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`${styles.footer} ${className}`}>{children}</div>;
 };
 
 /**
@@ -216,9 +207,7 @@ export const ModalActions: React.FC<{
   className?: string;
 }> = ({ children, align = 'right', className = '' }) => {
   return (
-    <div className={`${styles.actions} ${styles[`align-${align}`]} ${className}`}>
-      {children}
-    </div>
+    <div className={`${styles.actions} ${styles[`align-${align}`]} ${className}`}>{children}</div>
   );
 };
 

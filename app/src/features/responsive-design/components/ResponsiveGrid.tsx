@@ -1,6 +1,6 @@
 /**
  * ResponsiveGrid Component
- * 
+ *
  * Flexible grid system that adapts to different screen sizes
  */
 
@@ -15,12 +15,16 @@ import styles from './ResponsiveGrid.module.css';
  */
 interface ResponsiveGridProps {
   children: React.ReactNode;
-  columns?: number | 'auto-fit' | 'auto-fill' | {
-    mobile?: number | 'auto-fit' | 'auto-fill';
-    tablet?: number | 'auto-fit' | 'auto-fill';
-    desktop?: number | 'auto-fit' | 'auto-fill';
-    wide?: number | 'auto-fit' | 'auto-fill';
-  };
+  columns?:
+    | number
+    | 'auto-fit'
+    | 'auto-fill'
+    | {
+        mobile?: number | 'auto-fit' | 'auto-fill';
+        tablet?: number | 'auto-fit' | 'auto-fill';
+        desktop?: number | 'auto-fit' | 'auto-fill';
+        wide?: number | 'auto-fit' | 'auto-fill';
+      };
   gap?: number | { row?: number; column?: number };
   minChildWidth?: number;
   maxChildWidth?: number;
@@ -58,12 +62,12 @@ const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     if (typeof responsiveColumns === 'number') {
       return `repeat(${responsiveColumns}, 1fr)`;
     }
-    
+
     if (responsiveColumns === 'auto-fit' || responsiveColumns === 'auto-fill') {
       const max = maxChildWidth ? `${maxChildWidth}px` : '1fr';
       return `repeat(${responsiveColumns}, minmax(${minChildWidth}px, ${max}))`;
     }
-    
+
     return 'repeat(auto-fit, minmax(250px, 1fr))';
   }, [responsiveColumns, minChildWidth, maxChildWidth]);
 
@@ -100,23 +104,17 @@ export const Container: React.FC<{
   padding?: number | { x?: number; y?: number };
   center?: boolean;
   className?: string;
-}> = ({ 
-  children, 
-  maxWidth, 
-  padding, 
-  center = true, 
-  className = '' 
-}) => {
+}> = ({ children, maxWidth, padding, center = true, className = '' }) => {
   const { getContainerConfig } = useResponsiveLayout();
   const config = getContainerConfig({ maxWidth, padding, center });
 
   const paddingStyles = useMemo(() => {
     if (!config.padding) return {};
-    
+
     if (typeof config.padding === 'number') {
       return { padding: `${config.padding}px` };
     }
-    
+
     return {
       paddingLeft: `${config.padding.x ?? 0}px`,
       paddingRight: `${config.padding.x ?? 0}px`,
@@ -129,9 +127,12 @@ export const Container: React.FC<{
     <div
       className={`${styles.container} ${className}`}
       style={{
-        maxWidth: config.maxWidth === 'full' ? '100%' : 
-                  typeof config.maxWidth === 'number' ? `${config.maxWidth}px` : 
-                  config.maxWidth,
+        maxWidth:
+          config.maxWidth === 'full'
+            ? '100%'
+            : typeof config.maxWidth === 'number'
+              ? `${config.maxWidth}px`
+              : config.maxWidth,
         marginLeft: config.center ? 'auto' : undefined,
         marginRight: config.center ? 'auto' : undefined,
         ...paddingStyles,
@@ -147,11 +148,14 @@ export const Container: React.FC<{
  */
 export const Flex: React.FC<{
   children: React.ReactNode;
-  direction?: 'row' | 'column' | {
-    mobile?: 'row' | 'column';
-    tablet?: 'row' | 'column';
-    desktop?: 'row' | 'column';
-  };
+  direction?:
+    | 'row'
+    | 'column'
+    | {
+        mobile?: 'row' | 'column';
+        tablet?: 'row' | 'column';
+        desktop?: 'row' | 'column';
+      };
   wrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   justifyContent?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
   alignItems?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
@@ -167,7 +171,7 @@ export const Flex: React.FC<{
   className = '',
 }) => {
   const { getValue } = useBreakpoint();
-  
+
   const responsiveDirection = useMemo(() => {
     if (typeof direction === 'object') {
       return getValue(direction) ?? 'row';
@@ -214,11 +218,13 @@ export const Flex: React.FC<{
 export const Stack: React.FC<{
   children: React.ReactNode;
   direction?: 'vertical' | 'horizontal';
-  spacing?: number | {
-    mobile?: number;
-    tablet?: number;
-    desktop?: number;
-  };
+  spacing?:
+    | number
+    | {
+        mobile?: number;
+        tablet?: number;
+        desktop?: number;
+      };
   divider?: boolean;
   align?: 'start' | 'center' | 'end' | 'stretch';
   wrap?: boolean;
@@ -233,7 +239,7 @@ export const Stack: React.FC<{
   className = '',
 }) => {
   const { getValue } = useBreakpoint();
-  
+
   const responsiveSpacing = useMemo(() => {
     if (typeof spacing === 'object') {
       return getValue(spacing) ?? 16;
@@ -265,22 +271,16 @@ export const Stack: React.FC<{
         gap: `${responsiveSpacing}px`,
       }}
     >
-      {divider ? (
-        childrenArray.map((child, index) => (
-          <React.Fragment key={index}>
-            {child}
-            {index < childrenArray.length - 1 && (
-              <div 
-                className={styles.divider}
-                role="separator"
-                aria-hidden="true"
-              />
-            )}
-          </React.Fragment>
-        ))
-      ) : (
-        children
-      )}
+      {divider
+        ? childrenArray.map((child, index) => (
+            <React.Fragment key={index}>
+              {child}
+              {index < childrenArray.length - 1 && (
+                <div className={styles.divider} role='separator' aria-hidden='true' />
+              )}
+            </React.Fragment>
+          ))
+        : children}
     </div>
   );
 };

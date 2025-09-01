@@ -13,14 +13,11 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
     data: streaksAtRisk,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
-    queryKey: trackerId 
-      ? streakQueryKeys.atRisk(trackerId, warningDays)
-      : ['warnings', 'empty'],
-    queryFn: () => trackerId 
-      ? streakApi.getStreaksAtRisk(trackerId, warningDays) 
-      : Promise.resolve([]),
+    queryKey: trackerId ? streakQueryKeys.atRisk(trackerId, warningDays) : ['warnings', 'empty'],
+    queryFn: () =>
+      trackerId ? streakApi.getStreaksAtRisk(trackerId, warningDays) : Promise.resolve([]),
     enabled: trackerId !== undefined,
     staleTime: 2 * 60 * 1000, // 2 minutes (frequent updates for warnings)
     cacheTime: 5 * 60 * 1000, // 5 minutes
@@ -36,7 +33,7 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
       const options: StreakCalculationOptions = {
         frequency: 'Daily', // This should come from the habit's actual frequency
         targetCount: 1,
-        warningDays
+        warningDays,
       };
 
       return StreakCalculator.calculateRisk(streak, options);
@@ -48,7 +45,7 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
     const grouped = {
       high: [] as StreakRisk[],
       medium: [] as StreakRisk[],
-      low: [] as StreakRisk[]
+      low: [] as StreakRisk[],
     };
 
     riskAssessments.forEach(risk => {
@@ -77,21 +74,24 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
   }, [risksByLevel, streaksAtRisk]);
 
   // Get warning message for a specific streak
-  const getWarningMessage = useCallback((streak: StreakResponse): string => {
-    const options: StreakCalculationOptions = {
-      frequency: 'Daily',
-      targetCount: 1,
-      warningDays
-    };
-    
-    const risk = StreakCalculator.calculateRisk(streak, options);
-    return risk.message;
-  }, [warningDays]);
+  const getWarningMessage = useCallback(
+    (streak: StreakResponse): string => {
+      const options: StreakCalculationOptions = {
+        frequency: 'Daily',
+        targetCount: 1,
+        warningDays,
+      };
+
+      const risk = StreakCalculator.calculateRisk(streak, options);
+      return risk.message;
+    },
+    [warningDays]
+  );
 
   // Get urgency level for a streak
   const getUrgencyLevel = useCallback((streak: StreakResponse): 'critical' | 'warning' | 'info' => {
     if (!streak.daysSinceLastCompletion) return 'info';
-    
+
     if (streak.daysSinceLastCompletion >= 2) return 'critical';
     if (streak.daysSinceLastCompletion >= 1) return 'warning';
     return 'info';
@@ -102,7 +102,7 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
     if (risksByLevel.high.length > 0) {
       emit('streaks:critical-risk', {
         count: risksByLevel.high.length,
-        risks: risksByLevel.high
+        risks: risksByLevel.high,
       });
     }
 
@@ -112,8 +112,8 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
         byLevel: {
           high: risksByLevel.high.length,
           medium: risksByLevel.medium.length,
-          low: risksByLevel.low.length
-        }
+          low: risksByLevel.low.length,
+        },
       });
     }
   }, [emit, risksByLevel, warningStats]);
@@ -131,13 +131,13 @@ export function useStreakWarnings(trackerId?: number, warningDays: number = 1) {
     riskAssessments,
     risksByLevel,
     warningStats,
-    
+
     // State
     isLoading,
     error,
     hasWarnings: warningStats.hasAnyRisks,
     hasCriticalWarnings: warningStats.hasCriticalRisks,
-    
+
     // Actions
     refetch,
     getWarningMessage,
@@ -155,7 +155,7 @@ export function useStreakWarning(streak?: StreakResponse, options?: StreakCalcul
       frequency: 'Daily',
       targetCount: 1,
       warningDays: 1,
-      ...options
+      ...options,
     };
 
     return StreakCalculator.calculateRisk(streak, defaultOptions);
@@ -172,23 +172,31 @@ export function useStreakWarning(streak?: StreakResponse, options?: StreakCalcul
 
   const warningColor = useMemo(() => {
     if (!riskAssessment) return '#gray';
-    
+
     switch (riskAssessment.riskLevel) {
-      case 'high': return '#ef4444'; // red-500
-      case 'medium': return '#f59e0b'; // amber-500
-      case 'low': return '#10b981'; // emerald-500
-      default: return '#6b7280'; // gray-500
+      case 'high':
+        return '#ef4444'; // red-500
+      case 'medium':
+        return '#f59e0b'; // amber-500
+      case 'low':
+        return '#10b981'; // emerald-500
+      default:
+        return '#6b7280'; // gray-500
     }
   }, [riskAssessment]);
 
   const warningIcon = useMemo(() => {
     if (!riskAssessment) return '✅';
-    
+
     switch (riskAssessment.riskLevel) {
-      case 'high': return '🚨';
-      case 'medium': return '⚠️';
-      case 'low': return '💡';
-      default: return '✅';
+      case 'high':
+        return '🚨';
+      case 'medium':
+        return '⚠️';
+      case 'low':
+        return '💡';
+      default:
+        return '✅';
     }
   }, [riskAssessment]);
 
@@ -208,7 +216,7 @@ export function useStreakWarning(streak?: StreakResponse, options?: StreakCalcul
 export function useWarningPreferences() {
   // This would typically connect to user preferences storage
   // For now, we'll use localStorage with defaults
-  
+
   const getPreference = useCallback(<T>(key: string, defaultValue: T): T => {
     try {
       const stored = localStorage.getItem(`streakWarnings.${key}`);
@@ -236,17 +244,20 @@ export function useWarningPreferences() {
     warningFrequency: getPreference('warningFrequency', 'daily'), // daily, twice-daily, hourly
   };
 
-  const updatePreferences = useCallback((updates: Partial<typeof preferences>) => {
-    Object.entries(updates).forEach(([key, value]) => {
-      setPreference(key, value);
-    });
-  }, [setPreference]);
+  const updatePreferences = useCallback(
+    (updates: Partial<typeof preferences>) => {
+      Object.entries(updates).forEach(([key, value]) => {
+        setPreference(key, value);
+      });
+    },
+    [setPreference]
+  );
 
   const isQuietTime = useCallback(() => {
     const now = new Date();
     const currentHour = now.getHours();
     const { start, end } = preferences.quietHours;
-    
+
     if (start > end) {
       // Quiet hours cross midnight (e.g., 22:00 to 8:00)
       return currentHour >= start || currentHour < end;
@@ -256,13 +267,16 @@ export function useWarningPreferences() {
     }
   }, [preferences.quietHours]);
 
-  const shouldShowWarning = useCallback((riskLevel: 'high' | 'medium' | 'low') => {
-    if (!preferences.enableWarnings) return false;
-    if (riskLevel === 'high' && !preferences.enableCriticalAlerts) return false;
-    if (isQuietTime() && riskLevel !== 'high') return false;
-    
-    return true;
-  }, [preferences, isQuietTime]);
+  const shouldShowWarning = useCallback(
+    (riskLevel: 'high' | 'medium' | 'low') => {
+      if (!preferences.enableWarnings) return false;
+      if (riskLevel === 'high' && !preferences.enableCriticalAlerts) return false;
+      if (isQuietTime() && riskLevel !== 'high') return false;
+
+      return true;
+    },
+    [preferences, isQuietTime]
+  );
 
   return {
     preferences,

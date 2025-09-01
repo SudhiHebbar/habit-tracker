@@ -1,6 +1,6 @@
 /**
  * FlexibleSidebar Component
- * 
+ *
  * Adaptive sidebar that can be persistent, overlay, or push content
  */
 
@@ -42,17 +42,15 @@ const FlexibleSidebar: React.FC<FlexibleSidebarProps> = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   // Handle swipe to close
-  const { ref: swipeRef, bind: swipeBind } = useSwipe<HTMLDivElement>(
-    (direction) => {
-      if (!onClose) return;
-      
-      if (position === 'left' && direction === 'left') {
-        onClose();
-      } else if (position === 'right' && direction === 'right') {
-        onClose();
-      }
+  const { ref: swipeRef, bind: swipeBind } = useSwipe<HTMLDivElement>(direction => {
+    if (!onClose) return;
+
+    if (position === 'left' && direction === 'left') {
+      onClose();
+    } else if (position === 'right' && direction === 'right') {
+      onClose();
     }
-  );
+  });
 
   // Handle escape key
   useEffect(() => {
@@ -120,37 +118,33 @@ const FlexibleSidebar: React.FC<FlexibleSidebarProps> = ({
         ${isOpen ? styles.open : ''}
         ${className}
       `}
-      style={{
-        '--sidebar-width': typeof width === 'number' ? `${width}px` : width,
-      } as React.CSSProperties}
+      style={
+        {
+          '--sidebar-width': typeof width === 'number' ? `${width}px` : width,
+        } as React.CSSProperties
+      }
       aria-hidden={!isOpen && mode !== 'persistent'}
       {...(mode !== 'persistent' && swipeBind())}
     >
       {showCloseButton && onClose && (
-        <button
-          className={styles.closeButton}
-          onClick={onClose}
-          aria-label="Close sidebar"
-        >
+        <button className={styles.closeButton} onClick={onClose} aria-label='Close sidebar'>
           <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           >
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1='18' y1='6' x2='6' y2='18' />
+            <line x1='6' y1='6' x2='18' y2='18' />
           </svg>
         </button>
       )}
-      
-      <div className={styles.content}>
-        {children}
-      </div>
+
+      <div className={styles.content}>{children}</div>
     </aside>
   );
 };
