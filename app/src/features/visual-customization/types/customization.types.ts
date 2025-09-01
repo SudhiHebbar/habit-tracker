@@ -3,22 +3,33 @@
  * Consolidated type definitions for the visual customization system
  */
 
-// Re-export types from services
-export type {
+// Import and re-export types from services
+import type {
   ColorOption,
   ColorCategory,
 } from '../services/colorSystem';
 
-export type {
+import type {
   IconOption,
   IconCategory,
   IconCategoryInfo,
 } from '../services/iconLibrary';
 
-export type {
+import type {
   ContrastResult,
   ColorAccessibilityInfo,
 } from '../services/contrastCalculator';
+
+// Re-export the imported types
+export type {
+  ColorOption,
+  ColorCategory,
+  IconOption,
+  IconCategory,
+  IconCategoryInfo,
+  ContrastResult,
+  ColorAccessibilityInfo,
+};
 
 // Customization-specific types
 export interface HabitCustomization {

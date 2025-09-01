@@ -71,6 +71,15 @@ class EventBus {
 // Global instance
 const eventBus = new EventBus();
 
+// Combined hook for both emitting and listening (for backward compatibility)
+export function useEventBus() {
+  return {
+    emit: eventBus.emit.bind(eventBus),
+    subscribe: eventBus.subscribe.bind(eventBus),
+    unsubscribe: eventBus.unsubscribe.bind(eventBus),
+  };
+}
+
 // Hook for emitting events
 export function useEventEmitter() {
   const emit = useCallback((event: EventBusEvent) => {

@@ -19,6 +19,7 @@
     "start": "vite"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.85.6",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "react": "^19.1.1",

@@ -20,6 +20,11 @@ export { ColorSystem } from './services/colorSystem';
 export { ContrastCalculator } from './services/contrastCalculator';
 export { IconLibrary } from './services/iconLibrary';
 
+// Import services for local use
+import { ColorSystem } from './services/colorSystem';
+import { ContrastCalculator } from './services/contrastCalculator';
+import { IconLibrary } from './services/iconLibrary';
+
 // Types
 export type {
   // Color types
