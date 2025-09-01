@@ -8,8 +8,13 @@ import type {
 } from '../../../habit-completion/types/completion.types';
 import styles from '../../../../../styles/features/dashboard/calendar/CalendarGrid.module.css';
 
-interface HabitWithCompletion extends CompletionItem {
-  id: number; // Add id field for compatibility
+interface HabitWithCompletion {
+  id: number;
+  habitId: number;
+  habitName: string;
+  habitColor: string;
+  habitIcon?: string;
+  isCompleted: boolean;
 }
 
 interface CalendarGridProps {
@@ -45,7 +50,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
           habitMap.set(completion.habitId, {
             name: completion.habitName,
             color: completion.habitColor,
-            icon: completion.habitIcon || undefined,
+            icon: completion.habitIcon,
           });
         }
       });
@@ -70,7 +75,11 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
     const completionMap = new Map(dayCompletions.map(c => [c.habitId, c.isCompleted]));
 
     return allHabits.map(habit => ({
-      ...habit,
+      id: habit.habitId, // Add the missing id field
+      habitId: habit.habitId,
+      habitName: habit.name,
+      habitColor: habit.color,
+      habitIcon: habit.icon,
       isCompleted: completionMap.get(habit.habitId) || false,
     }));
   };
