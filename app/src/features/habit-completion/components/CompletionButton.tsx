@@ -73,31 +73,33 @@ export const CompletionButton: React.FC<CompletionButtonProps> = ({
           <div className={styles.icon}>
             {(() => {
               const iconSvg = IconLibrary.getIconSvgById(habitIcon);
-              
+
               if (iconSvg) {
                 return (
-                  <div 
-                    style={{ 
-                      width: '16px', 
-                      height: '16px', 
+                  <div
+                    style={{
+                      width: '16px',
+                      height: '16px',
                       color: habitColor,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
                     }}
                     dangerouslySetInnerHTML={{ __html: iconSvg }}
                   />
                 );
               }
-              
+
               // Fallback - colored circle without text
               return (
-                <div style={{
-                  width: '16px',
-                  height: '16px',
-                  backgroundColor: habitColor,
-                  borderRadius: '50%'
-                }} />
+                <div
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    backgroundColor: habitColor,
+                    borderRadius: '50%',
+                  }}
+                />
               );
             })()}
           </div>

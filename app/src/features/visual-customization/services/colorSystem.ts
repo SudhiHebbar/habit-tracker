@@ -48,7 +48,7 @@ export const COLOR_PALETTE: ColorOption[] = [
     isDefault: true,
     variants: {
       50: '#EEF2FF',
-      100: '#E0E7FF', 
+      100: '#E0E7FF',
       200: '#C7D2FE',
       300: '#A5B4FC',
       400: '#818CF8',
@@ -72,7 +72,7 @@ export const COLOR_PALETTE: ColorOption[] = [
     variants: {
       50: '#F5F3FF',
       100: '#EDE9FE',
-      200: '#DDD6FE', 
+      200: '#DDD6FE',
       300: '#C4B5FD',
       400: '#A78BFA',
       500: '#8B5CF6',
@@ -88,7 +88,7 @@ export const COLOR_PALETTE: ColorOption[] = [
       wcagAAA: false,
     },
   },
-  
+
   // Secondary Colors - Supporting brand colors
   {
     hex: '#10B981',
@@ -464,9 +464,7 @@ export class ColorSystem {
    * Get color by hex value
    */
   static getColorByHex(hex: string): ColorOption | undefined {
-    return COLOR_PALETTE.find(color => 
-      color.hex.toLowerCase() === hex.toLowerCase()
-    );
+    return COLOR_PALETTE.find(color => color.hex.toLowerCase() === hex.toLowerCase());
   }
 
   /**
@@ -495,15 +493,16 @@ export class ColorSystem {
    */
   static searchColors(query: string): ColorOption[] {
     const searchTerm = query.toLowerCase().trim();
-    
+
     if (!searchTerm) {
       return COLOR_PALETTE;
     }
 
-    return COLOR_PALETTE.filter(color => 
-      color.name.toLowerCase().includes(searchTerm) ||
-      color.hex.toLowerCase().includes(searchTerm) ||
-      color.category.toLowerCase().includes(searchTerm)
+    return COLOR_PALETTE.filter(
+      color =>
+        color.name.toLowerCase().includes(searchTerm) ||
+        color.hex.toLowerCase().includes(searchTerm) ||
+        color.category.toLowerCase().includes(searchTerm)
     );
   }
 
@@ -524,11 +523,13 @@ export class ColorSystem {
     }
 
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
   }
 
   /**
@@ -539,7 +540,7 @@ export class ColorSystem {
       const hex = Math.round(n).toString(16);
       return hex.length === 1 ? '0' + hex : hex;
     };
-    
+
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
   }
 
@@ -549,7 +550,7 @@ export class ColorSystem {
   static getBrightness(hex: string): number {
     const rgb = this.hexToRgb(hex);
     if (!rgb) return 0;
-    
+
     // Calculate perceived brightness using luminance formula
     return Math.round(0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b);
   }
@@ -576,17 +577,13 @@ export class ColorSystem {
     if (!rgb) return {};
 
     const variants: { [key: string]: string } = {};
-    
+
     // Generate lighter variants (50-400)
     for (let i = 50; i <= 400; i += 50) {
       const factor = (500 - i) / 500; // 0.9 to 0.2
       const lighten = (color: number) => Math.min(255, color + (255 - color) * factor);
-      
-      variants[i] = this.rgbToHex(
-        lighten(rgb.r),
-        lighten(rgb.g),
-        lighten(rgb.b)
-      );
+
+      variants[i] = this.rgbToHex(lighten(rgb.r), lighten(rgb.g), lighten(rgb.b));
     }
 
     // Original color at 500
@@ -596,12 +593,8 @@ export class ColorSystem {
     for (let i = 600; i <= 900; i += 100) {
       const factor = (i - 500) / 400; // 0.25 to 1
       const darken = (color: number) => Math.max(0, color * (1 - factor));
-      
-      variants[i] = this.rgbToHex(
-        darken(rgb.r),
-        darken(rgb.g),
-        darken(rgb.b)
-      );
+
+      variants[i] = this.rgbToHex(darken(rgb.r), darken(rgb.g), darken(rgb.b));
     }
 
     return variants;
@@ -613,7 +606,7 @@ export class ColorSystem {
   static getPopularColors(): ColorOption[] {
     return [
       this.getDefaultColor(),
-      ...COLOR_PALETTE.filter(color => 
+      ...COLOR_PALETTE.filter(color =>
         ['Violet', 'Emerald', 'Blue', 'Pink', 'Orange', 'Cyan'].includes(color.name)
       ),
     ];
@@ -624,21 +617,19 @@ export class ColorSystem {
    */
   static getColorsForHabitCategory(habitCategory: string): ColorOption[] {
     const categoryColorMap: { [key: string]: string[] } = {
-      'health': ['Emerald', 'Lime', 'Teal', 'Green'],
-      'fitness': ['Red', 'Orange', 'Amber', 'Pink'],
-      'learning': ['Blue', 'Indigo', 'Violet', 'Purple'],
-      'work': ['Slate', 'Gray', 'Blue', 'Indigo'],
-      'lifestyle': ['Pink', 'Purple', 'Fuchsia', 'Rose'],
-      'nature': ['Emerald', 'Lime', 'Teal', 'Green'],
-      'creative': ['Purple', 'Pink', 'Fuchsia', 'Violet'],
-      'social': ['Blue', 'Cyan', 'Sky', 'Teal'],
+      health: ['Emerald', 'Lime', 'Teal', 'Green'],
+      fitness: ['Red', 'Orange', 'Amber', 'Pink'],
+      learning: ['Blue', 'Indigo', 'Violet', 'Purple'],
+      work: ['Slate', 'Gray', 'Blue', 'Indigo'],
+      lifestyle: ['Pink', 'Purple', 'Fuchsia', 'Rose'],
+      nature: ['Emerald', 'Lime', 'Teal', 'Green'],
+      creative: ['Purple', 'Pink', 'Fuchsia', 'Violet'],
+      social: ['Blue', 'Cyan', 'Sky', 'Teal'],
     };
 
     const suggestedColors = categoryColorMap[habitCategory.toLowerCase()] || [];
-    
-    return COLOR_PALETTE.filter(color => 
-      suggestedColors.includes(color.name)
-    );
+
+    return COLOR_PALETTE.filter(color => suggestedColors.includes(color.name));
   }
 }
 

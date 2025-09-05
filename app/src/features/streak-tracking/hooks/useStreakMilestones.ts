@@ -16,10 +16,10 @@ export function useStreakMilestones(habitId?: number) {
     data: milestones,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: habitId ? streakQueryKeys.milestones(habitId) : ['milestones', 'empty'],
-    queryFn: () => habitId ? streakApi.getAchievedMilestones(habitId) : Promise.resolve([]),
+    queryFn: () => (habitId ? streakApi.getAchievedMilestones(habitId) : Promise.resolve([])),
     enabled: habitId !== undefined,
     staleTime: 10 * 60 * 1000, // 10 minutes (milestones don't change often)
     cacheTime: 30 * 60 * 1000, // 30 minutes
@@ -27,25 +27,28 @@ export function useStreakMilestones(habitId?: number) {
 
   // Check for new milestones
   const checkMilestones = useMutation({
-    mutationFn: ({ targetHabitId, currentStreak }: { targetHabitId: number; currentStreak: number }) =>
-      streakApi.checkMilestones(targetHabitId, currentStreak),
+    mutationFn: ({
+      targetHabitId,
+      currentStreak,
+    }: {
+      targetHabitId: number;
+      currentStreak: number;
+    }) => streakApi.checkMilestones(targetHabitId, currentStreak),
     onSuccess: (result: MilestoneCheckResult, { targetHabitId }) => {
       // Update milestones cache if there are new achievements
       if (result.hasNewMilestone && result.milestones.length > 0) {
-        const existingMilestones = queryClient.getQueryData<MilestoneAchievement[]>(
-          streakQueryKeys.milestones(targetHabitId)
-        ) || [];
-        
+        const existingMilestones =
+          queryClient.getQueryData<MilestoneAchievement[]>(
+            streakQueryKeys.milestones(targetHabitId)
+          ) || [];
+
         const updatedMilestones = [...existingMilestones, ...result.milestones];
-        queryClient.setQueryData(
-          streakQueryKeys.milestones(targetHabitId),
-          updatedMilestones
-        );
+        queryClient.setQueryData(streakQueryKeys.milestones(targetHabitId), updatedMilestones);
 
         // Emit events for each new milestone
         result.milestones.forEach(milestone => {
           emit('milestone:achieved', milestone);
-          
+
           // Show celebration toast
           showToast({
             type: 'success',
@@ -53,26 +56,30 @@ export function useStreakMilestones(habitId?: number) {
             duration: 5000,
             action: {
               label: 'Celebrate!',
-              onClick: () => emit('celebration:trigger', {
-                type: milestone.celebrationType,
-                milestone: milestone.milestoneValue
-              })
-            }
+              onClick: () =>
+                emit('celebration:trigger', {
+                  type: milestone.celebrationType,
+                  milestone: milestone.milestoneValue,
+                }),
+            },
           });
         });
       }
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Failed to check milestones:', error);
-    }
+    },
   });
 
   // Auto-check milestones when streak data changes
-  const autoCheckMilestones = useCallback((targetHabitId: number, currentStreak: number, previousStreak?: number) => {
-    if (previousStreak === undefined || currentStreak > previousStreak) {
-      checkMilestones.mutate({ targetHabitId, currentStreak });
-    }
-  }, [checkMilestones]);
+  const autoCheckMilestones = useCallback(
+    (targetHabitId: number, currentStreak: number, previousStreak?: number) => {
+      if (previousStreak === undefined || currentStreak > previousStreak) {
+        checkMilestones.mutate({ targetHabitId, currentStreak });
+      }
+    },
+    [checkMilestones]
+  );
 
   // Get milestone progress information
   const getMilestoneProgress = useCallback((currentStreak: number) => {
@@ -104,19 +111,19 @@ export function useStreakMilestones(habitId?: number) {
     milestones: milestones || [],
     isLoading,
     error,
-    
+
     // Actions
     refetch,
     checkMilestones: checkMilestones.mutate,
     autoCheckMilestones,
-    
+
     // Utilities
     getMilestoneProgress,
     getUpcomingMilestones,
     isMilestone,
     getMilestoneConfig,
     getMilestoneReward,
-    
+
     // State
     isCheckingMilestones: checkMilestones.isPending,
     checkMilestonesError: checkMilestones.error,
@@ -126,12 +133,11 @@ export function useStreakMilestones(habitId?: number) {
 // Hook for recent milestones across a tracker
 export function useRecentMilestones(trackerId?: number, days: number = 7) {
   return useQuery({
-    queryKey: trackerId 
-      ? streakQueryKeys.recentMilestones(trackerId, days) 
+    queryKey: trackerId
+      ? streakQueryKeys.recentMilestones(trackerId, days)
       : ['milestones', 'recent', 'empty'],
-    queryFn: () => trackerId 
-      ? streakApi.getRecentMilestones(trackerId, days) 
-      : Promise.resolve([]),
+    queryFn: () =>
+      trackerId ? streakApi.getRecentMilestones(trackerId, days) : Promise.resolve([]),
     enabled: trackerId !== undefined,
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -152,44 +158,50 @@ export function useMilestoneCelebration() {
             milestone: milestone.milestoneValue,
             habitName: milestone.habitName,
             message: milestone.message,
-            badgeType: milestone.badgeType
+            badgeType: milestone.badgeType,
           });
         }, 500); // Small delay for better UX
       }
     };
 
     on('milestone:achieved', handleMilestoneAchieved);
-    
+
     return () => {
       off('milestone:achieved', handleMilestoneAchieved);
     };
   }, [on, off, emit]);
 
   // Manually trigger a celebration
-  const triggerCelebration = useCallback((milestone: MilestoneAchievement) => {
-    emit('celebration:trigger', {
-      type: milestone.celebrationType,
-      milestone: milestone.milestoneValue,
-      habitName: milestone.habitName,
-      message: milestone.message,
-      badgeType: milestone.badgeType
-    });
-  }, [emit]);
+  const triggerCelebration = useCallback(
+    (milestone: MilestoneAchievement) => {
+      emit('celebration:trigger', {
+        type: milestone.celebrationType,
+        milestone: milestone.milestoneValue,
+        habitName: milestone.habitName,
+        message: milestone.message,
+        badgeType: milestone.badgeType,
+      });
+    },
+    [emit]
+  );
 
   // Trigger celebration by milestone value
-  const triggerCelebrationByValue = useCallback((milestoneValue: number, habitName: string) => {
-    const config = MilestoneDetector.getMilestoneConfig(milestoneValue);
-    const reward = MilestoneDetector.getMilestoneReward(milestoneValue);
-    
-    emit('celebration:trigger', {
-      type: config.celebrationType,
-      milestone: milestoneValue,
-      habitName,
-      message: config.message,
-      badgeType: config.badgeType,
-      reward
-    });
-  }, [emit]);
+  const triggerCelebrationByValue = useCallback(
+    (milestoneValue: number, habitName: string) => {
+      const config = MilestoneDetector.getMilestoneConfig(milestoneValue);
+      const reward = MilestoneDetector.getMilestoneReward(milestoneValue);
+
+      emit('celebration:trigger', {
+        type: config.celebrationType,
+        milestone: milestoneValue,
+        habitName,
+        message: config.message,
+        badgeType: config.badgeType,
+        reward,
+      });
+    },
+    [emit]
+  );
 
   return {
     triggerCelebration,
@@ -201,31 +213,32 @@ export function useMilestoneCelebration() {
 export function useMilestoneInsights(milestones: MilestoneAchievement[]) {
   const getMilestonesByBadgeType = useCallback(() => {
     const byBadgeType: Record<string, MilestoneAchievement[]> = {};
-    
+
     milestones.forEach(milestone => {
       if (!byBadgeType[milestone.badgeType]) {
         byBadgeType[milestone.badgeType] = [];
       }
       byBadgeType[milestone.badgeType].push(milestone);
     });
-    
+
     return byBadgeType;
   }, [milestones]);
 
-  const getRecentAchievements = useCallback((days: number = 30) => {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
-    
-    return milestones.filter(milestone => 
-      new Date(milestone.achievedAt) >= cutoffDate
-    ).sort((a, b) => 
-      new Date(b.achievedAt).getTime() - new Date(a.achievedAt).getTime()
-    );
-  }, [milestones]);
+  const getRecentAchievements = useCallback(
+    (days: number = 30) => {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - days);
+
+      return milestones
+        .filter(milestone => new Date(milestone.achievedAt) >= cutoffDate)
+        .sort((a, b) => new Date(b.achievedAt).getTime() - new Date(a.achievedAt).getTime());
+    },
+    [milestones]
+  );
 
   const getHighestMilestone = useCallback(() => {
     if (milestones.length === 0) return null;
-    return milestones.reduce((highest, current) => 
+    return milestones.reduce((highest, current) =>
       current.milestoneValue > highest.milestoneValue ? current : highest
     );
   }, [milestones]);
@@ -235,7 +248,7 @@ export function useMilestoneInsights(milestones: MilestoneAchievement[]) {
   }, [milestones]);
 
   const getSpecialMilestones = useCallback(() => {
-    return milestones.filter(milestone => 
+    return milestones.filter(milestone =>
       MilestoneDetector.isSpecialMilestone(milestone.milestoneValue)
     );
   }, [milestones]);

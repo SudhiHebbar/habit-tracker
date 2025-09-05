@@ -71,20 +71,26 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
   }, [disabled, onDoubleClick, iconId]);
 
   // Handle keyboard events
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (disabled || !iconId) return;
-    
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      handleClick();
-    }
-  }, [disabled, handleClick, iconId]);
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (disabled || !iconId) return;
+
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleClick();
+      }
+    },
+    [disabled, handleClick, iconId]
+  );
 
   // Handle drag events
-  const handleDragStart = useCallback((event: React.DragEvent) => {
-    if (disabled || !onDragStart || !iconId) return;
-    onDragStart(event, iconId);
-  }, [disabled, onDragStart, iconId]);
+  const handleDragStart = useCallback(
+    (event: React.DragEvent) => {
+      if (disabled || !onDragStart || !iconId) return;
+      onDragStart(event, iconId);
+    },
+    [disabled, onDragStart, iconId]
+  );
 
   // Generate accessible title
   const accessibleTitle = useMemo(() => {
@@ -121,7 +127,7 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
   // Render fallback when no icon or invalid iconId
   if (!icon) {
     if (!showFallback) return null;
-    
+
     return (
       <div
         className={`
@@ -137,19 +143,24 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
           ...style,
         }}
         title={accessibleTitle}
-        aria-label="No icon selected"
+        aria-label='No icon selected'
         data-testid={testId}
       >
         {fallbackText ? (
           <span className={styles.fallbackText}>{fallbackText}</span>
         ) : (
-          <svg className={styles.fallbackIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-            <circle cx="8.5" cy="8.5" r="1.5" />
-            <polyline points="21,15 16,10 5,21" />
+          <svg
+            className={styles.fallbackIcon}
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+          >
+            <rect x='3' y='3' width='18' height='18' rx='2' ry='2' />
+            <circle cx='8.5' cy='8.5' r='1.5' />
+            <polyline points='21,15 16,10 5,21' />
           </svg>
         )}
-        
+
         {showTooltip && (
           <div className={styles.tooltip}>
             <div className={styles.tooltipContent}>
@@ -178,12 +189,14 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
         ${animateOnLoad ? styles.animated : ''}
         ${className}
       `}
-      style={{
-        color: color || 'currentColor',
-        backgroundColor,
-        '--icon-color': color || 'currentColor',
-        ...style,
-      } as React.CSSProperties}
+      style={
+        {
+          color: color || 'currentColor',
+          backgroundColor,
+          '--icon-color': color || 'currentColor',
+          ...style,
+        } as React.CSSProperties
+      }
       onClick={isInteractive ? handleClick : undefined}
       onDoubleClick={isInteractive ? handleDoubleClick : undefined}
       onKeyDown={isInteractive ? handleKeyDown : undefined}
@@ -199,20 +212,20 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
       data-icon-category={icon.category}
     >
       {/* Icon SVG */}
-      <div 
+      <div
         className={styles.iconSvg}
         dangerouslySetInnerHTML={{ __html: icon.svg }}
-        aria-hidden="true"
+        aria-hidden='true'
       />
 
       {/* Selection indicator */}
       {selected && (
         <div className={styles.selectionIndicator}>
-          <svg viewBox="0 0 20 20" fill="currentColor">
+          <svg viewBox='0 0 20 20' fill='currentColor'>
             <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
+              fillRule='evenodd'
+              d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+              clipRule='evenodd'
             />
           </svg>
         </div>
@@ -224,11 +237,9 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
           <div className={styles.tooltipContent}>
             <div className={styles.tooltipHeader}>
               <span className={styles.iconName}>{icon.name}</span>
-              {icon.category && (
-                <span className={styles.iconCategory}>{icon.category}</span>
-              )}
+              {icon.category && <span className={styles.iconCategory}>{icon.category}</span>}
             </div>
-            
+
             {icon.tags && icon.tags.length > 0 && (
               <div className={styles.iconTags}>
                 {icon.tags.slice(0, 3).map(tag => (
@@ -238,7 +249,7 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
                 ))}
               </div>
             )}
-            
+
             <div className={styles.iconMeta}>
               <span className={styles.iconId}>ID: {iconId}</span>
             </div>
@@ -247,9 +258,7 @@ export const IconDisplay: React.FC<IconDisplayProps> = ({
       )}
 
       {/* Screen reader content */}
-      <span className={styles.srOnly}>
-        {accessibleLabel}
-      </span>
+      <span className={styles.srOnly}>{accessibleLabel}</span>
     </Component>
   );
 };

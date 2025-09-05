@@ -8,10 +8,10 @@ export function useStreakAnalytics(trackerId?: number) {
     data: analytics,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: trackerId ? streakQueryKeys.analytics(trackerId) : ['analytics', 'empty'],
-    queryFn: () => trackerId ? streakApi.getStreakAnalytics(trackerId) : Promise.resolve(null),
+    queryFn: () => (trackerId ? streakApi.getStreakAnalytics(trackerId) : Promise.resolve(null)),
     enabled: trackerId !== undefined,
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -28,38 +28,53 @@ export function useStreakAnalytics(trackerId?: number) {
       averageLongestStreak,
       averageCompletionRate,
       totalCompletions,
-      streaksAtRisk
+      streaksAtRisk,
     } = analytics;
 
     return {
       // Basic metrics
       activeStreakPercentage: totalHabits > 0 ? (activeStreaks / totalHabits) * 100 : 0,
-      completionRateGrade: 
-        averageCompletionRate >= 90 ? 'A' :
-        averageCompletionRate >= 80 ? 'B' :
-        averageCompletionRate >= 70 ? 'C' :
-        averageCompletionRate >= 60 ? 'D' : 'F',
-      
+      completionRateGrade:
+        averageCompletionRate >= 90
+          ? 'A'
+          : averageCompletionRate >= 80
+            ? 'B'
+            : averageCompletionRate >= 70
+              ? 'C'
+              : averageCompletionRate >= 60
+                ? 'D'
+                : 'F',
+
       // Risk assessment
       riskPercentage: totalHabits > 0 ? (streaksAtRisk.length / totalHabits) * 100 : 0,
-      riskLevel: 
-        streaksAtRisk.length === 0 ? 'low' :
-        streaksAtRisk.length / totalHabits < 0.2 ? 'low' :
-        streaksAtRisk.length / totalHabits < 0.5 ? 'medium' : 'high',
-      
+      riskLevel:
+        streaksAtRisk.length === 0
+          ? 'low'
+          : streaksAtRisk.length / totalHabits < 0.2
+            ? 'low'
+            : streaksAtRisk.length / totalHabits < 0.5
+              ? 'medium'
+              : 'high',
+
       // Performance indicators
-      consistencyScore: Math.round((averageCompletionRate + (activeStreaks / totalHabits) * 100) / 2),
+      consistencyScore: Math.round(
+        (averageCompletionRate + (activeStreaks / totalHabits) * 100) / 2
+      ),
       improvementPotential: Math.max(0, averageLongestStreak - averageCurrentStreak),
-      
+
       // Engagement metrics
       totalEngagement: totalCompletions,
       averageEngagement: totalHabits > 0 ? totalCompletions / totalHabits : 0,
-      
+
       // Streak health
-      streakHealth: 
-        averageCurrentStreak >= averageLongestStreak * 0.8 ? 'excellent' :
-        averageCurrentStreak >= averageLongestStreak * 0.6 ? 'good' :
-        averageCurrentStreak >= averageLongestStreak * 0.4 ? 'fair' : 'needs-attention',
+      streakHealth:
+        averageCurrentStreak >= averageLongestStreak * 0.8
+          ? 'excellent'
+          : averageCurrentStreak >= averageLongestStreak * 0.6
+            ? 'good'
+            : averageCurrentStreak >= averageLongestStreak * 0.4
+              ? 'fair'
+              : 'needs-attention',
     };
   }, [analytics]);
 
@@ -78,10 +93,10 @@ export function useStreakTrends(trackerId?: number, days: number = 30) {
     data: trends,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: trackerId ? streakQueryKeys.trends(trackerId, days) : ['trends', 'empty'],
-    queryFn: () => trackerId ? streakApi.getStreakTrends(trackerId, days) : Promise.resolve([]),
+    queryFn: () => (trackerId ? streakApi.getStreakTrends(trackerId, days) : Promise.resolve([])),
     enabled: trackerId !== undefined,
     staleTime: 10 * 60 * 1000, // 10 minutes
     cacheTime: 20 * 60 * 1000, // 20 minutes
@@ -91,13 +106,13 @@ export function useStreakTrends(trackerId?: number, days: number = 30) {
   const trendAnalysis = useMemo(() => {
     if (!trends || trends.length < 2) return null;
 
-    const sortedTrends = [...trends].sort((a, b) => 
-      new Date(a.date).getTime() - new Date(b.date).getTime()
+    const sortedTrends = [...trends].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
     const first = sortedTrends[0];
     const last = sortedTrends[sortedTrends.length - 1];
-    
+
     const streakTrend = last.averageStreak - first.averageStreak;
     const activityTrend = last.completionsCount - first.completionsCount;
     const activeStreakTrend = last.activeStreakCount - first.activeStreakCount;
@@ -129,7 +144,7 @@ export function useStreakTrends(trackerId?: number, days: number = 30) {
       momentum: {
         improving: streakTrend > 0 && activityTrend > 0,
         declining: streakTrend < 0 && activityTrend < 0,
-        mixed: (streakTrend > 0) !== (activityTrend > 0),
+        mixed: streakTrend > 0 !== activityTrend > 0,
       },
       smoothedData: smoothedAverages,
       volatility: calculateVolatility(averageStreaks),
@@ -147,22 +162,23 @@ export function useStreakTrends(trackerId?: number, days: number = 30) {
 }
 
 export function useStreakLeaderboard(
-  trackerId?: number, 
-  count: number = 10, 
+  trackerId?: number,
+  count: number = 10,
   byCurrentStreak: boolean = true
 ) {
   const {
     data: leaderboard,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
-    queryKey: trackerId 
+    queryKey: trackerId
       ? streakQueryKeys.leaderboard(trackerId, count, byCurrentStreak)
       : ['leaderboard', 'empty'],
-    queryFn: () => trackerId 
-      ? streakApi.getStreakLeaderboard(trackerId, count, byCurrentStreak) 
-      : Promise.resolve([]),
+    queryFn: () =>
+      trackerId
+        ? streakApi.getStreakLeaderboard(trackerId, count, byCurrentStreak)
+        : Promise.resolve([]),
     enabled: trackerId !== undefined,
     staleTime: 3 * 60 * 1000, // 3 minutes
     cacheTime: 10 * 60 * 1000, // 10 minutes
@@ -173,25 +189,33 @@ export function useStreakLeaderboard(
     if (!leaderboard || leaderboard.length === 0) return null;
 
     const topStreak = leaderboard[0];
-    const averageStreak = leaderboard.reduce((sum, entry) => 
-      sum + (byCurrentStreak ? entry.currentStreak : entry.longestStreak), 0
-    ) / leaderboard.length;
+    const averageStreak =
+      leaderboard.reduce(
+        (sum, entry) => sum + (byCurrentStreak ? entry.currentStreak : entry.longestStreak),
+        0
+      ) / leaderboard.length;
 
-    const streakDistribution = leaderboard.reduce((dist, entry) => {
-      const streak = byCurrentStreak ? entry.currentStreak : entry.longestStreak;
-      const range = getStreakRange(streak);
-      dist[range] = (dist[range] || 0) + 1;
-      return dist;
-    }, {} as Record<string, number>);
+    const streakDistribution = leaderboard.reduce(
+      (dist, entry) => {
+        const streak = byCurrentStreak ? entry.currentStreak : entry.longestStreak;
+        const range = getStreakRange(streak);
+        dist[range] = (dist[range] || 0) + 1;
+        return dist;
+      },
+      {} as Record<string, number>
+    );
 
     return {
       champion: topStreak,
       averageStreak,
       streakDistribution,
-      competitiveness: averageStreak / Math.max(1, topStreak.currentStreak || topStreak.longestStreak),
-      hasCloseCompetition: leaderboard.length > 1 && 
-        ((byCurrentStreak ? leaderboard[1].currentStreak : leaderboard[1].longestStreak) / 
-         (byCurrentStreak ? topStreak.currentStreak : topStreak.longestStreak)) > 0.8,
+      competitiveness:
+        averageStreak / Math.max(1, topStreak.currentStreak || topStreak.longestStreak),
+      hasCloseCompetition:
+        leaderboard.length > 1 &&
+        (byCurrentStreak ? leaderboard[1].currentStreak : leaderboard[1].longestStreak) /
+          (byCurrentStreak ? topStreak.currentStreak : topStreak.longestStreak) >
+          0.8,
     };
   }, [leaderboard, byCurrentStreak]);
 
@@ -208,7 +232,7 @@ export function useStreakLeaderboard(
 export function useStreakStatistics(trackerId?: number) {
   return useQuery({
     queryKey: trackerId ? streakQueryKeys.statistics(trackerId) : ['statistics', 'empty'],
-    queryFn: () => trackerId ? streakApi.getStreakStatistics(trackerId) : Promise.resolve({}),
+    queryFn: () => (trackerId ? streakApi.getStreakStatistics(trackerId) : Promise.resolve({})),
     enabled: trackerId !== undefined,
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -220,10 +244,12 @@ export function useTopPerformers(trackerId?: number, count: number = 5) {
     data: topPerformers,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
-    queryKey: trackerId ? streakQueryKeys.topPerformers(trackerId, count) : ['top-performers', 'empty'],
-    queryFn: () => trackerId ? streakApi.getTopPerformers(trackerId, count) : Promise.resolve([]),
+    queryKey: trackerId
+      ? streakQueryKeys.topPerformers(trackerId, count)
+      : ['top-performers', 'empty'],
+    queryFn: () => (trackerId ? streakApi.getTopPerformers(trackerId, count) : Promise.resolve([])),
     enabled: trackerId !== undefined,
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -235,14 +261,16 @@ export function useTopPerformers(trackerId?: number, count: number = 5) {
     const totalStreaks = topPerformers.reduce((sum, p) => sum + p.currentStreak, 0);
     const averageTopStreak = totalStreaks / topPerformers.length;
     const highestStreak = Math.max(...topPerformers.map(p => p.currentStreak));
-    const consistencyScore = topPerformers.reduce((sum, p) => sum + p.completionRate, 0) / topPerformers.length;
+    const consistencyScore =
+      topPerformers.reduce((sum, p) => sum + p.completionRate, 0) / topPerformers.length;
 
     return {
       averageTopStreak,
       highestStreak,
       consistencyScore,
       dominantPerformer: topPerformers[0],
-      hasConsistentTopTier: topPerformers.length > 2 && 
+      hasConsistentTopTier:
+        topPerformers.length > 2 &&
         topPerformers.slice(0, 3).every(p => p.currentStreak > averageTopStreak * 0.8),
     };
   }, [topPerformers]);
@@ -260,7 +288,8 @@ export function useTopPerformers(trackerId?: number, count: number = 5) {
 export function useOverallProgress(trackerId?: number) {
   return useQuery({
     queryKey: trackerId ? streakQueryKeys.progress(trackerId) : ['progress', 'empty'],
-    queryFn: () => trackerId ? streakApi.getOverallProgress(trackerId) : Promise.resolve({ progress: 0 }),
+    queryFn: () =>
+      trackerId ? streakApi.getOverallProgress(trackerId) : Promise.resolve({ progress: 0 }),
     enabled: trackerId !== undefined,
     staleTime: 5 * 60 * 1000, // 5 minutes
     cacheTime: 15 * 60 * 1000, // 15 minutes
@@ -270,11 +299,11 @@ export function useOverallProgress(trackerId?: number) {
 // Helper functions
 function calculateVolatility(data: number[]): number {
   if (data.length < 2) return 0;
-  
+
   const mean = data.reduce((sum, val) => sum + val, 0) / data.length;
   const squaredDifferences = data.map(val => Math.pow(val - mean, 2));
   const variance = squaredDifferences.reduce((sum, val) => sum + val, 0) / data.length;
-  
+
   return Math.sqrt(variance);
 }
 

@@ -19,12 +19,8 @@ const LiveIntegrationTest: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const handleHabitToggle = (habitId: number, checked: boolean) => {
-    setHabits(prev => 
-      prev.map(habit => 
-        habit.id === habitId 
-          ? { ...habit, completed: checked }
-          : habit
-      )
+    setHabits(prev =>
+      prev.map(habit => (habit.id === habitId ? { ...habit, completed: checked } : habit))
     );
 
     if (checked) {
@@ -56,8 +52,10 @@ const LiveIntegrationTest: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Live Animation Integration Test</h1>
-        <p>These are the actual animation components integrated into a real habit tracking interface</p>
-        
+        <p>
+          These are the actual animation components integrated into a real habit tracking interface
+        </p>
+
         <div className={styles.controls}>
           <button onClick={toggleLoading} className={styles.button}>
             {loading ? 'Loading...' : 'Test Loading States'}
@@ -67,7 +65,7 @@ const LiveIntegrationTest: React.FC = () => {
 
       <div className={styles.content}>
         <h2>Today's Habits</h2>
-        
+
         {loading ? (
           <div className={styles.habitList}>
             {[1, 2, 3, 4].map(i => (
@@ -87,18 +85,18 @@ const LiveIntegrationTest: React.FC = () => {
                   <div className={styles.habitCard}>
                     <div className={styles.habitHeader}>
                       <div className={styles.habitInfo}>
-                        <div 
+                        <div
                           className={styles.habitIcon}
                           style={{ backgroundColor: habit.color }}
                         />
                         <h3 className={styles.habitName}>{habit.name}</h3>
                       </div>
-                      
+
                       <AnimatedCheckbox
                         checked={habit.completed}
-                        onChange={(checked) => handleHabitToggle(habit.id, checked)}
+                        onChange={checked => handleHabitToggle(habit.id, checked)}
                         color={habit.color}
-                        size="large"
+                        size='large'
                         celebrateOnComplete
                         hapticFeedback
                         onAnimationComplete={() => {
@@ -109,21 +107,17 @@ const LiveIntegrationTest: React.FC = () => {
                         }}
                       />
                     </div>
-                    
+
                     <div className={styles.habitActions}>
                       <PressAnimation scale={0.95}>
-                        <button className={styles.actionButton}>
-                          Edit
-                        </button>
+                        <button className={styles.actionButton}>Edit</button>
                       </PressAnimation>
-                      
+
                       <PressAnimation scale={0.95}>
-                        <button className={styles.actionButton}>
-                          Stats
-                        </button>
+                        <button className={styles.actionButton}>Stats</button>
                       </PressAnimation>
                     </div>
-                    
+
                     <div className={styles.swipeHint}>
                       ← Swipe left to delete • Swipe right to complete →
                     </div>
@@ -133,7 +127,7 @@ const LiveIntegrationTest: React.FC = () => {
             ))}
           </div>
         )}
-        
+
         <div className={styles.stats}>
           <HoverScale scale={1.05}>
             <div className={styles.statCard}>
@@ -143,7 +137,7 @@ const LiveIntegrationTest: React.FC = () => {
               </div>
             </div>
           </HoverScale>
-          
+
           <HoverScale scale={1.05}>
             <div className={styles.statCard}>
               <h4>Current Streak</h4>
@@ -155,8 +149,8 @@ const LiveIntegrationTest: React.FC = () => {
 
       <CompletionCelebration
         active={showCelebration}
-        type="confetti"
-        intensity="normal"
+        type='confetti'
+        intensity='normal'
         message={`Great job completing ${celebrationHabit}!`}
         onComplete={() => setShowCelebration(false)}
       />

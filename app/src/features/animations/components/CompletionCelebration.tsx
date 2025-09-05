@@ -113,10 +113,7 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
     },
     animate: (particle: Particle) => ({
       y: [-100, -200 - Math.random() * 100],
-      x: [
-        particle.x,
-        particle.x + (Math.random() - 0.5) * 100,
-      ],
+      x: [particle.x, particle.x + (Math.random() - 0.5) * 100],
       opacity: [1, 1, 0],
       scale: [0, 1, 1],
       rotate: [0, particle.rotation * 3],
@@ -230,15 +227,15 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
   return (
     <AnimatePresence>
       {isVisible && (
-        <div className={clsx(styles.container, className)} aria-live="polite">
+        <div className={clsx(styles.container, className)} aria-live='polite'>
           {type === 'confetti' && (
             <div className={styles.particleContainer}>
-              {particles.map((particle) => (
+              {particles.map(particle => (
                 <motion.div
                   key={particle.id}
                   className={styles.confetti}
-                  initial="initial"
-                  animate="animate"
+                  initial='initial'
+                  animate='animate'
                   custom={particle}
                   variants={variants}
                   style={{
@@ -254,12 +251,12 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
 
           {type === 'sparkle' && (
             <div className={styles.sparkleContainer}>
-              {particles.map((particle) => (
+              {particles.map(particle => (
                 <motion.div
                   key={particle.id}
                   className={styles.sparkle}
-                  initial="initial"
-                  animate="animate"
+                  initial='initial'
+                  animate='animate'
                   variants={variants}
                   style={{
                     left: `${particle.x}%`,
@@ -274,12 +271,9 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
 
           {(type === 'pulse' || type === 'glow') && (
             <motion.div
-              className={clsx(
-                styles.pulseGlow,
-                type === 'glow' && styles.glow
-              )}
-              initial="initial"
-              animate="animate"
+              className={clsx(styles.pulseGlow, type === 'glow' && styles.glow)}
+              initial='initial'
+              animate='animate'
               variants={variants}
               style={{
                 backgroundColor: colors[0],
@@ -290,17 +284,13 @@ export const CompletionCelebration: React.FC<CompletionCelebrationProps> = ({
           {message && (
             <motion.div
               className={styles.messageContainer}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              initial='initial'
+              animate='animate'
+              exit='exit'
               variants={messageVariants}
             >
               <div className={styles.message}>
-                {milestone && (
-                  <span className={styles.milestone}>
-                    🎉 {milestone} Day Streak!
-                  </span>
-                )}
+                {milestone && <span className={styles.milestone}>🎉 {milestone} Day Streak!</span>}
                 <span className={styles.messageText}>{message}</span>
               </div>
             </motion.div>

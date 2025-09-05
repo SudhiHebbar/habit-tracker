@@ -1,15 +1,15 @@
 /**
  * useDeviceDetection Hook
- * 
+ *
  * React hook for device detection and capability management
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  DeviceType, 
-  OperatingSystem, 
+import {
+  DeviceType,
+  OperatingSystem,
   DeviceCapabilities,
-  ScreenDensity 
+  ScreenDensity,
 } from '../types/responsive.types';
 import {
   deviceDetector,
@@ -32,7 +32,7 @@ import {
   getOptimalImageSize,
   supportsHaptics,
   triggerHaptic,
-  getDeviceInfo
+  getDeviceInfo,
 } from '../services/deviceDetection';
 
 /**
@@ -80,7 +80,7 @@ export function useDeviceDetection(): UseDeviceDetectionReturn {
     // Listen for orientation changes
     window.addEventListener('orientationchange', handleOrientationChange);
     window.addEventListener('resize', handleOrientationChange);
-    
+
     // Listen for online/offline status
     window.addEventListener('online', handleOnlineStatusChange);
     window.addEventListener('offline', handleOnlineStatusChange);
@@ -112,21 +112,24 @@ export function useDeviceDetection(): UseDeviceDetectionReturn {
   }, []);
 
   // Memoized values
-  const memoizedValues = useMemo(() => ({
-    hasTouch: hasTouch(),
-    hasHover: hasHover(),
-    hasFinePointer: hasFinePointer(),
-    isMobile: isMobile(),
-    isTablet: isTablet(),
-    isDesktop: isDesktop(),
-    isHybrid: isHybrid(),
-    isIOS: isIOS(),
-    isAndroid: isAndroid(),
-    prefersReducedMotion: prefersReducedMotion(),
-    prefersDarkMode: prefersDarkMode(),
-    isStandalone: isStandalone(),
-    supportsHaptics: supportsHaptics(),
-  }), [deviceInfo]);
+  const memoizedValues = useMemo(
+    () => ({
+      hasTouch: hasTouch(),
+      hasHover: hasHover(),
+      hasFinePointer: hasFinePointer(),
+      isMobile: isMobile(),
+      isTablet: isTablet(),
+      isDesktop: isDesktop(),
+      isHybrid: isHybrid(),
+      isIOS: isIOS(),
+      isAndroid: isAndroid(),
+      prefersReducedMotion: prefersReducedMotion(),
+      prefersDarkMode: prefersDarkMode(),
+      isStandalone: isStandalone(),
+      supportsHaptics: supportsHaptics(),
+    }),
+    [deviceInfo]
+  );
 
   // Callbacks
   const getOptimalImageSizeCallback = useCallback((baseSize: number) => {
@@ -157,12 +160,15 @@ export function useTouchDetection(): {
   isHybridDevice: boolean;
 } {
   const { hasTouch: touch, isHybrid } = useDeviceDetection();
-  
-  return useMemo(() => ({
-    hasTouch: touch,
-    isTouchDevice: touch && !isHybrid,
-    isHybridDevice: isHybrid,
-  }), [touch, isHybrid]);
+
+  return useMemo(
+    () => ({
+      hasTouch: touch,
+      isTouchDevice: touch && !isHybrid,
+      isHybridDevice: isHybrid,
+    }),
+    [touch, isHybrid]
+  );
 }
 
 /**
@@ -176,14 +182,17 @@ export function usePlatform(): {
   isInstalled: boolean;
 } {
   const { isIOS: ios, isAndroid: android, isMobile: mobile, isStandalone } = useDeviceDetection();
-  
-  return useMemo(() => ({
-    isIOS: ios,
-    isAndroid: android,
-    isMobileWeb: mobile && !isStandalone,
-    isDesktopWeb: !mobile,
-    isInstalled: isStandalone,
-  }), [ios, android, mobile, isStandalone]);
+
+  return useMemo(
+    () => ({
+      isIOS: ios,
+      isAndroid: android,
+      isMobileWeb: mobile && !isStandalone,
+      isDesktopWeb: !mobile,
+      isInstalled: isStandalone,
+    }),
+    [ios, android, mobile, isStandalone]
+  );
 }
 
 /**
@@ -194,13 +203,20 @@ export function useAccessibilityPreferences(): {
   prefersDarkMode: boolean;
   prefersHighContrast: boolean;
 } {
-  const { prefersReducedMotion: reducedMotion, prefersDarkMode: darkMode, capabilities } = useDeviceDetection();
-  
-  return useMemo(() => ({
+  const {
     prefersReducedMotion: reducedMotion,
     prefersDarkMode: darkMode,
-    prefersHighContrast: capabilities?.prefersHighContrast ?? false,
-  }), [reducedMotion, darkMode, capabilities]);
+    capabilities,
+  } = useDeviceDetection();
+
+  return useMemo(
+    () => ({
+      prefersReducedMotion: reducedMotion,
+      prefersDarkMode: darkMode,
+      prefersHighContrast: capabilities?.prefersHighContrast ?? false,
+    }),
+    [reducedMotion, darkMode, capabilities]
+  );
 }
 
 /**
@@ -228,12 +244,15 @@ export function useNetworkStatus(): {
     };
   }, []);
 
-  return useMemo(() => ({
-    isOnline,
-    isOffline: !isOnline,
-    isSlow: capabilities?.networkSpeed === 'slow',
-    isFast: capabilities?.networkSpeed === 'fast',
-  }), [isOnline, capabilities]);
+  return useMemo(
+    () => ({
+      isOnline,
+      isOffline: !isOnline,
+      isSlow: capabilities?.networkSpeed === 'slow',
+      isFast: capabilities?.networkSpeed === 'fast',
+    }),
+    [isOnline, capabilities]
+  );
 }
 
 /**
@@ -251,14 +270,17 @@ export function useHaptics(): {
 } {
   const { supportsHaptics: supported, triggerHaptic: trigger } = useDeviceDetection();
 
-  const hapticPatterns = useMemo(() => ({
-    success: () => trigger([10, 30, 10]),
-    warning: () => trigger([20, 10, 20]),
-    error: () => trigger([30, 10, 30, 10, 30]),
-    light: () => trigger(10),
-    medium: () => trigger(20),
-    heavy: () => trigger(30),
-  }), [trigger]);
+  const hapticPatterns = useMemo(
+    () => ({
+      success: () => trigger([10, 30, 10]),
+      warning: () => trigger([20, 10, 20]),
+      error: () => trigger([30, 10, 30, 10, 30]),
+      light: () => trigger(10),
+      medium: () => trigger(20),
+      heavy: () => trigger(30),
+    }),
+    [trigger]
+  );
 
   return {
     supported,

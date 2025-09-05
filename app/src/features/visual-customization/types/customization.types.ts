@@ -4,21 +4,11 @@
  */
 
 // Import and re-export types from services
-import type {
-  ColorOption,
-  ColorCategory,
-} from '../services/colorSystem';
+import type { ColorOption, ColorCategory } from '../services/colorSystem';
 
-import type {
-  IconOption,
-  IconCategory,
-  IconCategoryInfo,
-} from '../services/iconLibrary';
+import type { IconOption, IconCategory, IconCategoryInfo } from '../services/iconLibrary';
 
-import type {
-  ContrastResult,
-  ColorAccessibilityInfo,
-} from '../services/contrastCalculator';
+import type { ContrastResult, ColorAccessibilityInfo } from '../services/contrastCalculator';
 
 // Re-export the imported types
 export type {
@@ -268,9 +258,9 @@ export interface ValidationErrorData extends CustomizationErrorData {
 }
 
 // Utility types
-export type CustomizationComponent = 
+export type CustomizationComponent =
   | 'ColorPalette'
-  | 'ColorPicker' 
+  | 'ColorPicker'
   | 'IconLibrary'
   | 'IconSelector'
   | 'CustomizationPreview'

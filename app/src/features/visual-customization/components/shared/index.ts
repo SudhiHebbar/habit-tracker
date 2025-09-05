@@ -1,6 +1,6 @@
 // Shared components for the visual customization system
 export { ColorSwatch } from './ColorSwatch';
-export { IconDisplay } from './IconDisplay';  
+export { IconDisplay } from './IconDisplay';
 export { PreviewCard } from './PreviewCard';
 
 // Re-export types if needed

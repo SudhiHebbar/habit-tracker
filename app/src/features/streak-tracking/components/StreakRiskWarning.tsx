@@ -7,14 +7,9 @@ import styles from './StreakRiskWarning.module.css';
 export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
   streak,
   onAction,
-  compact = false
+  compact = false,
 }) => {
-  const { 
-    riskAssessment, 
-    shouldShowWarning, 
-    warningColor, 
-    warningIcon 
-  } = useStreakWarning(streak);
+  const { riskAssessment, shouldShowWarning, warningColor, warningIcon } = useStreakWarning(streak);
 
   // Don't render if no warning needed
   if (!shouldShowWarning || !riskAssessment) {
@@ -23,17 +18,21 @@ export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
 
   const urgencyClass = useMemo(() => {
     switch (riskAssessment.riskLevel) {
-      case 'high': return styles.critical;
-      case 'medium': return styles.warning;
-      case 'low': return styles.info;
-      default: return styles.info;
+      case 'high':
+        return styles.critical;
+      case 'medium':
+        return styles.warning;
+      case 'low':
+        return styles.info;
+      default:
+        return styles.info;
     }
   }, [riskAssessment.riskLevel]);
 
   const timeMessage = useMemo(() => {
     const days = riskAssessment.daysSinceLastCompletion;
     if (days === 0) return 'Complete today to maintain your streak!';
-    if (days === 1) return 'It\'s been 1 day since completion';
+    if (days === 1) return "It's been 1 day since completion";
     return `It's been ${days} days since completion`;
   }, [riskAssessment.daysSinceLastCompletion]);
 
@@ -42,45 +41,45 @@ export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
       label: 'Complete Now',
       action: 'complete' as const,
       primary: true,
-      className: styles.completeButton
+      className: styles.completeButton,
     },
     {
       label: 'Remind Me',
       action: 'remind' as const,
       primary: false,
-      className: styles.remindButton
+      className: styles.remindButton,
     },
     {
       label: 'Dismiss',
       action: 'dismiss' as const,
       primary: false,
-      className: styles.dismissButton
-    }
+      className: styles.dismissButton,
+    },
   ];
 
   // Animation variants
   const warningVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 20, 
-      scale: 0.95 
+    hidden: {
+      opacity: 0,
+      y: 20,
+      scale: 0.95,
     },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       scale: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
-        damping: 30
-      }
+        damping: 30,
+      },
     },
-    exit: { 
-      opacity: 0, 
-      y: -20, 
+    exit: {
+      opacity: 0,
+      y: -20,
       scale: 0.95,
-      transition: { duration: 0.2 }
-    }
+      transition: { duration: 0.2 },
+    },
   };
 
   const pulseVariants = {
@@ -89,22 +88,22 @@ export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: 'easeInOut',
+      },
+    },
   };
 
   return (
     <motion.div
       className={`${styles.riskWarning} ${urgencyClass} ${compact ? styles.compact : ''}`}
       variants={warningVariants}
-      initial="hidden"
+      initial='hidden'
       animate={riskAssessment.riskLevel === 'high' ? 'pulse' : 'visible'}
-      exit="exit"
+      exit='exit'
       style={{ '--warning-color': warningColor } as React.CSSProperties}
     >
       <div className={styles.warningHeader}>
-        <span className={styles.warningIcon} aria-label="Warning">
+        <span className={styles.warningIcon} aria-label='Warning'>
           {warningIcon}
         </span>
         <div className={styles.warningContent}>
@@ -113,14 +112,8 @@ export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
             {riskAssessment.riskLevel === 'medium' && 'Streak at Risk'}
             {riskAssessment.riskLevel === 'low' && 'Gentle Reminder'}
           </h4>
-          <p className={styles.warningMessage}>
-            {riskAssessment.message}
-          </p>
-          {!compact && (
-            <p className={styles.timeMessage}>
-              {timeMessage}
-            </p>
-          )}
+          <p className={styles.warningMessage}>{riskAssessment.message}</p>
+          {!compact && <p className={styles.timeMessage}>{timeMessage}</p>}
         </div>
       </div>
 
@@ -131,9 +124,7 @@ export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
             <span className={styles.streakLabel}>day streak</span>
           </div>
           {streak.longestStreak > streak.currentStreak && (
-            <div className={styles.bestStreak}>
-              Best: {streak.longestStreak} days
-            </div>
+            <div className={styles.bestStreak}>Best: {streak.longestStreak} days</div>
           )}
         </div>
       )}
@@ -159,16 +150,14 @@ export const StreakRiskWarning: React.FC<StreakRiskWarningProps> = ({
       {riskAssessment.riskLevel === 'high' && (
         <div className={styles.urgencyIndicator}>
           <div className={styles.urgencyBar}>
-            <motion.div 
+            <motion.div
               className={styles.urgencyFill}
               initial={{ width: 0 }}
               animate={{ width: '100%' }}
-              transition={{ duration: 2, ease: "easeOut" }}
+              transition={{ duration: 2, ease: 'easeOut' }}
             />
           </div>
-          <span className={styles.urgencyText}>
-            Act now to save your streak!
-          </span>
+          <span className={styles.urgencyText}>Act now to save your streak!</span>
         </div>
       )}
     </motion.div>

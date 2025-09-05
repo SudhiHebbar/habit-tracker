@@ -46,11 +46,11 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
       case 'fade':
         return {
           initial: { opacity: 0 },
-          animate: { 
+          animate: {
             opacity: 1,
             transition: baseTransition,
           },
-          exit: { 
+          exit: {
             opacity: 0,
             transition: { ...baseTransition, duration: (duration / 1000) * 0.5 },
           },
@@ -133,7 +133,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
             opacity: 1,
             transition: {
               ...baseTransition,
-              type: "spring",
+              type: 'spring',
               stiffness: 200,
               damping: 20,
             },
@@ -157,22 +157,22 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   const variants = getTransitionVariants();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode='wait' initial={false}>
       <motion.div
         key={location.pathname}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        initial='initial'
+        animate='animate'
+        exit='exit'
         variants={variants}
-        className={clsx(
-          styles.pageTransition,
-          preserveHeight && styles.preserveHeight,
-          className
-        )}
-        style={type === 'flip' ? {
-          transformStyle: 'preserve-3d' as const,
-          perspective: 1000,
-        } : {}}
+        className={clsx(styles.pageTransition, preserveHeight && styles.preserveHeight, className)}
+        style={
+          type === 'flip'
+            ? {
+                transformStyle: 'preserve-3d' as const,
+                perspective: 1000,
+              }
+            : {}
+        }
       >
         {children}
       </motion.div>
@@ -193,14 +193,14 @@ export const RouteTransition: React.FC<RouteTransitionProps> = ({ children }) =>
   }
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode='wait'>
       <motion.div
         key={location.pathname}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{
-          type: "spring",
+          type: 'spring',
           stiffness: 300,
           damping: 30,
         }}

@@ -1,6 +1,6 @@
 /**
  * TouchOptimized Components
- * 
+ *
  * Collection of touch-optimized components for mobile interactions
  */
 
@@ -33,18 +33,14 @@ export const TouchTarget: React.FC<{
   as: Component = 'button',
 }) => {
   const { trigger: triggerHaptic } = useHaptics();
-  
+
   const handleClick = useCallback(() => {
     if (disabled) return;
     if (haptic) triggerHaptic();
     onClick?.();
   }, [onClick, haptic, disabled, triggerHaptic]);
 
-  const { ref, bind } = useTap<HTMLElement>(
-    handleClick,
-    undefined,
-    onLongPress
-  );
+  const { ref, bind } = useTap<HTMLElement>(handleClick, undefined, onLongPress);
 
   return (
     <Component
@@ -86,37 +82,33 @@ export const SwipeGesture: React.FC<{
   className = '',
 }) => {
   const { trigger: triggerHaptic } = useHaptics();
-  
-  const handleSwipe = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
-    if (haptic) triggerHaptic();
-    
-    switch (direction) {
-      case 'left':
-        onSwipeLeft?.();
-        break;
-      case 'right':
-        onSwipeRight?.();
-        break;
-      case 'up':
-        onSwipeUp?.();
-        break;
-      case 'down':
-        onSwipeDown?.();
-        break;
-    }
-  }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, haptic, triggerHaptic]);
 
-  const { ref, bind } = useSwipe<HTMLDivElement>(
-    handleSwipe,
-    { swipeThreshold: threshold }
+  const handleSwipe = useCallback(
+    (direction: 'up' | 'down' | 'left' | 'right') => {
+      if (haptic) triggerHaptic();
+
+      switch (direction) {
+        case 'left':
+          onSwipeLeft?.();
+          break;
+        case 'right':
+          onSwipeRight?.();
+          break;
+        case 'up':
+          onSwipeUp?.();
+          break;
+        case 'down':
+          onSwipeDown?.();
+          break;
+      }
+    },
+    [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, haptic, triggerHaptic]
   );
 
+  const { ref, bind } = useSwipe<HTMLDivElement>(handleSwipe, { swipeThreshold: threshold });
+
   return (
-    <div
-      ref={ref}
-      className={`${styles.swipeGesture} ${className}`}
-      {...bind()}
-    >
+    <div ref={ref} className={`${styles.swipeGesture} ${className}`} {...bind()}>
       {children}
     </div>
   );
@@ -131,12 +123,7 @@ export const PullToRefresh: React.FC<{
   onRefresh: () => Promise<void>;
   threshold?: number;
   className?: string;
-}> = ({
-  children,
-  onRefresh,
-  threshold = 80,
-  className = '',
-}) => {
+}> = ({ children, onRefresh, threshold = 80, className = '' }) => {
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [startY, setStartY] = useState(0);
@@ -149,34 +136,37 @@ export const PullToRefresh: React.FC<{
     }
   }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!startY || isRefreshing) return;
-    
-    const currentY = e.touches[0].clientY;
-    const distance = currentY - startY;
-    
-    if (distance > 0 && containerRef.current?.scrollTop === 0) {
-      e.preventDefault();
-      setPullDistance(Math.min(distance, threshold * 1.5));
-      
-      if (distance >= threshold && pullDistance < threshold) {
-        triggerHaptic();
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!startY || isRefreshing) return;
+
+      const currentY = e.touches[0].clientY;
+      const distance = currentY - startY;
+
+      if (distance > 0 && containerRef.current?.scrollTop === 0) {
+        e.preventDefault();
+        setPullDistance(Math.min(distance, threshold * 1.5));
+
+        if (distance >= threshold && pullDistance < threshold) {
+          triggerHaptic();
+        }
       }
-    }
-  }, [startY, threshold, isRefreshing, pullDistance, triggerHaptic]);
+    },
+    [startY, threshold, isRefreshing, pullDistance, triggerHaptic]
+  );
 
   const handleTouchEnd = useCallback(async () => {
     if (pullDistance >= threshold && !isRefreshing) {
       setIsRefreshing(true);
       triggerHaptic([20, 10, 20]);
-      
+
       try {
         await onRefresh();
       } finally {
         setIsRefreshing(false);
       }
     }
-    
+
     setPullDistance(0);
     setStartY(0);
   }, [pullDistance, threshold, isRefreshing, onRefresh, triggerHaptic]);
@@ -205,7 +195,7 @@ export const PullToRefresh: React.FC<{
           }}
         />
       </div>
-      
+
       <div
         className={styles.content}
         style={{
@@ -229,17 +219,10 @@ export const LongPress: React.FC<{
   delay?: number;
   haptic?: boolean;
   className?: string;
-}> = ({
-  children,
-  onLongPress,
-  onPress,
-  delay = 500,
-  haptic = true,
-  className = '',
-}) => {
+}> = ({ children, onLongPress, onPress, delay = 500, haptic = true, className = '' }) => {
   const { trigger: triggerHaptic } = useHaptics();
   const [isPressed, setIsPressed] = useState(false);
-  
+
   const handleLongPress = useCallback(() => {
     if (haptic) triggerHaptic([10, 5, 20]);
     onLongPress();
@@ -251,11 +234,7 @@ export const LongPress: React.FC<{
     onPress?.();
   }, [onPress, haptic, triggerHaptic]);
 
-  const { ref, bind } = useTap<HTMLDivElement>(
-    handlePress,
-    undefined,
-    handleLongPress
-  );
+  const { ref, bind } = useTap<HTMLDivElement>(handlePress, undefined, handleLongPress);
 
   return (
     <div
@@ -283,16 +262,9 @@ export const DoubleTap: React.FC<{
   delay?: number;
   haptic?: boolean;
   className?: string;
-}> = ({
-  children,
-  onDoubleTap,
-  onSingleTap,
-  delay = 300,
-  haptic = true,
-  className = '',
-}) => {
+}> = ({ children, onDoubleTap, onSingleTap, delay = 300, haptic = true, className = '' }) => {
   const { trigger: triggerHaptic } = useHaptics();
-  
+
   const handleDoubleTap = useCallback(() => {
     if (haptic) triggerHaptic([10, 5, 10]);
     onDoubleTap();
@@ -303,17 +275,10 @@ export const DoubleTap: React.FC<{
     onSingleTap?.();
   }, [onSingleTap, haptic, triggerHaptic]);
 
-  const { ref, bind } = useTap<HTMLDivElement>(
-    handleSingleTap,
-    handleDoubleTap
-  );
+  const { ref, bind } = useTap<HTMLDivElement>(handleSingleTap, handleDoubleTap);
 
   return (
-    <div
-      ref={ref}
-      className={`${styles.doubleTap} ${className}`}
-      {...bind()}
-    >
+    <div ref={ref} className={`${styles.doubleTap} ${className}`} {...bind()}>
       {children}
     </div>
   );
@@ -328,29 +293,27 @@ export const RippleEffect: React.FC<{
   color?: string;
   duration?: number;
   className?: string;
-}> = ({
-  children,
-  color = 'rgba(255, 255, 255, 0.3)',
-  duration = 600,
-  className = '',
-}) => {
+}> = ({ children, color = 'rgba(255, 255, 255, 0.3)', duration = 600, className = '' }) => {
   const [ripples, setRipples] = useState<Array<{ x: number; y: number; id: number }>>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return;
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const id = Date.now();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const id = Date.now();
 
-    setRipples(prev => [...prev, { x, y, id }]);
+      setRipples(prev => [...prev, { x, y, id }]);
 
-    setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== id));
-    }, duration);
-  }, [duration]);
+      setTimeout(() => {
+        setRipples(prev => prev.filter(r => r.id !== id));
+      }, duration);
+    },
+    [duration]
+  );
 
   return (
     <div

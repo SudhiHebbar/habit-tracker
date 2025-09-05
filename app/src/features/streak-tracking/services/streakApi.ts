@@ -6,7 +6,7 @@ import type {
   StreakLeaderboardEntry,
   MilestoneAchievement,
   MilestoneCheckResult,
-  StreakStatistics
+  StreakStatistics,
 } from '../types/streak.types';
 
 export const streakApi = {
@@ -38,9 +38,7 @@ export const streakApi = {
 
   // Get streak trends
   async getStreakTrends(trackerId: number, days = 30): Promise<StreakTrend[]> {
-    const response = await api.get<StreakTrend[]>(
-      `/streaks/trends/${trackerId}?days=${days}`
-    );
+    const response = await api.get<StreakTrend[]>(`/streaks/trends/${trackerId}?days=${days}`);
     return response.data;
   },
 
@@ -97,7 +95,9 @@ export const streakApi = {
   },
 
   // Validate streak consistency
-  async validateStreakConsistency(habitId: number): Promise<{ habitId: number; isConsistent: boolean }> {
+  async validateStreakConsistency(
+    habitId: number
+  ): Promise<{ habitId: number; isConsistent: boolean }> {
     const response = await api.get<{ habitId: number; isConsistent: boolean }>(
       `/streaks/validate/${habitId}`
     );
@@ -118,7 +118,7 @@ export const streakApi = {
       `/streaks/progress/${trackerId}`
     );
     return response.data;
-  }
+  },
 };
 
 // Cache keys for React Query
@@ -126,18 +126,19 @@ export const streakQueryKeys = {
   all: ['streaks'] as const,
   byHabit: (habitId: number) => [...streakQueryKeys.all, 'habit', habitId] as const,
   byTracker: (trackerId: number) => [...streakQueryKeys.all, 'tracker', trackerId] as const,
-  atRisk: (trackerId: number, warningDays: number) => 
+  atRisk: (trackerId: number, warningDays: number) =>
     [...streakQueryKeys.byTracker(trackerId), 'at-risk', warningDays] as const,
   analytics: (trackerId: number) => [...streakQueryKeys.byTracker(trackerId), 'analytics'] as const,
-  trends: (trackerId: number, days: number) => 
+  trends: (trackerId: number, days: number) =>
     [...streakQueryKeys.byTracker(trackerId), 'trends', days] as const,
-  leaderboard: (trackerId: number, count: number, byCurrentStreak: boolean) => 
+  leaderboard: (trackerId: number, count: number, byCurrentStreak: boolean) =>
     [...streakQueryKeys.byTracker(trackerId), 'leaderboard', count, byCurrentStreak] as const,
-  statistics: (trackerId: number) => [...streakQueryKeys.byTracker(trackerId), 'statistics'] as const,
+  statistics: (trackerId: number) =>
+    [...streakQueryKeys.byTracker(trackerId), 'statistics'] as const,
   milestones: (habitId: number) => [...streakQueryKeys.byHabit(habitId), 'milestones'] as const,
-  recentMilestones: (trackerId: number, days: number) => 
+  recentMilestones: (trackerId: number, days: number) =>
     [...streakQueryKeys.byTracker(trackerId), 'recent-milestones', days] as const,
-  topPerformers: (trackerId: number, count: number) => 
+  topPerformers: (trackerId: number, count: number) =>
     [...streakQueryKeys.byTracker(trackerId), 'top-performers', count] as const,
   progress: (trackerId: number) => [...streakQueryKeys.byTracker(trackerId), 'progress'] as const,
 };

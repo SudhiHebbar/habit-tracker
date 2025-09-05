@@ -27,10 +27,10 @@ export const ScaleIn: React.FC<ScaleInProps> = ({
     <motion.div
       initial={{ scale: initialScale, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ 
-        duration: duration / 1000, 
+      transition={{
+        duration: duration / 1000,
         delay: delay / 1000,
-        type: "spring",
+        type: 'spring',
         stiffness: 200,
         damping: 20,
       }}

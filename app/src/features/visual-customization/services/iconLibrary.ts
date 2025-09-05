@@ -5,11 +5,11 @@
 
 // Legacy icon ID mapping for backward compatibility
 const LEGACY_ICON_MAPPING: Record<string, string> = {
-  'water': 'water-drop',
-  'exercise': 'dumbbell',
-  'meditation': 'yoga',
-  'moon': 'sleep',
-  'heart-pulse': 'heart',  // In case heart-pulse was used
+  water: 'water-drop',
+  exercise: 'dumbbell',
+  meditation: 'yoga',
+  moon: 'sleep',
+  'heart-pulse': 'heart', // In case heart-pulse was used
   // Add any other legacy mappings as needed
 };
 
@@ -34,7 +34,7 @@ export interface IconOption {
   };
 }
 
-export type IconCategory = 
+export type IconCategory =
   | 'health'
   | 'fitness'
   | 'learning'
@@ -523,7 +523,7 @@ export class IconLibrary {
   static getIconSvgById(id: string): string | null {
     // First, check if this is a legacy icon ID and map it
     const mappedId = LEGACY_ICON_MAPPING[id] || id;
-    
+
     // Then look for the icon with the mapped ID
     const icon = ICON_LIBRARY.find(icon => icon.id === mappedId);
     return icon ? icon.svg : null;
@@ -548,19 +548,19 @@ export class IconLibrary {
    */
   static searchIcons(query: string): IconOption[] {
     const searchTerm = query.toLowerCase().trim();
-    
+
     if (!searchTerm) {
       return ICON_LIBRARY;
     }
 
-    return ICON_LIBRARY.filter(icon => 
-      icon.name.toLowerCase().includes(searchTerm) ||
-      icon.category.toLowerCase().includes(searchTerm) ||
-      icon.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-      (icon.keywords && icon.keywords.some(keyword => 
-        keyword.toLowerCase().includes(searchTerm)
-      )) ||
-      (icon.description && icon.description.toLowerCase().includes(searchTerm))
+    return ICON_LIBRARY.filter(
+      icon =>
+        icon.name.toLowerCase().includes(searchTerm) ||
+        icon.category.toLowerCase().includes(searchTerm) ||
+        icon.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+        (icon.keywords &&
+          icon.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm))) ||
+        (icon.description && icon.description.toLowerCase().includes(searchTerm))
     );
   }
 
@@ -582,12 +582,8 @@ export class IconLibrary {
    * Get icons by tags
    */
   static getIconsByTags(tags: string[]): IconOption[] {
-    return ICON_LIBRARY.filter(icon => 
-      tags.some(tag => 
-        icon.tags.some(iconTag => 
-          iconTag.toLowerCase().includes(tag.toLowerCase())
-        )
-      )
+    return ICON_LIBRARY.filter(icon =>
+      tags.some(tag => icon.tags.some(iconTag => iconTag.toLowerCase().includes(tag.toLowerCase())))
     );
   }
 
@@ -616,11 +612,9 @@ export class IconLibrary {
     }
 
     if (criteria.tags && criteria.tags.length > 0) {
-      filtered = filtered.filter(icon => 
-        criteria.tags!.some(tag => 
-          icon.tags.some(iconTag => 
-            iconTag.toLowerCase().includes(tag.toLowerCase())
-          )
+      filtered = filtered.filter(icon =>
+        criteria.tags!.some(tag =>
+          icon.tags.some(iconTag => iconTag.toLowerCase().includes(tag.toLowerCase()))
         )
       );
     }
@@ -634,9 +628,7 @@ export class IconLibrary {
     }
 
     if (criteria.query) {
-      filtered = this.searchIcons(criteria.query).filter(icon => 
-        filtered.includes(icon)
-      );
+      filtered = this.searchIcons(criteria.query).filter(icon => filtered.includes(icon));
     }
 
     return filtered;
@@ -647,22 +639,20 @@ export class IconLibrary {
    */
   static getIconSuggestionsForHabit(habitCategory: string): IconOption[] {
     const categoryMap: { [key: string]: IconCategory[] } = {
-      'health': ['health', 'fitness'],
-      'fitness': ['fitness', 'health'],
-      'learning': ['learning', 'work'],
-      'work': ['work', 'system'],
-      'lifestyle': ['lifestyle', 'system'],
-      'food': ['food', 'health'],
-      'creative': ['creative', 'entertainment'],
-      'social': ['social', 'communication'],
-      'outdoor': ['nature', 'fitness'],
+      health: ['health', 'fitness'],
+      fitness: ['fitness', 'health'],
+      learning: ['learning', 'work'],
+      work: ['work', 'system'],
+      lifestyle: ['lifestyle', 'system'],
+      food: ['food', 'health'],
+      creative: ['creative', 'entertainment'],
+      social: ['social', 'communication'],
+      outdoor: ['nature', 'fitness'],
     };
 
     const suggestedCategories = categoryMap[habitCategory.toLowerCase()] || ['system'];
-    
-    return ICON_LIBRARY.filter(icon => 
-      suggestedCategories.includes(icon.category)
-    );
+
+    return ICON_LIBRARY.filter(icon => suggestedCategories.includes(icon.category));
   }
 
   /**

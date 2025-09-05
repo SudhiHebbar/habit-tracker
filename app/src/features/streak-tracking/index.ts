@@ -11,42 +11,44 @@ import { StreakCalculator } from './services/streakCalculator';
 import { MilestoneDetector } from './services/milestoneDetector';
 
 // Hooks
-export { 
-  useStreakCalculation, 
-  useTrackerStreaks, 
-  useStreaksAtRisk 
+export {
+  useStreakCalculation,
+  useTrackerStreaks,
+  useStreaksAtRisk,
 } from './hooks/useStreakCalculation';
 
-export { 
-  useStreakMilestones, 
-  useRecentMilestones, 
+export {
+  useStreakMilestones,
+  useRecentMilestones,
   useMilestoneCelebration,
-  useMilestoneInsights 
+  useMilestoneInsights,
 } from './hooks/useStreakMilestones';
 
-export { 
-  useStreakAnalytics, 
-  useStreakTrends, 
+export {
+  useStreakAnalytics,
+  useStreakTrends,
   useStreakLeaderboard,
   useStreakStatistics,
   useTopPerformers,
-  useOverallProgress
+  useOverallProgress,
 } from './hooks/useStreakAnalytics';
 
-export { 
-  useStreakWarnings, 
+export {
+  useStreakWarnings,
   useStreakWarning,
-  useWarningPreferences 
+  useWarningPreferences,
 } from './hooks/useStreakWarnings';
 
 // Re-export commonly used utilities
 export const StreakTrackingUtils = {
   isMilestone: (streak: number) => MilestoneDetector.isMilestone(streak),
   getNextMilestone: (streak: number) => MilestoneDetector.getNextMilestone(streak),
-  formatStreak: (streak: number, showUnit?: boolean) => StreakCalculator.formatStreakDisplay(streak, showUnit),
+  formatStreak: (streak: number, showUnit?: boolean) =>
+    StreakCalculator.formatStreakDisplay(streak, showUnit),
   getStreakColor: (streak: number) => StreakCalculator.getStreakColor(streak),
   getStreakEmoji: (streak: number) => StreakCalculator.getStreakEmoji(streak),
   getMotivationalMessage: (streak: number) => StreakCalculator.getMotivationalMessage(streak),
   getStreakCategory: (streak: number) => StreakCalculator.getStreakCategory(streak),
-  calculateMilestoneProgress: (streak: number) => MilestoneDetector.calculateMilestoneProgress(streak),
+  calculateMilestoneProgress: (streak: number) =>
+    MilestoneDetector.calculateMilestoneProgress(streak),
 };

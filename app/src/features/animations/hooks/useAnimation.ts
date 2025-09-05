@@ -18,25 +18,29 @@ export const useAnimation = (config?: AnimationConfig) => {
     return config || {};
   }, [config, reducedMotion]);
 
-  const getDuration = useCallback((timing: AnimationTiming): number => {
-    if (reducedMotion) return 0;
-    return ANIMATION_DURATIONS[timing];
-  }, [reducedMotion]);
+  const getDuration = useCallback(
+    (timing: AnimationTiming): number => {
+      if (reducedMotion) return 0;
+      return ANIMATION_DURATIONS[timing];
+    },
+    [reducedMotion]
+  );
 
-  const getTransition = useCallback((
-    property: string | string[] = 'all',
-    timing: AnimationTiming = 'normal',
-    easing: string = 'ease-in-out'
-  ): string => {
-    if (reducedMotion) return 'none';
-    
-    const duration = getDuration(timing);
-    const properties = Array.isArray(property) ? property : [property];
-    
-    return properties
-      .map(prop => `${prop} ${duration}ms ${easing}`)
-      .join(', ');
-  }, [getDuration, reducedMotion]);
+  const getTransition = useCallback(
+    (
+      property: string | string[] = 'all',
+      timing: AnimationTiming = 'normal',
+      easing: string = 'ease-in-out'
+    ): string => {
+      if (reducedMotion) return 'none';
+
+      const duration = getDuration(timing);
+      const properties = Array.isArray(property) ? property : [property];
+
+      return properties.map(prop => `${prop} ${duration}ms ${easing}`).join(', ');
+    },
+    [getDuration, reducedMotion]
+  );
 
   const shouldAnimate = useCallback((): boolean => {
     return !reducedMotion && !config?.disabled;

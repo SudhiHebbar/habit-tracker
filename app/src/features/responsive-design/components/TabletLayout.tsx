@@ -1,6 +1,6 @@
 /**
  * TabletLayout Component
- * 
+ *
  * Tablet-optimized layout with adaptive sidebar and navigation
  */
 
@@ -61,28 +61,26 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
   }, [triggerHaptic]);
 
   // Handle swipe to open/close sidebar
-  const { ref: swipeRef, bind: swipeBind } = useSwipe<HTMLDivElement>(
-    (direction) => {
-      if (sidebarPosition === 'left') {
-        if (direction === 'right' && !isSidebarOpen) {
-          toggleSidebar();
-        } else if (direction === 'left' && isSidebarOpen) {
-          toggleSidebar();
-        }
-      } else {
-        if (direction === 'left' && !isSidebarOpen) {
-          toggleSidebar();
-        } else if (direction === 'right' && isSidebarOpen) {
-          toggleSidebar();
-        }
+  const { ref: swipeRef, bind: swipeBind } = useSwipe<HTMLDivElement>(direction => {
+    if (sidebarPosition === 'left') {
+      if (direction === 'right' && !isSidebarOpen) {
+        toggleSidebar();
+      } else if (direction === 'left' && isSidebarOpen) {
+        toggleSidebar();
+      }
+    } else {
+      if (direction === 'left' && !isSidebarOpen) {
+        toggleSidebar();
+      } else if (direction === 'right' && isSidebarOpen) {
+        toggleSidebar();
       }
     }
-  );
+  });
 
   // Build navigation for sidebar
   const sidebarContent = useMemo(() => {
     if (sidebar) return sidebar;
-    
+
     if (showNavigation && navigationItems.length > 0) {
       return (
         <nav className={styles.sidebarNav}>
@@ -92,24 +90,16 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
                 <a
                   href={item.path}
                   className={styles.navLink}
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault();
                     // Handle navigation
                     setIsSidebarOpen(false);
                   }}
                 >
-                  {item.icon && (
-                    <span className={styles.navIcon}>
-                      {item.icon}
-                    </span>
-                  )}
-                  <span className={styles.navLabel}>
-                    {item.label}
-                  </span>
+                  {item.icon && <span className={styles.navIcon}>{item.icon}</span>}
+                  <span className={styles.navLabel}>{item.label}</span>
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className={styles.badge}>
-                      {item.badge > 99 ? '99+' : item.badge}
-                    </span>
+                    <span className={styles.badge}>{item.badge > 99 ? '99+' : item.badge}</span>
                   )}
                 </a>
               </li>
@@ -118,7 +108,7 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
         </nav>
       );
     }
-    
+
     return null;
   }, [sidebar, showNavigation, navigationItems]);
 
@@ -143,9 +133,7 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
               className={styles.hamburger}
             />
           )}
-          <div className={styles.headerContent}>
-            {header}
-          </div>
+          <div className={styles.headerContent}>{header}</div>
         </header>
       )}
 
@@ -157,7 +145,7 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
             isOpen={isSidebarOpen}
             onClose={() => setIsSidebarOpen(false)}
             position={sidebarPosition}
-            mode="overlay"
+            mode='overlay'
             className={styles.sidebar}
           >
             {sidebarContent}
@@ -166,25 +154,19 @@ const TabletLayout: React.FC<TabletLayoutProps> = ({
 
         {/* Main content */}
         <main className={styles.main}>
-          <div className={styles.content}>
-            {children}
-          </div>
+          <div className={styles.content}>{children}</div>
         </main>
       </div>
 
       {/* Footer */}
-      {footer && (
-        <footer className={styles.footer}>
-          {footer}
-        </footer>
-      )}
+      {footer && <footer className={styles.footer}>{footer}</footer>}
 
       {/* Overlay for sidebar */}
       {isSidebarOpen && (
         <div
           className={styles.overlay}
           onClick={() => setIsSidebarOpen(false)}
-          aria-hidden="true"
+          aria-hidden='true'
         />
       )}
     </div>

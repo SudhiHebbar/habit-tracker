@@ -31,11 +31,11 @@ export interface ColorAccessibilityInfo {
  * WCAG 2.1 Contrast Requirements
  */
 export const WCAG_STANDARDS = {
-  AA_NORMAL: 4.5,     // WCAG 2.1 AA for normal text
-  AAA_NORMAL: 7.0,    // WCAG 2.1 AAA for normal text
-  AA_LARGE: 3.0,      // WCAG 2.1 AA for large text (18pt+ or 14pt+ bold)
-  AAA_LARGE: 4.5,     // WCAG 2.1 AAA for large text
-  MINIMUM: 1.0,       // Absolute minimum (no contrast)
+  AA_NORMAL: 4.5, // WCAG 2.1 AA for normal text
+  AAA_NORMAL: 7.0, // WCAG 2.1 AAA for normal text
+  AA_LARGE: 3.0, // WCAG 2.1 AA for large text (18pt+ or 14pt+ bold)
+  AAA_LARGE: 4.5, // WCAG 2.1 AAA for large text
+  MINIMUM: 1.0, // Absolute minimum (no contrast)
 } as const;
 
 /**
@@ -66,9 +66,7 @@ export class ContrastCalculator {
     // Convert to sRGB
     const [r, g, b] = [rgb.r, rgb.g, rgb.b].map(channel => {
       const sRGB = channel / 255;
-      return sRGB <= 0.03928 
-        ? sRGB / 12.92 
-        : Math.pow((sRGB + 0.055) / 1.055, 2.4);
+      return sRGB <= 0.03928 ? sRGB / 12.92 : Math.pow((sRGB + 0.055) / 1.055, 2.4);
     });
 
     // Calculate relative luminance using WCAG formula
@@ -149,13 +147,16 @@ export class ContrastCalculator {
   /**
    * Generate color recommendations for better contrast
    */
-  static generateRecommendations(color: string, background: string): {
+  static generateRecommendations(
+    color: string,
+    background: string
+  ): {
     lighterVariant?: string;
     darkerVariant?: string;
     alternativeColors?: string[];
   } {
     const recommendations: NonNullable<ColorAccessibilityInfo['recommendations']> = {};
-    
+
     // Generate lighter and darker variants
     const rgb = ColorSystem.hexToRgb(color);
     if (rgb) {
@@ -167,7 +168,7 @@ export class ContrastCalculator {
       };
       const lighterHex = ColorSystem.rgbToHex(lighterRgb.r, lighterRgb.g, lighterRgb.b);
       const lighterContrast = this.getContrastRatio(lighterHex, background);
-      
+
       if (lighterContrast >= WCAG_STANDARDS.AA_NORMAL) {
         recommendations.lighterVariant = lighterHex;
       }
@@ -180,7 +181,7 @@ export class ContrastCalculator {
       };
       const darkerHex = ColorSystem.rgbToHex(darkerRgb.r, darkerRgb.g, darkerRgb.b);
       const darkerContrast = this.getContrastRatio(darkerHex, background);
-      
+
       if (darkerContrast >= WCAG_STANDARDS.AA_NORMAL) {
         recommendations.darkerVariant = darkerHex;
       }
@@ -252,15 +253,11 @@ export class ContrastCalculator {
     isLargeText: boolean = false
   ): boolean {
     const ratio = this.getContrastRatio(foreground, background);
-    
+
     if (standard === 'AAA') {
-      return isLargeText 
-        ? ratio >= WCAG_STANDARDS.AAA_LARGE 
-        : ratio >= WCAG_STANDARDS.AAA_NORMAL;
+      return isLargeText ? ratio >= WCAG_STANDARDS.AAA_LARGE : ratio >= WCAG_STANDARDS.AAA_NORMAL;
     } else {
-      return isLargeText 
-        ? ratio >= WCAG_STANDARDS.AA_LARGE 
-        : ratio >= WCAG_STANDARDS.AA_NORMAL;
+      return isLargeText ? ratio >= WCAG_STANDARDS.AA_LARGE : ratio >= WCAG_STANDARDS.AA_NORMAL;
     }
   }
 
@@ -273,7 +270,7 @@ export class ContrastCalculator {
     targetRatio: number = WCAG_STANDARDS.AA_NORMAL
   ): number {
     const baseRatio = this.getContrastRatio(foreground, background);
-    
+
     if (baseRatio >= targetRatio) {
       return 1.0; // Already accessible at full opacity
     }
@@ -283,7 +280,8 @@ export class ContrastCalculator {
     let high = 1;
     let result = 1;
 
-    for (let i = 0; i < 20; i++) { // Max 20 iterations
+    for (let i = 0; i < 20; i++) {
+      // Max 20 iterations
       const mid = (low + high) / 2;
       const adjustedColor = this.adjustOpacity(foreground, background, mid);
       const ratio = this.getContrastRatio(adjustedColor, background);
@@ -307,7 +305,7 @@ export class ContrastCalculator {
   private static adjustOpacity(foreground: string, background: string, opacity: number): string {
     const fgRgb = ColorSystem.hexToRgb(foreground);
     const bgRgb = ColorSystem.hexToRgb(background);
-    
+
     if (!fgRgb || !bgRgb) return foreground;
 
     // Alpha compositing
@@ -369,9 +367,7 @@ export class ContrastCalculator {
     standard: 'AA' | 'AAA' = 'AA',
     isLargeText: boolean = false
   ): string[] {
-    return colors.filter(color => 
-      this.isAccessible(color, background, standard, isLargeText)
-    );
+    return colors.filter(color => this.isAccessible(color, background, standard, isLargeText));
   }
 
   /**

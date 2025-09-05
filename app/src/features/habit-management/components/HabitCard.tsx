@@ -62,15 +62,17 @@ export const HabitCard: React.FC<HabitCardProps> = ({
   return (
     <div
       className={`${styles.habitCard} ${isCompleted ? styles.completed : ''} ${!habit.isActive ? styles.inactive : ''} ${className}`}
-      style={{ 
-        '--habit-color': habit.color,
-        transition: 'all 0.2s ease-in-out',
-      } as React.CSSProperties}
-      onMouseEnter={(e) => {
+      style={
+        {
+          '--habit-color': habit.color,
+          transition: 'all 0.2s ease-in-out',
+        } as React.CSSProperties
+      }
+      onMouseEnter={e => {
         e.currentTarget.style.transform = 'translateY(-2px) scale(1.01)';
         e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.1)';
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         e.currentTarget.style.transform = 'translateY(0) scale(1)';
         e.currentTarget.style.boxShadow = 'none';
       }}
@@ -133,32 +135,34 @@ export const HabitCard: React.FC<HabitCardProps> = ({
               <div className={styles.habitIcon}>
                 {(() => {
                   const iconSvg = IconLibrary.getIconSvgById(habit.icon);
-                  
+
                   if (iconSvg) {
                     return (
-                      <div 
-                        style={{ 
-                          width: '24px', 
+                      <div
+                        style={{
+                          width: '24px',
                           height: '24px',
                           color: habit.color,
                           display: 'inline-flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                         className={styles.svgIcon}
                         dangerouslySetInnerHTML={{ __html: iconSvg }}
                       />
                     );
                   }
-                  
+
                   // Fallback for missing icons
                   return (
-                    <div style={{
-                      width: '24px',
-                      height: '24px',
-                      backgroundColor: habit.color,
-                      borderRadius: '50%'
-                    }} />
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        backgroundColor: habit.color,
+                        borderRadius: '50%',
+                      }}
+                    />
                   );
                 })()}
               </div>

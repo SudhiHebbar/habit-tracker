@@ -216,34 +216,35 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
   // Filter presets based on search and category
   const filteredPresets = useMemo(() => {
     let presets = CUSTOMIZATION_PRESETS;
-    
+
     // Filter by category
     if (selectedCategory !== 'all') {
       presets = presets.filter(preset => preset.category === selectedCategory);
     }
-    
+
     // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      presets = presets.filter(preset =>
-        preset.name.toLowerCase().includes(query) ||
-        preset.description.toLowerCase().includes(query) ||
-        preset.tags.some(tag => tag.toLowerCase().includes(query))
+      presets = presets.filter(
+        preset =>
+          preset.name.toLowerCase().includes(query) ||
+          preset.description.toLowerCase().includes(query) ||
+          preset.tags.some(tag => tag.toLowerCase().includes(query))
       );
     }
-    
+
     // Limit results if specified
     if (maxDisplayed && maxDisplayed > 0) {
       presets = presets.slice(0, maxDisplayed);
     }
-    
+
     return presets;
   }, [searchQuery, selectedCategory, maxDisplayed]);
 
   // Check if current selection matches a preset
   const currentPreset = useMemo(() => {
-    return CUSTOMIZATION_PRESETS.find(preset =>
-      preset.color === selectedColor && preset.iconId === selectedIcon
+    return CUSTOMIZATION_PRESETS.find(
+      preset => preset.color === selectedColor && preset.iconId === selectedIcon
     );
   }, [selectedColor, selectedIcon]);
 
@@ -266,7 +267,7 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
     return (
       <button
         key={preset.id}
-        type="button"
+        type='button'
         className={`
           ${styles.presetCard}
           ${styles[size]}
@@ -280,34 +281,31 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
       >
         {/* Visual Preview */}
         <div className={styles.presetPreview}>
-          <div 
-            className={styles.presetColor}
-            style={{ backgroundColor: preset.color }}
-          >
+          <div className={styles.presetColor} style={{ backgroundColor: preset.color }}>
             {icon && (
-              <div 
+              <div
                 className={styles.presetIcon}
                 style={{ color: textColor }}
                 dangerouslySetInnerHTML={{ __html: icon.svg }}
               />
             )}
           </div>
-          
+
           {/* Badges */}
           {preset.isPopular && (
-            <span className={styles.popularBadge} title="Popular preset">
+            <span className={styles.popularBadge} title='Popular preset'>
               ⭐
             </span>
           )}
           {preset.isNew && (
-            <span className={styles.newBadge} title="New preset">
+            <span className={styles.newBadge} title='New preset'>
               🆕
             </span>
           )}
-          
+
           {/* Accessibility indicator */}
           {contrastInfo.contrast.wcagAA && (
-            <span className={styles.accessibilityBadge} title="WCAG AA Compliant">
+            <span className={styles.accessibilityBadge} title='WCAG AA Compliant'>
               ✓
             </span>
           )}
@@ -317,16 +315,12 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
         <div className={styles.presetInfo}>
           <h4 className={styles.presetName}>{preset.name}</h4>
           <p className={styles.presetDescription}>{preset.description}</p>
-          
+
           <div className={styles.presetDetails}>
-            <span className={styles.colorDetail}>
-              {colorInfo?.name || preset.color}
-            </span>
-            <span className={styles.iconDetail}>
-              {icon?.name || 'Custom Icon'}
-            </span>
+            <span className={styles.colorDetail}>{colorInfo?.name || preset.color}</span>
+            <span className={styles.iconDetail}>{icon?.name || 'Custom Icon'}</span>
           </div>
-          
+
           <div className={styles.presetTags}>
             {preset.tags.slice(0, 3).map(tag => (
               <span key={tag} className={styles.tag}>
@@ -339,11 +333,11 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
         {/* Selection indicator */}
         {isSelected && (
           <div className={styles.selectionIndicator}>
-            <svg viewBox="0 0 20 20" fill="currentColor">
+            <svg viewBox='0 0 20 20' fill='currentColor'>
               <path
-                fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clipRule="evenodd"
+                fillRule='evenodd'
+                d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                clipRule='evenodd'
               />
             </svg>
           </div>
@@ -357,9 +351,7 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
       {/* Header */}
       <div className={styles.header}>
         <h3 className={styles.title}>Preset Combinations</h3>
-        <p className={styles.subtitle}>
-          Choose from curated color and icon combinations
-        </p>
+        <p className={styles.subtitle}>Choose from curated color and icon combinations</p>
       </div>
 
       {/* Controls */}
@@ -367,26 +359,26 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
         <div className={styles.controls}>
           {showSearch && (
             <div className={styles.searchBox}>
-              <svg className={styles.searchIcon} viewBox="0 0 20 20" fill="currentColor">
+              <svg className={styles.searchIcon} viewBox='0 0 20 20' fill='currentColor'>
                 <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
+                  fillRule='evenodd'
+                  d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z'
+                  clipRule='evenodd'
                 />
               </svg>
               <input
-                type="text"
-                placeholder="Search presets..."
+                type='text'
+                placeholder='Search presets...'
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className={styles.searchInput}
               />
               {searchQuery && (
                 <button
-                  type="button"
+                  type='button'
                   className={styles.clearSearch}
                   onClick={() => setSearchQuery('')}
-                  aria-label="Clear search"
+                  aria-label='Clear search'
                 >
                   ×
                 </button>
@@ -397,9 +389,9 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
           {showCategories && (
             <select
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={e => setSelectedCategory(e.target.value)}
               className={styles.categoryFilter}
-              aria-label="Filter presets by category"
+              aria-label='Filter presets by category'
             >
               {PRESET_CATEGORIES.map(category => (
                 <option key={category.id} value={category.id}>
@@ -416,10 +408,7 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
         <div className={styles.currentSelection}>
           <span className={styles.currentLabel}>Current:</span>
           <div className={styles.currentPreset}>
-            <div 
-              className={styles.currentColor}
-              style={{ backgroundColor: currentPreset.color }}
-            />
+            <div className={styles.currentColor} style={{ backgroundColor: currentPreset.color }} />
             <span className={styles.currentName}>{currentPreset.name}</span>
           </div>
         </div>
@@ -431,14 +420,17 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
           filteredPresets.map(renderPreset)
         ) : (
           <div className={styles.noResults}>
-            <svg className={styles.noResultsIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
+            <svg
+              className={styles.noResultsIcon}
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+            >
+              <circle cx='11' cy='11' r='8' />
+              <path d='M21 21l-4.35-4.35' />
             </svg>
             <p>No presets found</p>
-            <p className={styles.noResultsHint}>
-              Try adjusting your search or category filter
-            </p>
+            <p className={styles.noResultsHint}>Try adjusting your search or category filter</p>
           </div>
         )}
       </div>
@@ -450,9 +442,11 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
             Like this combination? Save it as a custom preset.
           </p>
           <button
-            type="button"
+            type='button'
             className={styles.saveButton}
-            onClick={() => {/* Future: Save custom preset functionality */}}
+            onClick={() => {
+              /* Future: Save custom preset functionality */
+            }}
           >
             Save as Custom Preset
           </button>
@@ -465,7 +459,7 @@ export const CustomizationPresets: React.FC<CustomizationPresetsProps> = ({
           {filteredPresets.length} of {CUSTOMIZATION_PRESETS.length} presets
           {searchQuery && ` matching "${searchQuery}"`}
         </p>
-        
+
         <div className={styles.categoryStats}>
           {PRESET_CATEGORIES.slice(1).map(category => {
             const count = CUSTOMIZATION_PRESETS.filter(p => p.category === category.id).length;

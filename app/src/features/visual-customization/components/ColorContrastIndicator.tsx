@@ -31,28 +31,29 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
   const [showDetails, setShowDetails] = useState(false);
 
   // Main contrast analysis
-  const contrastAnalysis = useMemo(() => 
-    ContrastCalculator.analyzeContrast(foregroundColor, selectedBackground),
+  const contrastAnalysis = useMemo(
+    () => ContrastCalculator.analyzeContrast(foregroundColor, selectedBackground),
     [foregroundColor, selectedBackground]
   );
 
   // Multiple background analysis if enabled
-  const multipleBackgroundAnalysis = useMemo(() => 
-    testMultipleBackgrounds 
-      ? ContrastCalculator.testAgainstCommonBackgrounds(foregroundColor)
-      : {},
+  const multipleBackgroundAnalysis = useMemo(
+    () =>
+      testMultipleBackgrounds
+        ? ContrastCalculator.testAgainstCommonBackgrounds(foregroundColor)
+        : {},
     [foregroundColor, testMultipleBackgrounds]
   );
 
   // Accessibility status
-  const accessibilityStatus = useMemo(() => 
-    ContrastCalculator.getAccessibilityStatus(contrastAnalysis.contrast),
+  const accessibilityStatus = useMemo(
+    () => ContrastCalculator.getAccessibilityStatus(contrastAnalysis.contrast),
     [contrastAnalysis.contrast]
   );
 
   // Best text color for the current foreground
-  const bestTextColor = useMemo(() => 
-    ContrastCalculator.getBestTextColor(foregroundColor),
+  const bestTextColor = useMemo(
+    () => ContrastCalculator.getBestTextColor(foregroundColor),
     [foregroundColor]
   );
 
@@ -76,28 +77,20 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
     return (
       <div className={`${styles.contrastBadge} ${styles[status]} ${styles[size]}`}>
         <span className={styles.icon}>{icon}</span>
-        
-        {showRatio && (
-          <span className={styles.ratio}>
-            {ratio.toFixed(1)}:1
-          </span>
-        )}
-        
-        {showGrade && (
-          <span className={styles.grade}>
-            {grade}
-          </span>
-        )}
+
+        {showRatio && <span className={styles.ratio}>{ratio.toFixed(1)}:1</span>}
+
+        {showGrade && <span className={styles.grade}>{grade}</span>}
 
         {/* Compliance indicators */}
         <div className={styles.complianceIcons}>
           {wcagAAA && (
-            <span className={styles.complianceIcon} title="WCAG AAA Compliant">
+            <span className={styles.complianceIcon} title='WCAG AAA Compliant'>
               AAA
             </span>
           )}
           {wcagAA && !wcagAAA && (
-            <span className={styles.complianceIcon} title="WCAG AA Compliant">
+            <span className={styles.complianceIcon} title='WCAG AA Compliant'>
               AA
             </span>
           )}
@@ -116,17 +109,11 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
           color: foregroundColor,
         }}
       >
-        <span className={styles.previewText}>
-          {isLargeText ? 'Large Text' : 'Normal Text'}
-        </span>
+        <span className={styles.previewText}>{isLargeText ? 'Large Text' : 'Normal Text'}</span>
       </div>
       <div className={styles.previewInfo}>
-        <span className={styles.colorLabel}>
-          Foreground: {foregroundColor}
-        </span>
-        <span className={styles.colorLabel}>
-          Background: {selectedBackground}
-        </span>
+        <span className={styles.colorLabel}>Foreground: {foregroundColor}</span>
+        <span className={styles.colorLabel}>Background: {selectedBackground}</span>
       </div>
     </div>
   );
@@ -139,7 +126,7 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
         {Object.entries(COMMON_BACKGROUNDS).map(([name, hex]) => (
           <button
             key={name}
-            type="button"
+            type='button'
             className={`
               ${styles.backgroundOption}
               ${selectedBackground === hex ? styles.selected : ''}
@@ -163,15 +150,13 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
 
     return (
       <div className={styles.recommendations}>
-        <h4 className={styles.recommendationsTitle}>
-          Accessibility Recommendations
-        </h4>
-        
+        <h4 className={styles.recommendationsTitle}>Accessibility Recommendations</h4>
+
         {recommendations.lighterVariant && (
           <div className={styles.recommendation}>
             <span className={styles.recommendationLabel}>Lighter variant:</span>
             <button
-              type="button"
+              type='button'
               className={styles.recommendationColor}
               style={{ color: recommendations.lighterVariant }}
               onClick={() => handleForegroundChange(recommendations.lighterVariant!)}
@@ -181,12 +166,12 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
             </button>
           </div>
         )}
-        
+
         {recommendations.darkerVariant && (
           <div className={styles.recommendation}>
             <span className={styles.recommendationLabel}>Darker variant:</span>
             <button
-              type="button"
+              type='button'
               className={styles.recommendationColor}
               style={{ backgroundColor: recommendations.darkerVariant }}
               onClick={() => handleBackgroundChange(recommendations.darkerVariant!)}
@@ -196,7 +181,7 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
             </button>
           </div>
         )}
-        
+
         {recommendations.alternativeColors && recommendations.alternativeColors.length > 0 && (
           <div className={styles.recommendation}>
             <span className={styles.recommendationLabel}>Alternative colors:</span>
@@ -204,7 +189,7 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
               {recommendations.alternativeColors.slice(0, 3).map(color => (
                 <button
                   key={color}
-                  type="button"
+                  type='button'
                   className={styles.alternativeColor}
                   style={{ backgroundColor: color }}
                   onClick={() => handleBackgroundChange(color)}
@@ -226,18 +211,13 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
 
     return (
       <div className={styles.multipleResults}>
-        <h4 className={styles.multipleResultsTitle}>
-          Contrast Against Common Backgrounds
-        </h4>
+        <h4 className={styles.multipleResultsTitle}>Contrast Against Common Backgrounds</h4>
         <div className={styles.backgroundResults}>
           {Object.entries(multipleBackgroundAnalysis).map(([name, analysis]) => {
             const status = ContrastCalculator.getAccessibilityStatus(analysis.contrast);
-            
+
             return (
-              <div
-                key={name}
-                className={`${styles.backgroundResult} ${styles[status.status]}`}
-              >
+              <div key={name} className={`${styles.backgroundResult} ${styles[status.status]}`}>
                 <div className={styles.resultHeader}>
                   <div
                     className={styles.resultSwatch}
@@ -247,12 +227,8 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
                   <span className={styles.resultIcon}>{status.icon}</span>
                 </div>
                 <div className={styles.resultDetails}>
-                  <span className={styles.resultRatio}>
-                    {analysis.contrast.ratio.toFixed(1)}:1
-                  </span>
-                  <span className={styles.resultGrade}>
-                    {analysis.contrast.grade}
-                  </span>
+                  <span className={styles.resultRatio}>{analysis.contrast.ratio.toFixed(1)}:1</span>
+                  <span className={styles.resultGrade}>{analysis.contrast.grade}</span>
                 </div>
               </div>
             );
@@ -275,18 +251,15 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
             <span className={styles.analysisLabel}>Contrast Ratio:</span>
             <span className={styles.analysisValue}>{contrast.ratio.toFixed(2)}:1</span>
           </div>
-          
+
           <div className={styles.analysisItem}>
             <span className={styles.analysisLabel}>Accessibility Score:</span>
             <div className={styles.scoreBar}>
-              <div
-                className={styles.scoreProgress}
-                style={{ width: `${contrast.score}%` }}
-              />
+              <div className={styles.scoreProgress} style={{ width: `${contrast.score}%` }} />
               <span className={styles.scoreText}>{contrast.score}/100</span>
             </div>
           </div>
-          
+
           <div className={styles.analysisItem}>
             <span className={styles.analysisLabel}>WCAG Compliance:</span>
             <div className={styles.complianceList}>
@@ -305,7 +278,7 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div className={styles.bestTextColor}>
           <span className={styles.bestTextLabel}>Best text color for this background:</span>
           <div
@@ -328,16 +301,16 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
   return (
     <div className={`${styles.colorContrastIndicator} ${styles[size]} ${className}`}>
       {/* Main indicator */}
-      <div 
+      <div
         className={`${styles.mainIndicator} ${interactive ? styles.interactive : ''}`}
         onClick={toggleDetails}
       >
         {renderContrastBadge()}
         {renderColorPreview()}
-        
+
         {interactive && (
           <button
-            type="button"
+            type='button'
             className={styles.detailsToggle}
             onClick={toggleDetails}
             aria-expanded={showDetails}
@@ -345,13 +318,13 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
           >
             <svg
               className={`${styles.toggleIcon} ${showDetails ? styles.expanded : ''}`}
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              viewBox='0 0 20 20'
+              fill='currentColor'
             >
               <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
+                fillRule='evenodd'
+                d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
+                clipRule='evenodd'
               />
             </svg>
           </button>
@@ -378,7 +351,9 @@ export const ColorContrastIndicator: React.FC<ColorContrastIndicatorProps> = ({
       {/* Screen reader information */}
       <div className={styles.srOnly}>
         Color contrast: {contrastAnalysis.contrast.ratio.toFixed(1)} to 1 ratio.
-        {contrastAnalysis.contrast.wcagAA ? ' Meets WCAG AA standards.' : ' Does not meet WCAG AA standards.'}
+        {contrastAnalysis.contrast.wcagAA
+          ? ' Meets WCAG AA standards.'
+          : ' Does not meet WCAG AA standards.'}
         {contrastAnalysis.contrast.wcagAAA ? ' Meets WCAG AAA standards.' : ''}
       </div>
     </div>

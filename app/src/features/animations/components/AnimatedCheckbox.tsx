@@ -59,17 +59,17 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
     checked: {
       scale: [1, 1.2, 1],
       rotate: [0, -10, 0],
-      transition: shouldAnimate() 
+      transition: shouldAnimate()
         ? {
             scale: {
               times: [0, 0.5, 1],
               duration: 0.4,
-              ease: "easeInOut",
+              ease: 'easeInOut',
             },
             rotate: {
               times: [0, 0.5, 1],
               duration: 0.4,
-              ease: "easeInOut",
+              ease: 'easeInOut',
             },
           }
         : { duration: 0 },
@@ -87,7 +87,7 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
       transition: shouldAnimate()
         ? {
             pathLength: {
-              type: "spring",
+              type: 'spring',
               ...SPRING_CONFIGS.default,
               duration: 0.4,
             },
@@ -107,7 +107,7 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
       transition: shouldAnimate()
         ? {
             duration: 0.6,
-            ease: "easeOut" as const,
+            ease: 'easeOut' as const,
           }
         : { duration: 0 },
     },
@@ -123,18 +123,13 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
 
   return (
     <label
-      className={clsx(
-        styles.container,
-        styles[size],
-        { [styles.disabled]: disabled },
-        className
-      )}
+      className={clsx(styles.container, styles[size], { [styles.disabled]: disabled }, className)}
     >
       <div className={styles.checkboxWrapper}>
         <motion.div
           className={styles.checkbox}
           initial={false}
-          animate={checked ? "checked" : "unchecked"}
+          animate={checked ? 'checked' : 'unchecked'}
           variants={checkboxVariants}
           whileHover={!disabled ? { scale: 1.05 } : {}}
           whileTap={!disabled ? { scale: 0.95 } : {}}
@@ -161,19 +156,19 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
               strokeWidth={currentSize.stroke}
               className={styles.checkboxBorder}
             />
-            
+
             <AnimatePresence>
               {checked && (
                 <motion.path
                   d={`M ${currentSize.box * 0.25} ${currentSize.box * 0.5} L ${currentSize.box * 0.45} ${currentSize.box * 0.7} L ${currentSize.box * 0.75} ${currentSize.box * 0.3}`}
-                  fill="none"
-                  stroke="white"
+                  fill='none'
+                  stroke='white'
                   strokeWidth={currentSize.stroke}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  initial='hidden'
+                  animate='visible'
+                  exit='hidden'
                   variants={checkmarkVariants}
                 />
               )}
@@ -184,9 +179,9 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
             {isAnimating && checked && celebrateOnComplete && (
               <motion.div
                 className={styles.pulse}
-                initial="initial"
-                animate="animate"
-                exit="initial"
+                initial='initial'
+                animate='animate'
+                exit='initial'
                 variants={pulseVariants}
                 style={{
                   backgroundColor: color,
@@ -199,7 +194,7 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
         </motion.div>
 
         <input
-          type="checkbox"
+          type='checkbox'
           checked={checked}
           onChange={() => onChange(!checked)}
           disabled={disabled}
@@ -209,7 +204,12 @@ export const AnimatedCheckbox: React.FC<AnimatedCheckboxProps> = ({
       </div>
 
       {label && (
-        <span className={clsx(styles.label, styles[`label${size.charAt(0).toUpperCase() + size.slice(1)}`])}>
+        <span
+          className={clsx(
+            styles.label,
+            styles[`label${size.charAt(0).toUpperCase() + size.slice(1)}`]
+          )}
+        >
           {label}
         </span>
       )}

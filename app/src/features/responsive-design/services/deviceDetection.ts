@@ -1,15 +1,15 @@
 /**
  * Device Detection Service
- * 
+ *
  * Detects device type, capabilities, and features for
  * optimal responsive behavior and performance
  */
 
-import { 
-  DeviceType, 
-  OperatingSystem, 
+import {
+  DeviceType,
+  OperatingSystem,
   DeviceCapabilities,
-  ScreenDensity 
+  ScreenDensity,
 } from '../types/responsive.types';
 
 /**
@@ -36,9 +36,10 @@ class DeviceDetector {
   private detectCapabilities(): void {
     if (typeof window === 'undefined') return;
 
-    const hasTouch = 'ontouchstart' in window || 
-                     navigator.maxTouchPoints > 0 || 
-                     (navigator as any).msMaxTouchPoints > 0;
+    const hasTouch =
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      (navigator as any).msMaxTouchPoints > 0;
 
     const mediaQueries = {
       hover: window.matchMedia('(hover: hover)'),
@@ -55,17 +56,24 @@ class DeviceDetector {
     this.capabilities = {
       touch: hasTouch,
       hover: mediaQueries.hover.matches,
-      pointer: mediaQueries.pointer.matches ? 'fine' : 
-               mediaQueries.coarsePointer.matches ? 'coarse' : 'none',
+      pointer: mediaQueries.pointer.matches
+        ? 'fine'
+        : mediaQueries.coarsePointer.matches
+          ? 'coarse'
+          : 'none',
       anyHover: mediaQueries.anyHover.matches,
-      anyPointer: mediaQueries.anyPointer.matches ? 'fine' : 
-                  mediaQueries.anyCoarsePointer.matches ? 'coarse' : 'none',
+      anyPointer: mediaQueries.anyPointer.matches
+        ? 'fine'
+        : mediaQueries.anyCoarsePointer.matches
+          ? 'coarse'
+          : 'none',
       orientation: window.innerWidth > window.innerHeight ? 'landscape' : 'portrait',
       reducedMotion: mediaQueries.reducedMotion.matches,
       prefersDarkMode: mediaQueries.darkMode.matches,
       prefersHighContrast: mediaQueries.highContrast.matches,
-      standalone: window.matchMedia('(display-mode: standalone)').matches ||
-                  (navigator as any).standalone === true,
+      standalone:
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (navigator as any).standalone === true,
       networkSpeed: this.detectNetworkSpeed(),
       devicePixelRatio: window.devicePixelRatio || 1,
     };
@@ -76,18 +84,19 @@ class DeviceDetector {
    */
   private detectNetworkSpeed(): 'slow' | 'fast' | 'offline' {
     if (!navigator.onLine) return 'offline';
-    
-    const connection = (navigator as any).connection || 
-                       (navigator as any).mozConnection || 
-                       (navigator as any).webkitConnection;
-    
+
+    const connection =
+      (navigator as any).connection ||
+      (navigator as any).mozConnection ||
+      (navigator as any).webkitConnection;
+
     if (connection) {
       const effectiveType = connection.effectiveType;
       if (effectiveType === 'slow-2g' || effectiveType === '2g') {
         return 'slow';
       }
     }
-    
+
     return 'fast';
   }
 
@@ -127,8 +136,10 @@ class DeviceDetector {
     const userAgent = navigator.userAgent.toLowerCase();
     const platform = navigator.platform?.toLowerCase() || '';
 
-    if (/iphone|ipad|ipod/.test(userAgent) || 
-        (platform === 'macintel' && navigator.maxTouchPoints > 1)) {
+    if (
+      /iphone|ipad|ipod/.test(userAgent) ||
+      (platform === 'macintel' && navigator.maxTouchPoints > 1)
+    ) {
       this.operatingSystem = 'ios';
     } else if (/android/.test(userAgent)) {
       this.operatingSystem = 'android';
@@ -346,7 +357,8 @@ export const isAndroid = () => deviceDetector.isAndroid();
 export const prefersReducedMotion = () => deviceDetector.prefersReducedMotion();
 export const prefersDarkMode = () => deviceDetector.prefersDarkMode();
 export const isStandalone = () => deviceDetector.isStandalone();
-export const getOptimalImageSize = (baseSize: number) => deviceDetector.getOptimalImageSize(baseSize);
+export const getOptimalImageSize = (baseSize: number) =>
+  deviceDetector.getOptimalImageSize(baseSize);
 export const supportsHaptics = () => deviceDetector.supportsHaptics();
 export const triggerHaptic = (pattern?: number | number[]) => deviceDetector.triggerHaptic(pattern);
 export const getDeviceInfo = () => deviceDetector.getDeviceInfo();

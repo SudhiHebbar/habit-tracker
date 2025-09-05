@@ -24,20 +24,20 @@ export default function StreakHistory({
   className,
 }: StreakHistoryProps) {
   const { shouldAnimate } = useAnimation();
-  
+
   // Calculate date range
   const endDate = startOfDay(new Date());
   const startDate = startOfDay(subDays(endDate, timeRange));
-  
+
   // Process completions into timeline data
   const timelineData = Array.from({ length: timeRange }, (_, index) => {
     const date = subDays(endDate, timeRange - 1 - index);
     const dateStr = format(date, 'yyyy-MM-dd');
-    
-    const completion = completions.find(c => 
-      format(new Date(c.completionDate), 'yyyy-MM-dd') === dateStr
+
+    const completion = completions.find(
+      c => format(new Date(c.completionDate), 'yyyy-MM-dd') === dateStr
     );
-    
+
     return {
       date,
       dateStr,
@@ -46,11 +46,14 @@ export default function StreakHistory({
       dayOfMonth: format(date, 'd'),
       month: format(date, 'MMM'),
       isToday: format(date, 'yyyy-MM-dd') === format(endDate, 'yyyy-MM-dd'),
-      isMilestone: showMilestones && completion && [7, 14, 21, 30, 50, 100].includes(completion.currentStreak || 0),
+      isMilestone:
+        showMilestones &&
+        completion &&
+        [7, 14, 21, 30, 50, 100].includes(completion.currentStreak || 0),
       isBreak: false, // Will be calculated below
     };
   });
-  
+
   // Identify streak breaks
   if (showBreaks) {
     let inStreak = false;
@@ -66,48 +69,50 @@ export default function StreakHistory({
       }
     }
   }
-  
+
   // Calculate statistics
   const totalDays = timelineData.length;
   const completedDays = timelineData.filter(d => d.isCompleted).length;
   const completionRate = Math.round((completedDays / totalDays) * 100);
   const longestStreakInRange = calculateLongestStreakInRange(timelineData);
-  
+
   const containerVariants = {
     initial: { opacity: 0, y: 20 },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.5,
         staggerChildren: 0.02,
-      }
+      },
     },
   };
-  
+
   const dayVariants = {
     initial: { scale: 0, opacity: 0 },
-    animate: { 
-      scale: 1, 
+    animate: {
+      scale: 1,
       opacity: 1,
       transition: {
-        type: "spring" as const,
+        type: 'spring' as const,
         stiffness: 300,
         damping: 20,
-      }
+      },
     },
-    hover: shouldAnimate() ? {
-      scale: 1.1,
-      transition: { type: "spring" as const, stiffness: 400, damping: 10 }
-    } : {},
+    hover: shouldAnimate()
+      ? {
+          scale: 1.1,
+          transition: { type: 'spring' as const, stiffness: 400, damping: 10 },
+        }
+      : {},
   };
-  
+
   return (
     <motion.div
       className={`${styles.container} ${className || ''}`}
       variants={containerVariants}
-      initial="initial"
-      animate="animate"
+      initial='initial'
+      animate='animate'
     >
       <div className={styles.header}>
         <h3 className={styles.title}>Streak History</h3>
@@ -118,7 +123,7 @@ export default function StreakHistory({
           <button className={timeRange === 365 ? styles.active : ''}>1 Year</button>
         </div>
       </div>
-      
+
       <div className={styles.statistics}>
         <div className={styles.stat}>
           <span className={styles.statLabel}>Completion Rate</span>
@@ -126,14 +131,16 @@ export default function StreakHistory({
         </div>
         <div className={styles.stat}>
           <span className={styles.statLabel}>Completed Days</span>
-          <span className={styles.statValue}>{completedDays}/{totalDays}</span>
+          <span className={styles.statValue}>
+            {completedDays}/{totalDays}
+          </span>
         </div>
         <div className={styles.stat}>
           <span className={styles.statLabel}>Best Streak</span>
           <span className={styles.statValue}>{longestStreakInRange} days</span>
         </div>
       </div>
-      
+
       <div className={styles.timeline}>
         <div className={styles.monthLabels}>
           {getMonthLabels(timelineData).map((month, index) => (
@@ -142,14 +149,14 @@ export default function StreakHistory({
             </div>
           ))}
         </div>
-        
+
         <div className={styles.calendar}>
           {getWeekdayLabels().map(day => (
             <div key={day} className={styles.weekdayLabel}>
               {day}
             </div>
           ))}
-          
+
           {timelineData.map((day, index) => (
             <motion.div
               key={index}
@@ -161,21 +168,17 @@ export default function StreakHistory({
                 ${day.isBreak ? styles.break : ''}
               `}
               variants={dayVariants}
-              whileHover="hover"
+              whileHover='hover'
               title={`${format(day.date, 'MMM d, yyyy')}${day.isCompleted ? ' - Completed' : ' - Missed'}${day.isMilestone ? ' - Milestone!' : ''}`}
             >
-              {day.isMilestone && (
-                <span className={styles.milestoneIcon}>⭐</span>
-              )}
-              {day.isBreak && (
-                <span className={styles.breakIcon}>💔</span>
-              )}
+              {day.isMilestone && <span className={styles.milestoneIcon}>⭐</span>}
+              {day.isBreak && <span className={styles.breakIcon}>💔</span>}
               <span className={styles.dayNumber}>{day.dayOfMonth}</span>
             </motion.div>
           ))}
         </div>
       </div>
-      
+
       <div className={styles.legend}>
         <div className={styles.legendItem}>
           <div className={`${styles.legendDot} ${styles.completed}`} />
@@ -206,7 +209,7 @@ export default function StreakHistory({
 function calculateLongestStreakInRange(timelineData: any[]): number {
   let maxStreak = 0;
   let currentStreak = 0;
-  
+
   for (const day of timelineData) {
     if (day.isCompleted) {
       currentStreak++;
@@ -215,21 +218,21 @@ function calculateLongestStreakInRange(timelineData: any[]): number {
       currentStreak = 0;
     }
   }
-  
+
   return maxStreak;
 }
 
 function getMonthLabels(timelineData: any[]): string[] {
   const months: string[] = [];
   let lastMonth = '';
-  
+
   for (const day of timelineData) {
     if (day.month !== lastMonth) {
       months.push(day.month);
       lastMonth = day.month;
     }
   }
-  
+
   return months;
 }
 

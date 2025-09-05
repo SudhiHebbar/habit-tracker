@@ -1,6 +1,6 @@
 /**
  * ResponsiveDemo Component
- * 
+ *
  * Comprehensive demo showcasing all responsive design features
  */
 
@@ -60,7 +60,7 @@ const ResponsiveDemo: React.FC = () => {
   const addInteraction = useCallback((interaction: string) => {
     setInteractions(prev => [
       `${new Date().toLocaleTimeString()}: ${interaction}`,
-      ...prev.slice(0, 9)
+      ...prev.slice(0, 9),
     ]);
   }, []);
 
@@ -91,7 +91,7 @@ const ResponsiveDemo: React.FC = () => {
   return (
     <ResponsiveLayout
       navigationItems={navigationItems}
-      showNavigation={true}
+      showNavigation
       header={
         <div className={styles.header}>
           <h1>Responsive Design Demo</h1>
@@ -140,11 +140,7 @@ const ResponsiveDemo: React.FC = () => {
               <h3>Responsive Grid ({gridColumns} columns)</h3>
               <ResponsiveGrid columns={gridColumns} gap={16}>
                 {demoCards.map(card => (
-                  <div
-                    key={card.id}
-                    className={styles.gridItem}
-                    style={{ background: card.color }}
-                  >
+                  <div key={card.id} className={styles.gridItem} style={{ background: card.color }}>
                     <h4>{card.title}</h4>
                     <p>{card.description}</p>
                   </div>
@@ -155,7 +151,7 @@ const ResponsiveDemo: React.FC = () => {
               <Flex
                 direction={getValue({ mobile: 'column', desktop: 'row' })}
                 gap={16}
-                justifyContent="space-between"
+                justifyContent='space-between'
               >
                 <div className={styles.flexItem}>Flex Item 1</div>
                 <div className={styles.flexItem}>Flex Item 2</div>
@@ -163,7 +159,7 @@ const ResponsiveDemo: React.FC = () => {
               </Flex>
 
               <h3>Stack Layout</h3>
-              <Stack direction="vertical" spacing={12}>
+              <Stack direction='vertical' spacing={12}>
                 <div className={styles.stackItem}>Stack Item 1</div>
                 <div className={styles.stackItem}>Stack Item 2</div>
                 <div className={styles.stackItem}>Stack Item 3</div>
@@ -229,10 +225,7 @@ const ResponsiveDemo: React.FC = () => {
                 </div>
               </RippleEffect>
 
-              <TouchTarget
-                onClick={() => setIsModalOpen(true)}
-                className={styles.interactionCard}
-              >
+              <TouchTarget onClick={() => setIsModalOpen(true)} className={styles.interactionCard}>
                 <div>
                   <h4>Adaptive Modal</h4>
                   <p>Opens appropriate to device</p>
@@ -246,9 +239,7 @@ const ResponsiveDemo: React.FC = () => {
             <h2>Interaction Log</h2>
             <div className={styles.interactionLog}>
               {interactions.length === 0 ? (
-                <p className={styles.emptyLog}>
-                  No interactions yet. Try the components above!
-                </p>
+                <p className={styles.emptyLog}>No interactions yet. Try the components above!</p>
               ) : (
                 interactions.map((interaction, index) => (
                   <div key={index} className={styles.logItem}>
@@ -265,22 +256,27 @@ const ResponsiveDemo: React.FC = () => {
       <AdaptiveModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Responsive Modal Demo"
-        size="medium"
+        title='Responsive Modal Demo'
+        size='medium'
       >
         <div className={styles.modalContent}>
-          <p>
-            This modal adapts based on your device:
-          </p>
+          <p>This modal adapts based on your device:</p>
           <ul>
-            <li><strong>Mobile:</strong> Bottom sheet with swipe to dismiss</li>
-            <li><strong>Tablet:</strong> Side drawer</li>
-            <li><strong>Desktop:</strong> Centered modal</li>
+            <li>
+              <strong>Mobile:</strong> Bottom sheet with swipe to dismiss
+            </li>
+            <li>
+              <strong>Tablet:</strong> Side drawer
+            </li>
+            <li>
+              <strong>Desktop:</strong> Centered modal
+            </li>
           </ul>
           <p>
-            Current presentation: <strong>{isMobile ? 'Bottom Sheet' : isTablet ? 'Drawer' : 'Modal'}</strong>
+            Current presentation:{' '}
+            <strong>{isMobile ? 'Bottom Sheet' : isTablet ? 'Drawer' : 'Modal'}</strong>
           </p>
-          
+
           <div className={styles.modalActions}>
             <button
               onClick={() => {
@@ -290,9 +286,7 @@ const ResponsiveDemo: React.FC = () => {
             >
               Action
             </button>
-            <button onClick={() => setIsModalOpen(false)}>
-              Close
-            </button>
+            <button onClick={() => setIsModalOpen(false)}>Close</button>
           </div>
         </div>
       </AdaptiveModal>

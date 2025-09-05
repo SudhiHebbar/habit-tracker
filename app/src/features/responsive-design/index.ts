@@ -1,6 +1,6 @@
 /**
  * Responsive Design Feature Exports
- * 
+ *
  * Main entry point for the responsive design system
  */
 
@@ -12,56 +12,51 @@ export { default as DesktopLayout, MultiColumnLayout } from './components/Deskto
 export { default as FlexibleSidebar } from './components/FlexibleSidebar';
 export { default as ResponsiveGrid, Container, Flex, Stack } from './components/ResponsiveGrid';
 export { default as AdaptiveModal, ModalFooter, ModalActions } from './components/AdaptiveModal';
-export { 
-  TouchTarget, 
-  SwipeGesture, 
-  PullToRefresh, 
-  LongPress, 
-  DoubleTap, 
-  RippleEffect 
+export {
+  TouchTarget,
+  SwipeGesture,
+  PullToRefresh,
+  LongPress,
+  DoubleTap,
+  RippleEffect,
 } from './components/TouchOptimized';
 export { default as PerformanceMonitor } from './components/PerformanceMonitor';
 export { default as ResponsiveDemo } from './components/ResponsiveDemo';
 
 // Hooks
-export { 
-  useBreakpoint, 
-  useResponsiveVisibility, 
+export {
+  useBreakpoint,
+  useResponsiveVisibility,
   useResponsiveValue,
   useMediaQuery,
   useResponsiveClassName,
-  useResponsiveStyle
+  useResponsiveStyle,
 } from './hooks/useBreakpoint';
-export { 
+export {
   useDeviceDetection,
   useTouchDetection,
   usePlatform,
   useAccessibilityPreferences,
   useNetworkStatus,
-  useHaptics
+  useHaptics,
 } from './hooks/useDeviceDetection';
-export { 
+export {
   useViewportSize,
   useElementSize,
   useScrollPosition,
   useSafeAreaInsets,
-  useIntersectionObserver
+  useIntersectionObserver,
 } from './hooks/useViewportSize';
-export { 
+export {
   useResponsiveLayout,
   useAdaptiveContent,
   useResponsiveSpacing,
-  useResponsiveFontSize
+  useResponsiveFontSize,
 } from './hooks/useResponsiveLayout';
-export { 
-  useTouchCapabilities,
-  useSwipe,
-  useTap,
-  usePinch
-} from './hooks/useTouchCapabilities';
+export { useTouchCapabilities, useSwipe, useTap, usePinch } from './hooks/useTouchCapabilities';
 
 // Services
-export { 
+export {
   breakpointManager,
   MEDIA_QUERIES,
   getCurrentBreakpoint,
@@ -71,9 +66,9 @@ export {
   isAtMost,
   isBetween,
   subscribeToQuery,
-  getResponsiveValue
+  getResponsiveValue,
 } from './services/breakpointManager';
-export { 
+export {
   deviceDetector,
   getDeviceCapabilities,
   getDeviceType,
@@ -94,9 +89,9 @@ export {
   getOptimalImageSize,
   supportsHaptics,
   triggerHaptic,
-  getDeviceInfo
+  getDeviceInfo,
 } from './services/deviceDetection';
-export { 
+export {
   performanceOptimizer,
   getPerformanceConfig,
   getPerformanceMetrics,
@@ -109,7 +104,7 @@ export {
   debounce,
   requestIdleCallback,
   cancelIdleCallback,
-  getOptimizedImageSrc
+  getOptimizedImageSrc,
 } from './services/performanceOptimizer';
 
 // Types
@@ -135,7 +130,7 @@ export type {
   ResponsiveComponentProps,
   LayoutMode,
   ScreenDensity,
-  ResponsiveConfig
+  ResponsiveConfig,
 } from './types/responsive.types';
 
 // Constants

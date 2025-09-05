@@ -1,6 +1,6 @@
 /**
  * MobileNavigation Component
- * 
+ *
  * Mobile-optimized navigation with bottom navigation bar
  * and hamburger menu options
  */
@@ -57,16 +57,19 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
 
     const visible = items.slice(0, maxVisibleItems - 1);
     const overflow = items.slice(maxVisibleItems - 1);
-    
+
     return { visibleItems: visible, overflowItems: overflow };
   }, [items, maxVisibleItems]);
 
   // Handle item selection
-  const handleItemSelect = useCallback((item: NavigationItem) => {
-    triggerHaptic();
-    onItemSelect?.(item);
-    setIsMenuOpen(false);
-  }, [onItemSelect, triggerHaptic]);
+  const handleItemSelect = useCallback(
+    (item: NavigationItem) => {
+      triggerHaptic();
+      onItemSelect?.(item);
+      setIsMenuOpen(false);
+    },
+    [onItemSelect, triggerHaptic]
+  );
 
   // Handle menu toggle
   const toggleMenu = useCallback(() => {
@@ -89,8 +92,8 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
           ${styles[position]}
           ${className}
         `}
-        role="navigation"
-        aria-label="Main navigation"
+        role='navigation'
+        aria-label='Main navigation'
       >
         <ul className={styles.navList}>
           {visibleItems.map(item => (
@@ -104,25 +107,17 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
                 aria-label={item.label}
                 aria-current={activeItem === item.id ? 'page' : undefined}
               >
-                {item.icon && (
-                  <span className={styles.navIcon}>
-                    {item.icon}
-                  </span>
-                )}
+                {item.icon && <span className={styles.navIcon}>{item.icon}</span>}
                 {item.badge !== undefined && item.badge > 0 && (
                   <span className={styles.badge} aria-label={`${item.badge} new`}>
                     {item.badge > 99 ? '99+' : item.badge}
                   </span>
                 )}
-                {showLabels && (
-                  <span className={styles.navLabel}>
-                    {item.label}
-                  </span>
-                )}
+                {showLabels && <span className={styles.navLabel}>{item.label}</span>}
               </button>
             </li>
           ))}
-          
+
           {overflowItems.length > 0 && (
             <li className={styles.navItem}>
               <button
@@ -132,29 +127,27 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
                   ${isMenuOpen ? styles.menuOpen : ''}
                 `}
                 onClick={toggleMenu}
-                aria-label="More options"
+                aria-label='More options'
                 aria-expanded={isMenuOpen}
-                aria-haspopup="true"
+                aria-haspopup='true'
               >
                 <span className={styles.navIcon}>
                   <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    width='24'
+                    height='24'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   >
-                    <circle cx="12" cy="12" r="1" />
-                    <circle cx="12" cy="5" r="1" />
-                    <circle cx="12" cy="19" r="1" />
+                    <circle cx='12' cy='12' r='1' />
+                    <circle cx='12' cy='5' r='1' />
+                    <circle cx='12' cy='19' r='1' />
                   </svg>
                 </span>
-                {showLabels && (
-                  <span className={styles.navLabel}>More</span>
-                )}
+                {showLabels && <span className={styles.navLabel}>More</span>}
               </button>
             </li>
           )}
@@ -167,14 +160,14 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
           <div
             className={styles.menuOverlay}
             onClick={() => setIsMenuOpen(false)}
-            aria-hidden="true"
+            aria-hidden='true'
           />
           <div
             className={`
               ${styles.overflowMenu}
               ${position === 'bottom' ? styles.menuAbove : styles.menuBelow}
             `}
-            role="menu"
+            role='menu'
           >
             <ul className={styles.menuList}>
               {overflowItems.map(item => (
@@ -185,20 +178,12 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({
                       ${activeItem === item.id ? styles.active : ''}
                     `}
                     onClick={() => handleItemSelect(item)}
-                    role="menuitem"
+                    role='menuitem'
                   >
-                    {item.icon && (
-                      <span className={styles.menuIcon}>
-                        {item.icon}
-                      </span>
-                    )}
-                    <span className={styles.menuLabel}>
-                      {item.label}
-                    </span>
+                    {item.icon && <span className={styles.menuIcon}>{item.icon}</span>}
+                    <span className={styles.menuLabel}>{item.label}</span>
                     {item.badge !== undefined && item.badge > 0 && (
-                      <span className={styles.badge}>
-                        {item.badge > 99 ? '99+' : item.badge}
-                      </span>
+                      <span className={styles.badge}>{item.badge > 99 ? '99+' : item.badge}</span>
                     )}
                   </button>
                 </li>
@@ -220,7 +205,7 @@ export const HamburgerMenu: React.FC<{
   className?: string;
 }> = ({ isOpen, onToggle, className = '' }) => {
   const { trigger: triggerHaptic } = useHaptics();
-  
+
   const handleToggle = useCallback(() => {
     triggerHaptic();
     onToggle();

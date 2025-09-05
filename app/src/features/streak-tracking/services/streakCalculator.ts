@@ -18,34 +18,30 @@ export class StreakCalculator {
 
   static getMilestoneProgress(currentStreak: number): number {
     const nextMilestone = this.getNextMilestone(currentStreak);
-    const previousMilestone = this.MILESTONE_VALUES
-      .filter(m => m < nextMilestone)
-      .pop() || 0;
-    
+    const previousMilestone = this.MILESTONE_VALUES.filter(m => m < nextMilestone).pop() || 0;
+
     if (currentStreak === 0) return 0;
     if (previousMilestone === 0) return (currentStreak / nextMilestone) * 100;
-    
-    const progress = ((currentStreak - previousMilestone) / (nextMilestone - previousMilestone)) * 100;
+
+    const progress =
+      ((currentStreak - previousMilestone) / (nextMilestone - previousMilestone)) * 100;
     return Math.min(100, Math.max(0, progress));
   }
 
-  static calculateRisk(
-    streak: StreakResponse,
-    options: StreakCalculationOptions
-  ): StreakRisk {
+  static calculateRisk(streak: StreakResponse, options: StreakCalculationOptions): StreakRisk {
     if (!streak.lastCompletionDate || streak.currentStreak === 0) {
       return {
         habitId: streak.habitId,
         isAtRisk: false,
         daysSinceLastCompletion: streak.daysSinceLastCompletion || 0,
         riskLevel: 'low',
-        message: 'No active streak to maintain'
+        message: 'No active streak to maintain',
       };
     }
 
     const daysSinceCompletion = streak.daysSinceLastCompletion || 0;
     const warningDays = options.warningDays || 1;
-    
+
     let riskThreshold: number;
     switch (options.frequency) {
       case 'Daily':
@@ -85,7 +81,7 @@ export class StreakCalculator {
       isAtRisk,
       daysSinceLastCompletion: daysSinceCompletion,
       riskLevel,
-      message
+      message,
     };
   }
 
@@ -121,9 +117,8 @@ export class StreakCalculator {
     frequency: 'Daily' | 'Weekly' | 'Custom',
     targetCount?: number
   ): number {
-    const daysSinceCreation = Math.floor(
-      (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)
-    ) + 1;
+    const daysSinceCreation =
+      Math.floor((Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
     let expectedCompletions: number;
     switch (frequency) {
@@ -147,13 +142,13 @@ export class StreakCalculator {
     if (streak >= 365) return "Incredible! You've built a year-long habit!";
     if (streak >= 100) return "Amazing! You've hit triple digits!";
     if (streak >= 50) return "Fantastic! You're halfway to 100!";
-    if (streak >= 30) return "Great job! A month of consistency!";
-    if (streak >= 21) return "Awesome! They say 21 days makes a habit!";
-    if (streak >= 14) return "Two weeks strong! Keep it up!";
+    if (streak >= 30) return 'Great job! A month of consistency!';
+    if (streak >= 21) return 'Awesome! They say 21 days makes a habit!';
+    if (streak >= 14) return 'Two weeks strong! Keep it up!';
     if (streak >= 7) return "One week streak! You're building momentum!";
-    if (streak >= 3) return "Nice! Three days in a row!";
-    if (streak >= 1) return "Great start! Keep going!";
-    return "Ready to start your streak?";
+    if (streak >= 3) return 'Nice! Three days in a row!';
+    if (streak >= 1) return 'Great start! Keep going!';
+    return 'Ready to start your streak?';
   }
 
   static estimateNextMilestoneDate(
@@ -163,7 +158,7 @@ export class StreakCalculator {
   ): Date {
     const nextMilestone = this.getNextMilestone(currentStreak);
     const daysToMilestone = nextMilestone - currentStreak;
-    
+
     let daysMultiplier: number;
     switch (frequency) {
       case 'Daily':
@@ -182,7 +177,7 @@ export class StreakCalculator {
     const estimatedDays = daysToMilestone * daysMultiplier;
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + estimatedDays);
-    
+
     return futureDate;
   }
 
@@ -202,7 +197,7 @@ export class StreakCalculator {
     const longestStreakBonus = Math.min(streak.longestStreak * 2, 200); // Cap at 200
     const completionRateScore = streak.completionRate * 5; // Max 500
     const milestoneBonus = streak.achievedMilestones.length * 50; // 50 per milestone
-    
+
     return currentStreakScore + longestStreakBonus + completionRateScore + milestoneBonus;
   }
 

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AnimatedCheckbox, CompletionCelebration, MicroInteraction, HoverScale } from '@features/animations';
+import {
+  AnimatedCheckbox,
+  CompletionCelebration,
+  MicroInteraction,
+  HoverScale,
+} from '@features/animations';
 import { SwipeHandler } from '@shared/components/interactions/SwipeHandler';
 import { useAnimation } from '@features/animations/hooks/useAnimation';
 import { LazyHabitHistory } from '../../dashboard/components/LazyHabitHistory';
@@ -42,11 +47,11 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
   const handleToggleComplete = () => {
     const newCompleted = !localCompleted;
     setLocalCompleted(newCompleted);
-    
+
     if (newCompleted && enableCelebration) {
       setShowCelebration(true);
     }
-    
+
     onToggleComplete?.(habit);
   };
 
@@ -72,19 +77,23 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
       y: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: 'easeOut',
       },
     },
-    hover: shouldAnimate() ? {
-      scale: 1.02,
-      boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
-      transition: {
-        duration: 0.2,
-      },
-    } : {},
-    tap: shouldAnimate() ? {
-      scale: 0.98,
-    } : {},
+    hover: shouldAnimate()
+      ? {
+          scale: 1.02,
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+          transition: {
+            duration: 0.2,
+          },
+        }
+      : {},
+    tap: shouldAnimate()
+      ? {
+          scale: 0.98,
+        }
+      : {},
   };
 
   const card = (
@@ -92,14 +101,14 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
       className={`${styles.habitCard} ${localCompleted ? styles.completed : ''} ${!habit.isActive ? styles.inactive : ''} ${className}`}
       style={{ '--habit-color': habit.color } as React.CSSProperties}
       variants={cardVariants}
-      initial="initial"
-      animate="animate"
-      whileHover="hover"
-      whileTap="tap"
+      initial='initial'
+      animate='animate'
+      whileHover='hover'
+      whileTap='tap'
       layout
     >
       <div className={styles.header}>
-        <motion.div 
+        <motion.div
           className={styles.colorBar}
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -110,7 +119,7 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
             checked={localCompleted}
             onChange={handleToggleComplete}
             color={habit.color}
-            size="large"
+            size='large'
             celebrateOnComplete={enableCelebration}
             onAnimationComplete={() => {
               if (enableCelebration) {
@@ -118,41 +127,37 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
               }
             }}
           />
-          
+
           {onEdit && (
             <MicroInteraction
               config={{ hover: true, press: true, ripple: true }}
-              as="button"
+              as='button'
               className={`${styles.actionButton} ${styles.editButton}`}
             >
-              <button
-                onClick={() => onEdit(habit)}
-                title="Edit habit"
-                aria-label="Edit habit"
-              >
-                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
-                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              <button onClick={() => onEdit(habit)} title='Edit habit' aria-label='Edit habit'>
+                <svg viewBox='0 0 20 20' fill='currentColor' className={styles.icon}>
+                  <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z' />
                 </svg>
               </button>
             </MicroInteraction>
           )}
-          
+
           {onDelete && (
             <MicroInteraction
               config={{ hover: true, press: true, ripple: true }}
-              as="button"
+              as='button'
               className={`${styles.actionButton} ${styles.deleteButton}`}
             >
               <button
                 onClick={() => onDelete(habit)}
-                title="Delete habit"
-                aria-label="Delete habit"
+                title='Delete habit'
+                aria-label='Delete habit'
               >
-                <svg viewBox="0 0 20 20" fill="currentColor" className={styles.icon}>
+                <svg viewBox='0 0 20 20' fill='currentColor' className={styles.icon}>
                   <path
-                    fillRule="evenodd"
-                    d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z"
-                    clipRule="evenodd"
+                    fillRule='evenodd'
+                    d='M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 2a1 1 0 000 2h6a1 1 0 100-2H7zm0 4a1 1 0 100 2h6a1 1 0 100-2H7z'
+                    clipRule='evenodd'
                   />
                 </svg>
               </button>
@@ -161,7 +166,7 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         className={styles.content}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -173,31 +178,33 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
               <div className={styles.habitIcon}>
                 {(() => {
                   const iconSvg = IconLibrary.getIconSvgById(habit.icon);
-                  
+
                   if (iconSvg) {
                     return (
-                      <div 
-                        style={{ 
-                          width: '24px', 
-                          height: '24px', 
+                      <div
+                        style={{
+                          width: '24px',
+                          height: '24px',
                           color: habit.color,
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                         dangerouslySetInnerHTML={{ __html: iconSvg }}
                       />
                     );
                   }
-                  
+
                   // Fallback - colored circle without text
                   return (
-                    <div style={{
-                      width: '24px',
-                      height: '24px',
-                      backgroundColor: habit.color,
-                      borderRadius: '50%'
-                    }} />
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        backgroundColor: habit.color,
+                        borderRadius: '50%',
+                      }}
+                    />
                   );
                 })()}
               </div>
@@ -207,7 +214,7 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
         </div>
 
         {habit.description && (
-          <motion.p 
+          <motion.p
             className={styles.description}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -218,7 +225,7 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
         )}
 
         {showStats && (
-          <motion.div 
+          <motion.div
             className={styles.stats}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -244,11 +251,13 @@ export const AnimatedHabitCard: React.FC<AnimatedHabitCardProps> = ({
 
       <CompletionCelebration
         active={showCelebration}
-        type="confetti"
-        intensity="normal"
+        type='confetti'
+        intensity='normal'
         colors={[habit.color, '#10b981', '#3b82f6']}
-        message="Habit completed!"
-        milestone={habit.currentStreak && habit.currentStreak % 7 === 0 ? habit.currentStreak : undefined}
+        message='Habit completed!'
+        milestone={
+          habit.currentStreak && habit.currentStreak % 7 === 0 ? habit.currentStreak : undefined
+        }
         onComplete={() => setShowCelebration(false)}
       />
     </motion.div>

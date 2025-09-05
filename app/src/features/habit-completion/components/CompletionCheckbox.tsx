@@ -12,6 +12,9 @@ interface CompletionCheckboxProps {
   showStreak?: boolean;
   onToggle?: (isCompleted: boolean) => void;
   className?: string;
+  disabled?: boolean;
+  checked?: boolean;
+  onChange?: () => void;
 }
 
 export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
@@ -23,6 +26,9 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
   showStreak = false,
   onToggle,
   className,
+  disabled = false,
+  checked,
+  onChange,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -52,7 +58,13 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
       e.preventDefault();
       e.stopPropagation();
 
-      if (isToggling) return;
+      if (disabled || isToggling) return;
+
+      // Use external onChange handler if provided (for calendar view)
+      if (onChange) {
+        onChange();
+        return;
+      }
 
       try {
         await toggleCompletion();
@@ -60,7 +72,7 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
         console.error('Failed to toggle completion:', error);
       }
     },
-    [isToggling, toggleCompletion]
+    [disabled, isToggling, onChange, toggleCompletion]
   );
 
   const handleKeyDown = useCallback(
@@ -76,7 +88,7 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
   return (
     <div
       className={`${styles.container} ${styles[size]} ${className || ''}`}
-      data-completed={isCompleted}
+      data-completed={checked ?? isCompleted}
       data-optimistic={isOptimistic}
       data-animating={isAnimating}
     >
@@ -84,9 +96,9 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
         className={styles.checkbox}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        disabled={isToggling}
-        aria-label={`Mark ${habitName} as ${isCompleted ? 'incomplete' : 'complete'}`}
-        aria-checked={isCompleted}
+        disabled={disabled || isToggling}
+        aria-label={`Mark ${habitName} as ${(checked ?? isCompleted) ? 'incomplete' : 'complete'}`}
+        aria-checked={checked ?? isCompleted}
         role='checkbox'
         style={
           {
@@ -125,7 +137,7 @@ export const CompletionCheckbox: React.FC<CompletionCheckboxProps> = ({
       {/* Celebration Effects */}
       {showCelebration && (
         <CompletionCelebration
-          type="confetti"
+          type='confetti'
           color={habitColor}
           onComplete={() => setShowCelebration(false)}
           duration={2500}

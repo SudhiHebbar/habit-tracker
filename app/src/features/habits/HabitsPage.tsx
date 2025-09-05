@@ -6,6 +6,8 @@ import { useTrackers } from '../tracker-management/hooks/useTrackers';
 import { HabitList } from '../habit-management/components/HabitList';
 import { CreateHabitModal } from '../habit-management/components/CreateHabitModal';
 import { EditHabitModal } from '../habit-management/components/EditHabitModal';
+import { ViewToggle } from '../dashboard/components/ViewToggle';
+import { CalendarView } from '../dashboard/components/calendar/CalendarView';
 import {
   useHabits,
   useCreateHabit,
@@ -18,6 +20,7 @@ import type {
   CreateHabitRequest,
   UpdateHabitRequest,
 } from '../habit-management/types/habit.types';
+import type { ViewMode } from '../dashboard/components/Dashboard';
 import styles from './HabitsPage.module.css';
 
 const HabitsPage = () => {
@@ -26,6 +29,7 @@ const HabitsPage = () => {
   const [selectedTrackerId, setSelectedTrackerId] = useState<number | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   // Use the first active tracker by default
   React.useEffect(() => {
@@ -90,6 +94,10 @@ const HabitsPage = () => {
     } catch (error) {
       console.error('Failed to toggle completion for habit:', habit.name, error);
     }
+  };
+
+  const handleViewModeChange = (newViewMode: ViewMode) => {
+    setViewMode(newViewMode);
   };
 
   if (routeParams.id) {
@@ -160,25 +168,43 @@ const HabitsPage = () => {
               </div>
             )}
 
-            {/* Current Tracker Info */}
+            {/* Current Tracker Info and View Toggle */}
             {selectedTrackerId && (
               <div className={styles.currentTracker}>
-                <h3>{trackers.find(t => t.id === selectedTrackerId)?.name || 'Unknown Tracker'}</h3>
+                <div className={styles.trackerHeader}>
+                  <h3>{trackers.find(t => t.id === selectedTrackerId)?.name || 'Unknown Tracker'}</h3>
+                  <ViewToggle
+                    viewMode={viewMode}
+                    onViewModeChange={handleViewModeChange}
+                  />
+                </div>
               </div>
             )}
 
-            {/* Habits List */}
-            <HabitList
-              habits={habits}
-              loading={habitsLoading || createLoading}
-              error={habitsError}
-              onCreateHabit={handleCreateHabit}
-              onEditHabit={handleEditHabit}
-              onDeleteHabit={handleDeleteHabit}
-              onToggleComplete={handleToggleComplete}
-              showStats
-              className={styles.habitsList}
-            />
+            {/* Habits Views */}
+            {selectedTrackerId && (
+              <div className={styles.habitsViews}>
+                {viewMode === 'calendar' ? (
+                  <CalendarView
+                    trackerId={selectedTrackerId}
+                    habits={habits}
+                    onHabitComplete={handleToggleComplete}
+                  />
+                ) : (
+                  <HabitList
+                    habits={habits}
+                    loading={habitsLoading || createLoading}
+                    error={habitsError}
+                    onCreateHabit={handleCreateHabit}
+                    onEditHabit={handleEditHabit}
+                    onDeleteHabit={handleDeleteHabit}
+                    onToggleComplete={handleToggleComplete}
+                    showStats
+                    className={styles.habitsList}
+                  />
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>

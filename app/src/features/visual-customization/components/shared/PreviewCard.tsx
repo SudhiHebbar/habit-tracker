@@ -63,12 +63,7 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
     <div className={styles.dashboardPreview}>
       <div className={styles.habitTile} style={{ backgroundColor: color }}>
         <div className={styles.tileHeader}>
-          <IconDisplay
-            iconId={iconId}
-            size="medium"
-            color={textColor}
-            showTooltip={false}
-          />
+          <IconDisplay iconId={iconId} size='medium' color={textColor} showTooltip={false} />
           <div className={styles.streakBadge} style={{ color: textColor }}>
             {mockData.currentStreak}
           </div>
@@ -96,23 +91,21 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
     <div className={styles.listPreview}>
       <div className={styles.listItem}>
         <div className={styles.itemLeft}>
-          <ColorSwatch 
-            color={color} 
-            size="small" 
+          <ColorSwatch
+            color={color}
+            size='small'
             showTooltip={false}
             className={styles.itemColor}
           />
           <IconDisplay
             iconId={iconId}
-            size="small"
+            size='small'
             showTooltip={false}
             className={styles.itemIcon}
           />
           <div className={styles.itemInfo}>
             <h4 className={styles.itemTitle}>{title}</h4>
-            {description && (
-              <p className={styles.itemDescription}>{description}</p>
-            )}
+            {description && <p className={styles.itemDescription}>{description}</p>}
           </div>
         </div>
         <div className={styles.itemRight}>
@@ -120,11 +113,11 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
             <span className={styles.streakNumber}>{mockData.currentStreak}</span>
             <span className={styles.streakLabel}>day streak</span>
           </div>
-          <div 
+          <div
             className={`${styles.statusIndicator} ${mockData.completedToday ? styles.completed : ''}`}
-            style={{ 
+            style={{
               backgroundColor: mockData.completedToday ? color : 'transparent',
-              borderColor: color 
+              borderColor: color,
             }}
           />
         </div>
@@ -137,28 +130,17 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
       <div className={styles.previewCard} style={{ borderTopColor: color }}>
         <div className={styles.cardHeader}>
           <div className={styles.cardIcon}>
-            <IconDisplay
-              iconId={iconId}
-              size="medium"
-              color={color}
-              showTooltip={false}
-            />
+            <IconDisplay iconId={iconId} size='medium' color={color} showTooltip={false} />
           </div>
           <div className={styles.cardActions}>
-            <ColorSwatch 
-              color={color} 
-              size="small" 
-              showTooltip={false}
-            />
+            <ColorSwatch color={color} size='small' showTooltip={false} />
           </div>
         </div>
-        
+
         <div className={styles.cardContent}>
           <h4 className={styles.cardTitle}>{title}</h4>
-          {description && (
-            <p className={styles.cardDescription}>{description}</p>
-          )}
-          
+          {description && <p className={styles.cardDescription}>{description}</p>}
+
           {showMockData && (
             <div className={styles.cardStats}>
               <div className={styles.stat}>
@@ -168,15 +150,13 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
                 <span className={styles.statLabel}>Current Streak</span>
               </div>
               <div className={styles.stat}>
-                <span className={styles.statValue}>
-                  {mockData.totalCompletions}
-                </span>
+                <span className={styles.statValue}>{mockData.totalCompletions}</span>
                 <span className={styles.statLabel}>Total</span>
               </div>
             </div>
           )}
         </div>
-        
+
         <div className={styles.cardFooter}>
           <div className={styles.weekProgress}>
             {mockData.weekProgress.map((completed, index) => (
@@ -199,19 +179,17 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
       <div className={styles.detailHeader} style={{ backgroundColor: color }}>
         <IconDisplay
           iconId={iconId}
-          size="large"
+          size='large'
           color={textColor}
           showTooltip={false}
           className={styles.detailIcon}
         />
         <div className={styles.detailInfo} style={{ color: textColor }}>
           <h3 className={styles.detailTitle}>{title}</h3>
-          {description && (
-            <p className={styles.detailDescription}>{description}</p>
-          )}
+          {description && <p className={styles.detailDescription}>{description}</p>}
         </div>
       </div>
-      
+
       <div className={styles.detailBody}>
         <div className={styles.detailStats}>
           <div className={styles.primaryStat}>
@@ -220,7 +198,7 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
             </span>
             <span className={styles.primaryLabel}>Day Streak</span>
           </div>
-          
+
           <div className={styles.secondaryStats}>
             <div className={styles.secondaryStat}>
               <span className={styles.secondaryValue}>{mockData.totalCompletions}</span>
@@ -239,16 +217,8 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
   const renderMinimalPreview = () => (
     <div className={styles.minimalPreview}>
       <div className={styles.minimalContent}>
-        <ColorSwatch 
-          color={color} 
-          size="small" 
-          showTooltip={false}
-        />
-        <IconDisplay
-          iconId={iconId}
-          size="small"
-          showTooltip={false}
-        />
+        <ColorSwatch color={color} size='small' showTooltip={false} />
+        <IconDisplay iconId={iconId} size='small' showTooltip={false} />
         <span className={styles.minimalTitle}>{title}</span>
       </div>
     </div>
@@ -286,11 +256,13 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
       onClick={interactive ? onClick : undefined}
       data-testid={testId}
       tabIndex={interactive ? 0 : undefined}
-      aria-label={interactive ? `Preview: ${title} with ${colorInfo?.name || color} color and ${icon?.name || 'no'} icon` : undefined}
+      aria-label={
+        interactive
+          ? `Preview: ${title} with ${colorInfo?.name || color} color and ${icon?.name || 'no'} icon`
+          : undefined
+      }
     >
-      <div className={styles.previewContent}>
-        {renderPreview()}
-      </div>
+      <div className={styles.previewContent}>{renderPreview()}</div>
 
       {/* Accessibility Information */}
       {showAccessibilityInfo && (
@@ -298,22 +270,22 @@ export const PreviewCard: React.FC<PreviewCardProps> = ({
           <div className={styles.accessibilityHeader}>
             <span className={styles.accessibilityTitle}>Accessibility</span>
           </div>
-          
+
           <div className={styles.accessibilityDetails}>
             <div className={styles.contrastDetail}>
               <span className={styles.contrastLabel}>Contrast Ratio:</span>
               <span className={styles.contrastValue}>
                 {contrastInfo.contrast.ratio.toFixed(1)}:1
               </span>
-              <span className={`${styles.wcagBadge} ${contrastInfo.contrast.wcagAA ? styles.pass : styles.fail}`}>
+              <span
+                className={`${styles.wcagBadge} ${contrastInfo.contrast.wcagAA ? styles.pass : styles.fail}`}
+              >
                 {contrastInfo.contrast.grade}
               </span>
             </div>
-            
+
             <div className={styles.colorDetails}>
-              <span className={styles.colorName}>
-                {colorInfo?.name || 'Custom Color'}
-              </span>
+              <span className={styles.colorName}>{colorInfo?.name || 'Custom Color'}</span>
               <span className={styles.colorHex}>{color.toUpperCase()}</span>
             </div>
           </div>

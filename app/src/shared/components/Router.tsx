@@ -15,8 +15,12 @@ const HabitsPage = lazy(() => import('../../features/habits/HabitsPage'));
 const SettingsPage = lazy(() => import('../../features/settings/SettingsPage'));
 const NotFoundPage = lazy(() => import('../../features/404/NotFoundPage'));
 const AnimationDemo = lazy(() => import('../../features/animations/examples/AnimationDemo'));
-const SimpleAnimationTest = lazy(() => import('../../features/animations/examples/SimpleAnimationTest'));
-const LiveIntegrationTest = lazy(() => import('../../features/animations/examples/LiveIntegrationTest'));
+const SimpleAnimationTest = lazy(
+  () => import('../../features/animations/examples/SimpleAnimationTest')
+);
+const LiveIntegrationTest = lazy(
+  () => import('../../features/animations/examples/LiveIntegrationTest')
+);
 
 /**
  * Loading fallback component for lazy loaded pages

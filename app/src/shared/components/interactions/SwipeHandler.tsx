@@ -47,13 +47,15 @@ export const SwipeHandler: React.FC<SwipeHandlerProps> = ({
     };
 
     if (shouldAnimate()) {
-      controls.start({
-        ...animations[direction],
-        transition: { duration: 0.3, ease: 'easeOut' },
-      }).then(() => {
-        if (onComplete) onComplete();
-        controls.start({ x: 0, y: 0, opacity: 1 });
-      });
+      controls
+        .start({
+          ...animations[direction],
+          transition: { duration: 0.3, ease: 'easeOut' },
+        })
+        .then(() => {
+          if (onComplete) onComplete();
+          controls.start({ x: 0, y: 0, opacity: 1 });
+        });
     }
   };
 
@@ -117,7 +119,7 @@ export const SwipeHandler: React.FC<SwipeHandlerProps> = ({
       >
         {children}
       </motion.div>
-      
+
       {showIndicator && gestureState.isDragging && (
         <div className={styles.indicator}>
           {gestureState.isSwipingLeft && <span className={styles.arrow}>←</span>}

@@ -126,31 +126,33 @@ export const HabitCalendarCard: React.FC<HabitCalendarCardProps> = ({
               <div className={styles.habitIcon}>
                 {(() => {
                   const iconSvg = IconLibrary.getIconSvgById(habit.icon);
-                  
+
                   if (iconSvg) {
                     return (
-                      <div 
-                        style={{ 
-                          width: '20px', 
-                          height: '20px', 
+                      <div
+                        style={{
+                          width: '20px',
+                          height: '20px',
                           color: habit.color,
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
                         }}
                         dangerouslySetInnerHTML={{ __html: iconSvg }}
                       />
                     );
                   }
-                  
+
                   // Fallback - colored circle without text
                   return (
-                    <div style={{
-                      width: '20px',
-                      height: '20px',
-                      backgroundColor: habit.color,
-                      borderRadius: '50%'
-                    }} />
+                    <div
+                      style={{
+                        width: '20px',
+                        height: '20px',
+                        backgroundColor: habit.color,
+                        borderRadius: '50%',
+                      }}
+                    />
                   );
                 })()}
               </div>

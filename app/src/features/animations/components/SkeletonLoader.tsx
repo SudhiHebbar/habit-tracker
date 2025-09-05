@@ -70,11 +70,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
 
     return (
       <motion.div
-        className={clsx(
-          styles.skeleton,
-          shouldShowShimmer && styles.shimmer,
-          className
-        )}
+        className={clsx(styles.skeleton, shouldShowShimmer && styles.shimmer, className)}
         style={{
           width,
           height,
@@ -87,7 +83,7 @@ export const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
         }}
         animate={shouldShowShimmer ? 'animate' : undefined}
         variants={shouldShowShimmer ? shimmerAnimation : undefined}
-        aria-hidden="true"
+        aria-hidden='true'
       />
     );
   };
@@ -133,32 +129,32 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({
     <div className={clsx(styles.card, className)}>
       {showAvatar && (
         <div className={styles.cardHeader}>
-          <SkeletonLoader variant="circular" width={40} height={40} />
+          <SkeletonLoader variant='circular' width={40} height={40} />
           {showTitle && (
             <div className={styles.cardTitleGroup}>
-              <SkeletonLoader width="60%" height="1.25rem" />
-              <SkeletonLoader width="40%" height="0.875rem" />
+              <SkeletonLoader width='60%' height='1.25rem' />
+              <SkeletonLoader width='40%' height='0.875rem' />
             </div>
           )}
         </div>
       )}
-      
+
       {!showAvatar && showTitle && (
         <div className={styles.cardTitle}>
-          <SkeletonLoader width="70%" height="1.5rem" />
+          <SkeletonLoader width='70%' height='1.5rem' />
         </div>
       )}
 
       {showDescription && (
         <div className={styles.cardContent}>
-          <SkeletonLoader variant="text" lines={descriptionLines} />
+          <SkeletonLoader variant='text' lines={descriptionLines} />
         </div>
       )}
 
       {showActions && (
         <div className={styles.cardActions}>
-          <SkeletonLoader variant="rounded" width={80} height={32} />
-          <SkeletonLoader variant="rounded" width={80} height={32} />
+          <SkeletonLoader variant='rounded' width={80} height={32} />
+          <SkeletonLoader variant='rounded' width={80} height={32} />
         </div>
       )}
     </div>
@@ -180,12 +176,10 @@ export const SkeletonList: React.FC<SkeletonListProps> = ({
     <div className={clsx(styles.list, className)}>
       {Array.from({ length: items }, (_, index) => (
         <div key={index} className={styles.listItem}>
-          {showAvatar && (
-            <SkeletonLoader variant="circular" width={32} height={32} />
-          )}
+          {showAvatar && <SkeletonLoader variant='circular' width={32} height={32} />}
           <div className={styles.listContent}>
-            <SkeletonLoader width="70%" height="1rem" />
-            <SkeletonLoader width="40%" height="0.875rem" />
+            <SkeletonLoader width='70%' height='1rem' />
+            <SkeletonLoader width='40%' height='0.875rem' />
           </div>
         </div>
       ))}
@@ -201,18 +195,44 @@ export const SkeletonHabitCard: React.FC<SkeletonHabitCardProps> = ({ className 
   return (
     <div className={clsx(styles.habitCard, className)}>
       <div className={styles.habitCardHeader}>
-        <SkeletonLoader variant="circular" width={24} height={24} />
-        <SkeletonLoader width="60%" height="1.25rem" />
+        <SkeletonLoader variant='circular' width={24} height={24} />
+        <SkeletonLoader width='60%' height='1.25rem' />
       </div>
-      
+
       <div className={styles.habitCardContent}>
-        <SkeletonLoader width="100%" height="0.875rem" />
-        <SkeletonLoader width="80%" height="0.875rem" />
+        <SkeletonLoader width='100%' height='0.875rem' />
+        <SkeletonLoader width='80%' height='0.875rem' />
       </div>
-      
+
       <div className={styles.habitCardFooter}>
-        <SkeletonLoader variant="rounded" width={60} height={24} />
-        <SkeletonLoader variant="rectangular" width={40} height={40} />
+        <SkeletonLoader variant='rounded' width={60} height={24} />
+        <SkeletonLoader variant='rectangular' width={40} height={40} />
+      </div>
+    </div>
+  );
+};
+
+interface SkeletonCalendarCellProps {
+  className?: string;
+}
+
+export const SkeletonCalendarCell: React.FC<SkeletonCalendarCellProps> = ({ className }) => {
+  return (
+    <div className={clsx(styles.calendarCell, className)}>
+      <div className={styles.calendarCellHeader}>
+        <SkeletonLoader width='30%' height='1.25rem' />
+        <SkeletonLoader width='50%' height='0.875rem' />
+      </div>
+
+      <div className={styles.calendarCellProgress}>
+        <SkeletonLoader variant='rounded' width='100%' height='8px' />
+        <SkeletonLoader width='40%' height='0.75rem' />
+      </div>
+
+      <div className={styles.calendarCellHabits}>
+        <SkeletonLoader width='100%' height='1rem' />
+        <SkeletonLoader width='85%' height='1rem' />
+        <SkeletonLoader width='70%' height='1rem' />
       </div>
     </div>
   );

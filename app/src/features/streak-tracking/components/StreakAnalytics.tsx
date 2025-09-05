@@ -22,42 +22,42 @@ export default function StreakAnalytics({
   className,
 }: StreakAnalyticsProps) {
   const { shouldAnimate } = useAnimation();
-  
+
   // Calculate insights based on analytics data
   const insights = calculateInsights(analyticsData, trends);
   const chartData = prepareChartData(trends, timeframe);
-  
+
   const containerVariants = {
     initial: { opacity: 0, y: 30 },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
         staggerChildren: 0.1,
-      }
+      },
     },
   };
-  
+
   const cardVariants = {
     initial: { scale: 0.9, opacity: 0 },
-    animate: { 
-      scale: 1, 
+    animate: {
+      scale: 1,
       opacity: 1,
       transition: {
-        type: "spring" as const,
+        type: 'spring' as const,
         stiffness: 100,
         damping: 15,
-      }
+      },
     },
   };
-  
+
   return (
     <motion.div
       className={`${styles.container} ${className || ''}`}
       variants={containerVariants}
-      initial="initial"
-      animate="animate"
+      initial='initial'
+      animate='animate'
     >
       <div className={styles.header}>
         <h2 className={styles.title}>Streak Analytics</h2>
@@ -68,7 +68,7 @@ export default function StreakAnalytics({
           <button className={timeframe === 'year' ? styles.active : ''}>Year</button>
         </div>
       </div>
-      
+
       {/* Key Metrics */}
       <motion.section className={styles.metrics} variants={cardVariants}>
         <h3 className={styles.sectionTitle}>Key Metrics</h3>
@@ -80,105 +80,108 @@ export default function StreakAnalytics({
             </span>
             <div className={styles.metricChange}>
               <span className={analyticsData.streakGrowth > 0 ? styles.positive : styles.negative}>
-                {analyticsData.streakGrowth > 0 ? '↗' : '↘'} {Math.abs(analyticsData.streakGrowth)}%
+                {analyticsData.streakGrowth > 0 ? '↗' : '↘'}{' '}
+                {Math.abs(analyticsData.streakGrowth)}%
               </span>
             </div>
           </div>
-          
+
           <div className={styles.metric}>
             <span className={styles.metricLabel}>Success Rate</span>
             <span className={styles.metricValue}>
               {Math.round(analyticsData.completionRate * 100)}%
             </span>
             <div className={styles.progressBar}>
-              <div 
+              <div
                 className={styles.progressFill}
                 style={{ width: `${analyticsData.completionRate * 100}%` }}
               />
             </div>
           </div>
-          
+
           <div className={styles.metric}>
             <span className={styles.metricLabel}>Active Streaks</span>
             <span className={styles.metricValue}>{analyticsData.activeStreaks}</span>
-            <span className={styles.metricSubtext}>
-              out of {analyticsData.totalHabits} habits
-            </span>
+            <span className={styles.metricSubtext}>out of {analyticsData.totalHabits} habits</span>
           </div>
-          
+
           <div className={styles.metric}>
             <span className={styles.metricLabel}>Milestones Hit</span>
             <span className={styles.metricValue}>{analyticsData.totalMilestones}</span>
             <div className={styles.milestoneIcons}>
               {Array.from({ length: Math.min(analyticsData.totalMilestones, 5) }).map((_, i) => (
-                <span key={i} className={styles.milestoneIcon}>🏆</span>
+                <span key={i} className={styles.milestoneIcon}>
+                  🏆
+                </span>
               ))}
               {analyticsData.totalMilestones > 5 && (
-                <span className={styles.milestoneOverflow}>+{analyticsData.totalMilestones - 5}</span>
+                <span className={styles.milestoneOverflow}>
+                  +{analyticsData.totalMilestones - 5}
+                </span>
               )}
             </div>
           </div>
         </div>
       </motion.section>
-      
+
       {/* Trend Chart */}
       <motion.section className={styles.chart} variants={cardVariants}>
         <h3 className={styles.sectionTitle}>Streak Trends</h3>
         <div className={styles.chartContainer}>
-          <svg className={styles.svg} viewBox="0 0 400 200">
+          <svg className={styles.svg} viewBox='0 0 400 200'>
             <defs>
-              <linearGradient id="streakGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--color-primary)" stopOpacity="0.8"/>
-                <stop offset="100%" stopColor="var(--color-primary)" stopOpacity="0.1"/>
+              <linearGradient id='streakGradient' x1='0' y1='0' x2='0' y2='1'>
+                <stop offset='0%' stopColor='var(--color-primary)' stopOpacity='0.8' />
+                <stop offset='100%' stopColor='var(--color-primary)' stopOpacity='0.1' />
               </linearGradient>
             </defs>
-            
+
             {/* Grid lines */}
             {Array.from({ length: 5 }).map((_, i) => (
               <line
                 key={i}
-                x1="0"
+                x1='0'
                 y1={i * 40}
-                x2="400"
+                x2='400'
                 y2={i * 40}
-                stroke="var(--color-border)"
-                strokeWidth="1"
-                opacity="0.3"
+                stroke='var(--color-border)'
+                strokeWidth='1'
+                opacity='0.3'
               />
             ))}
-            
+
             {/* Trend line */}
             <motion.polyline
-              fill="none"
-              stroke="var(--color-primary)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+              fill='none'
+              stroke='var(--color-primary)'
+              strokeWidth='3'
+              strokeLinecap='round'
+              strokeLinejoin='round'
               points={chartData.points}
               initial={{ pathLength: 0 }}
               animate={{ pathLength: shouldAnimate() ? 1 : 1 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
+              transition={{ duration: 1.5, ease: 'easeInOut' }}
             />
-            
+
             {/* Area fill */}
             <motion.polygon
-              fill="url(#streakGradient)"
+              fill='url(#streakGradient)'
               points={`${chartData.points},400,200,0,200`}
               initial={{ opacity: 0 }}
               animate={{ opacity: shouldAnimate() ? 1 : 1 }}
               transition={{ duration: 1, delay: 0.5 }}
             />
-            
+
             {/* Data points */}
             {chartData.dataPoints.map((point, index) => (
               <motion.circle
                 key={index}
                 cx={point.x}
                 cy={point.y}
-                r="4"
-                fill="var(--color-primary)"
-                stroke="white"
-                strokeWidth="2"
+                r='4'
+                fill='var(--color-primary)'
+                stroke='white'
+                strokeWidth='2'
                 initial={{ scale: 0 }}
                 animate={{ scale: shouldAnimate() ? 1 : 1 }}
                 transition={{ duration: 0.3, delay: index * 0.1 + 1 }}
@@ -186,7 +189,7 @@ export default function StreakAnalytics({
               />
             ))}
           </svg>
-          
+
           <div className={styles.chartLabels}>
             {chartData.labels.map((label, index) => (
               <span key={index} className={styles.chartLabel}>
@@ -196,7 +199,7 @@ export default function StreakAnalytics({
           </div>
         </div>
       </motion.section>
-      
+
       {/* Insights */}
       <motion.section className={styles.insights} variants={cardVariants}>
         <h3 className={styles.sectionTitle}>Insights & Recommendations</h3>
@@ -209,23 +212,19 @@ export default function StreakAnalytics({
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: index * 0.1 }}
             >
-              <div className={styles.insightIcon}>
-                {getInsightIcon(insight.type)}
-              </div>
+              <div className={styles.insightIcon}>{getInsightIcon(insight.type)}</div>
               <div className={styles.insightContent}>
                 <h4 className={styles.insightTitle}>{insight.title}</h4>
                 <p className={styles.insightDescription}>{insight.description}</p>
                 {insight.action && (
-                  <button className={styles.insightAction}>
-                    {insight.action}
-                  </button>
+                  <button className={styles.insightAction}>{insight.action}</button>
                 )}
               </div>
             </motion.div>
           ))}
         </div>
       </motion.section>
-      
+
       {/* Comparison */}
       {showComparison && (
         <motion.section className={styles.comparison} variants={cardVariants}>
@@ -244,19 +243,15 @@ export default function StreakAnalytics({
                       backgroundColor: getHabitColor(habit.successRate),
                     }}
                   />
-                  <span className={styles.barLabel}>
-                    {Math.round(habit.successRate * 100)}%
-                  </span>
+                  <span className={styles.barLabel}>{Math.round(habit.successRate * 100)}%</span>
                 </div>
-                <div className={styles.habitStreak}>
-                  {habit.currentStreak} days
-                </div>
+                <div className={styles.habitStreak}>{habit.currentStreak} days</div>
               </div>
             ))}
           </div>
         </motion.section>
       )}
-      
+
       {/* Performance Breakdown */}
       <motion.section className={styles.breakdown} variants={cardVariants}>
         <h3 className={styles.sectionTitle}>Performance Breakdown</h3>
@@ -272,7 +267,7 @@ export default function StreakAnalytics({
               ))}
             </div>
           </div>
-          
+
           <div className={styles.performanceCard}>
             <h4>Streak Patterns</h4>
             <div className={styles.patternsList}>
@@ -293,7 +288,7 @@ export default function StreakAnalytics({
 // Helper functions
 function calculateInsights(analyticsData: StreakAnalyticsData, trends: StreakTrend[]) {
   const insights = [];
-  
+
   // High performance insight
   if (analyticsData.completionRate > 0.8) {
     insights.push({
@@ -302,17 +297,18 @@ function calculateInsights(analyticsData: StreakAnalyticsData, trends: StreakTre
       description: `You're maintaining an ${Math.round(analyticsData.completionRate * 100)}% success rate. Keep up the momentum!`,
     });
   }
-  
+
   // Improvement opportunity
   if (analyticsData.streakGrowth < 0) {
     insights.push({
       type: 'warning',
       title: 'Streaks Declining',
-      description: 'Your average streak length has decreased. Consider reviewing your habit schedule.',
-      action: 'Adjust Schedule'
+      description:
+        'Your average streak length has decreased. Consider reviewing your habit schedule.',
+      action: 'Adjust Schedule',
     });
   }
-  
+
   // Milestone achievement
   if (analyticsData.totalMilestones > 0) {
     insights.push({
@@ -321,7 +317,7 @@ function calculateInsights(analyticsData: StreakAnalyticsData, trends: StreakTre
       description: `You've hit ${analyticsData.totalMilestones} milestones this period. Great consistency!`,
     });
   }
-  
+
   return insights;
 }
 
@@ -329,26 +325,31 @@ function prepareChartData(trends: StreakTrend[], timeframe: string) {
   const chartWidth = 400;
   const chartHeight = 200;
   const padding = 20;
-  
+
   const maxValue = Math.max(...trends.map(t => t.averageStreak));
   const dataPoints = trends.map((trend, index) => {
     const x = (index / (trends.length - 1)) * (chartWidth - 2 * padding) + padding;
-    const y = chartHeight - padding - ((trend.averageStreak / maxValue) * (chartHeight - 2 * padding));
+    const y =
+      chartHeight - padding - (trend.averageStreak / maxValue) * (chartHeight - 2 * padding);
     return { x, y, value: trend.averageStreak };
   });
-  
+
   const points = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
   const labels = trends.map(t => format(new Date(t.date), 'MMM d'));
-  
+
   return { points, dataPoints, labels };
 }
 
 function getInsightIcon(type: string) {
   switch (type) {
-    case 'success': return '🎉';
-    case 'warning': return '⚠️';
-    case 'info': return '💡';
-    default: return '📊';
+    case 'success':
+      return '🎉';
+    case 'warning':
+      return '⚠️';
+    case 'info':
+      return '💡';
+    default:
+      return '📊';
   }
 }
 

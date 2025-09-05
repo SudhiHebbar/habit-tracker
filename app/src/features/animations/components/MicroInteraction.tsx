@@ -42,7 +42,7 @@ export const MicroInteraction: React.FC<MicroInteractionProps> = ({
         const y = e.clientY - rect.top;
         const id = Date.now();
         setRipples(prev => [...prev, { id, x, y }]);
-        
+
         setTimeout(() => {
           setRipples(prev => prev.filter(ripple => ripple.id !== id));
         }, 600);
@@ -54,36 +54,39 @@ export const MicroInteraction: React.FC<MicroInteractionProps> = ({
     initial: {
       scale: 1,
     },
-    hover: shouldAnimate() && config.hover
-      ? {
-          scale: 1.02,
-          transition: {
-            type: "spring" as const,
-            stiffness: 400,
-            damping: 17,
-          },
-        }
-      : {},
-    pressed: shouldAnimate() && config.press
-      ? {
-          scale: 0.98,
-          transition: {
-            type: "spring" as const,
-            stiffness: 400,
-            damping: 17,
-          },
-        }
-      : {},
-    focus: shouldAnimate() && config.focus
-      ? {
-          scale: 1.01,
-          transition: {
-            type: "spring" as const,
-            stiffness: 400,
-            damping: 17,
-          },
-        }
-      : {},
+    hover:
+      shouldAnimate() && config.hover
+        ? {
+            scale: 1.02,
+            transition: {
+              type: 'spring' as const,
+              stiffness: 400,
+              damping: 17,
+            },
+          }
+        : {},
+    pressed:
+      shouldAnimate() && config.press
+        ? {
+            scale: 0.98,
+            transition: {
+              type: 'spring' as const,
+              stiffness: 400,
+              damping: 17,
+            },
+          }
+        : {},
+    focus:
+      shouldAnimate() && config.focus
+        ? {
+            scale: 1.01,
+            transition: {
+              type: 'spring' as const,
+              stiffness: 400,
+              damping: 17,
+            },
+          }
+        : {},
   };
 
   const MotionComponent = motion[Component as keyof typeof motion] as typeof motion.div;
@@ -93,10 +96,10 @@ export const MicroInteraction: React.FC<MicroInteractionProps> = ({
       ref={containerRef}
       className={clsx(styles.container, className)}
       variants={interactionVariants}
-      initial="initial"
-      whileHover="hover"
-      whileTap="pressed"
-      whileFocus="focus"
+      initial='initial'
+      whileHover='hover'
+      whileTap='pressed'
+      whileFocus='focus'
       animate={controls}
       onPointerDown={handlePointerDown}
     >
@@ -142,9 +145,9 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       const id = Date.now();
-      
+
       setRipples(prev => [...prev, { id, x, y }]);
-      
+
       setTimeout(() => {
         setRipples(prev => prev.filter(ripple => ripple.id !== id));
       }, duration);
@@ -152,11 +155,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
   };
 
   return (
-    <div
-      ref={containerRef}
-      className={clsx(styles.rippleWrapper, className)}
-      onClick={handleClick}
-    >
+    <div ref={containerRef} className={clsx(styles.rippleWrapper, className)} onClick={handleClick}>
       {ripples.map(ripple => (
         <motion.span
           key={ripple.id}

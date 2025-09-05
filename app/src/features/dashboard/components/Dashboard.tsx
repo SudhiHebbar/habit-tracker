@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container } from '../../../shared/components/Layout/Container';
-import { SkeletonHabitCard } from '../../animations/components/SkeletonLoader';
 import { DashboardHeader } from './DashboardHeader';
 import { TodayHeader } from './TodayHeader';
 import { ProgressOverview } from './ProgressOverview';
@@ -9,6 +8,7 @@ import { HabitList } from './HabitList';
 import { VirtualizedHabitGrid } from './VirtualizedHabitGrid';
 import { ViewToggle } from './ViewToggle';
 import { EmptyDashboard } from './EmptyDashboard';
+import { CalendarView } from './calendar/CalendarView';
 import { FilterSortControls } from './FilterSortControls';
 import { CreateTrackerModal } from '../../tracker-management/components/CreateTrackerModal';
 import { useTrackers } from '../../tracker-management/hooks/useTrackers';
@@ -21,7 +21,7 @@ import type { Habit } from '../../habit-management/types/habit.types';
 import type { CreateTrackerDto } from '../../tracker-management/types/tracker.types';
 import styles from '../../../../styles/features/dashboard/Dashboard.module.css';
 
-export type ViewMode = 'grid' | 'list';
+export type ViewMode = 'grid' | 'list' | 'calendar';
 export type TimeRange = 'daily' | 'weekly';
 
 interface DashboardProps {
@@ -182,7 +182,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
   // Check if dashboard is empty
   const isDashboardEmpty = !trackersLoading && (!currentTracker || filteredHabits.length === 0);
 
-  // Responsive view mode - force list on mobile
+  // Responsive view mode - force list on mobile for grid view, calendar is always responsive
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768 && viewMode === 'grid') {
@@ -215,7 +215,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
             <ViewToggle
               viewMode={viewMode}
               onViewModeChange={handleViewModeChange}
-              disabled={window.innerWidth < 768}
+              disabled={window.innerWidth < 768 && viewMode === 'grid'}
             />
           </div>
 
@@ -267,6 +267,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ initialTrackerId }) => {
                 loading={habitsLoading}
                 timeRange={timeRange}
                 containerHeight={600}
+              />
+            ) : viewMode === 'calendar' ? (
+              <CalendarView
+                trackerId={selectedTrackerId}
+                habits={filteredHabits}
+                onHabitComplete={handleHabitComplete}
               />
             ) : (
               <HabitList

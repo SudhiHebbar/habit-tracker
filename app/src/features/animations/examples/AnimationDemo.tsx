@@ -34,21 +34,21 @@ export const AnimationDemo: React.FC = () => {
           <AnimatedCheckbox
             checked={checked1}
             onChange={setChecked1}
-            label="Daily Exercise"
-            color="#10b981"
-            size="large"
+            label='Daily Exercise'
+            color='#10b981'
+            size='large'
           />
           <AnimatedCheckbox
             checked={checked2}
-            onChange={(checked) => {
+            onChange={checked => {
               setChecked2(checked);
               if (checked) {
                 setShowCelebration(true);
               }
             }}
-            label="Drink Water"
-            color="#3b82f6"
-            size="medium"
+            label='Drink Water'
+            color='#3b82f6'
+            size='medium'
             celebrateOnComplete
           />
         </div>
@@ -58,18 +58,15 @@ export const AnimationDemo: React.FC = () => {
       <section className={styles.section}>
         <h2>Celebration Effects</h2>
         <div className={styles.buttonGroup}>
-          <button
-            onClick={() => setShowCelebration(true)}
-            className={styles.button}
-          >
+          <button onClick={() => setShowCelebration(true)} className={styles.button}>
             Trigger Confetti
           </button>
         </div>
         <CompletionCelebration
           active={showCelebration}
-          type="confetti"
-          intensity="normal"
-          message="Great job!"
+          type='confetti'
+          intensity='normal'
+          message='Great job!'
           milestone={7}
           onComplete={() => setShowCelebration(false)}
         />
@@ -89,7 +86,7 @@ export const AnimationDemo: React.FC = () => {
             </button>
           ))}
         </div>
-        <PageTransition type="slide" direction="right">
+        <PageTransition type='slide' direction='right'>
           <div className={styles.pageContent}>
             <h3>{pages[currentPage]}</h3>
             <p>This is the {pages[currentPage]} page content.</p>
@@ -100,10 +97,7 @@ export const AnimationDemo: React.FC = () => {
       {/* Loading States */}
       <section className={styles.section}>
         <h2>Skeleton Loaders</h2>
-        <button
-          onClick={() => setLoading(!loading)}
-          className={styles.button}
-        >
+        <button onClick={() => setLoading(!loading)} className={styles.button}>
           Toggle Loading
         </button>
         <div className={styles.skeletonGroup}>
@@ -168,7 +162,7 @@ export const AnimationDemo: React.FC = () => {
             </div>
           </FadeIn>
 
-          <SlideIn direction="up" distance={30}>
+          <SlideIn direction='up' distance={30}>
             <div className={styles.transitionCard}>
               <h4>Slide In</h4>
               <p>This content slides in</p>

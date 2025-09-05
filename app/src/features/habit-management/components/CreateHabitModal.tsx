@@ -222,24 +222,28 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
           {/* Visual Customization */}
           <div className={styles.formGroup}>
             <label className={styles.label}>Visual Customization</label>
-            
+
             {/* Preview */}
             <div className={styles.previewSection}>
-              <div style={{
-                padding: '12px',
-                border: `2px solid ${formData.color}`,
-                borderRadius: '8px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                backgroundColor: '#f9fafb'
-              }}>
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  backgroundColor: formData.color,
-                  borderRadius: '4px'
-                }} />
+              <div
+                style={{
+                  padding: '12px',
+                  border: `2px solid ${formData.color}`,
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backgroundColor: '#f9fafb',
+                }}
+              >
+                <div
+                  style={{
+                    width: '24px',
+                    height: '24px',
+                    backgroundColor: formData.color,
+                    borderRadius: '4px',
+                  }}
+                />
                 <span style={{ fontWeight: 'bold', color: formData.color }}>
                   {formData.name || 'Habit Name'}
                 </span>
@@ -264,7 +268,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                   selectedIcon={formData.icon || null}
                   onIconSelect={handleIconSelect}
                   disabled={isLoading}
-                  size="medium"
+                  size='medium'
                 />
               </div>
             </div>
